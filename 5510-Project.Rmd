@@ -1,0 +1,25 @@
+---
+title: "5510-Projecxt"
+author: "T13_Wed_kable"
+date: "5/17/2021"
+output: html_document
+---
+
+```{r , echo = FALSE, message = FALSE, warning = FALSE, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, 
+                      message=FALSE, 
+                      warning=FALSE0
+
+library(tidyverse)
+library(readr)
+library(kableExtra)
+library(bookdown)
+library(ggplot2)
+library(ggpubr)
+library(plotly)
+library(data.table)
+library(scales)
+library(stringr)      
+library(formattable)
+library(tidyr)
+```
