@@ -5,8 +5,8 @@ date: "5/17/2021"
 output: html_document
 ---
 
-```{r , echo = FALSE, message = FALSE, warning = FALSE, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, 
+```{r , echo = FALSE, message = FALSE, warning = FALSE, include=FALSE, eval = TRUE}
+knitr::opts_chunk$set(echo = TRUE, 
                       message=FALSE, 
                       warning=FALSE)
 
@@ -23,4 +23,37 @@ library(scales)
 library(stringr)      
 library(formattable)
 library(tidyr)
+library(lubridate)
 ```
+
+
+# How long did it take on average for the CFA brigade to respond to incidents in their own areas for hazard class 2 in Q4 2018/19 and Q4 2019/20? Also, this will be analyzed against the standard time (given in the data for each of the hazard classes). (CFA Emergency Response Time)
+
+
+```{r}
+data_CFA_20 <- read_csv("~/5510_group_project/data/dat_q4_2020.csv")
+data_CFA
+```
+```{r}
+data_CFA_20 <- data_CFA_20%>%
+  rename(`Number of incidents per Brigade Area` = `Number of emergency incidents within the Brigade Area for the reporting period for Hazard Class 2`)
+
+data_CFA_20
+```
+
+```{r}
+data_CFA_20 <- data_CFA_20%>%
+  rename(Time = `The time in which 90% of emergency incidents were responded to by the brigade within their own Brigade Area`)
+```
+
+```{r}
+CFA_2020 <- data_CFA_20 %>%
+
+group_by(Time) %>%
+summarise(mean(Time, na.rm = TRUE))
+
+CFA_2020
+```
+
+
+
