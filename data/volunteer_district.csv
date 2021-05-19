@@ -1,0 +1,120 @@
+"age","Less than 1","1-5 years","6-10 years","11-15 years","16-20 years","21-25 years","26-30 years","31-35 years","36-40 years","41-45 years","46-50 years","51-55 years","56-60 years","61-65 years","66-70 years","71-75 years","76-80 years","81-85 years","86 plus","district","position","Not Found"
+"16-17",1,33,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Barwon South","Operational",NA
+"18-24",25,426,140,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Barwon South","Operational",NA
+"25-34",17,201,373,299,52,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Barwon South","Operational",NA
+"35-44",15,201,219,207,224,178,72,2,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Barwon South","Operational",NA
+"45-54",9,185,222,208,167,184,222,263,69,1,NA,1,NA,NA,NA,NA,NA,NA,NA,"Barwon South","Operational",NA
+"55-64",9,84,119,135,132,127,119,211,230,179,66,4,1,NA,1,NA,NA,NA,NA,"Barwon South","Operational",NA
+"65 Plus",2,40,60,52,48,40,53,98,102,83,193,141,97,21,15,2,NA,NA,NA,"Barwon South","Operational",NA
+"16-17",61,17,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Barwon South","Non Operational",NA
+"18-24",83,178,53,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Barwon South","Non Operational",NA
+"25-34",75,123,87,68,17,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Barwon South","Non Operational",NA
+"35-44",50,130,85,49,60,57,14,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,1,"Barwon South","Non Operational",NA
+"45-54",53,98,102,69,49,49,45,64,16,1,1,NA,NA,NA,NA,NA,NA,NA,NA,"Barwon South","Non Operational",NA
+"55-64",33,85,79,53,58,54,58,78,61,33,14,2,1,NA,NA,NA,NA,NA,NA,"Barwon South","Non Operational",NA
+"65 Plus",15,45,66,53,40,74,72,141,79,64,87,95,83,32,29,5,2,NA,NA,"Barwon South","Non Operational",NA
+"16-17",3,16,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Eastern Metro","Operational",NA
+"18-24",9,133,45,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Eastern Metro","Operational",NA
+"25-34",4,107,98,55,15,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Eastern Metro","Operational",NA
+"35-44",4,83,63,43,41,33,8,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Eastern Metro","Operational",NA
+"45-54",1,56,65,47,44,25,25,27,10,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Eastern Metro","Operational",NA
+"55-64",2,28,30,29,30,28,24,27,23,11,3,NA,NA,NA,NA,NA,NA,NA,NA,"Eastern Metro","Operational",NA
+"65 Plus",NA,6,10,12,9,11,4,18,20,16,13,10,8,3,NA,NA,NA,NA,NA,"Eastern Metro","Operational",NA
+"16-17",36,8,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Eastern Metro","Non Operational",NA
+"18-24",58,57,8,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Eastern Metro","Non Operational",NA
+"25-34",40,35,19,8,3,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Eastern Metro","Non Operational",NA
+"35-44",35,33,10,19,12,4,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Eastern Metro","Non Operational",NA
+"45-54",37,37,31,16,7,4,4,3,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Eastern Metro","Non Operational",NA
+"55-64",22,26,25,23,20,10,10,16,6,4,3,NA,NA,NA,NA,NA,NA,NA,NA,"Eastern Metro","Non Operational",NA
+"65 Plus",9,23,38,20,9,6,19,14,16,21,15,10,6,4,1,NA,NA,NA,NA,"Eastern Metro","Non Operational",NA
+"16-17",2,9,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Gippsland","Operational",NA
+"18-24",5,218,78,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Gippsland","Operational",NA
+"25-34",3,126,205,123,61,NA,NA,NA,NA,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Gippsland","Operational",NA
+"35-44",1,113,128,89,107,67,23,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Gippsland","Operational",NA
+"45-54",1,92,183,145,90,88,77,66,24,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Gippsland","Operational",NA
+"55-64",3,90,113,106,116,76,87,107,118,55,23,1,NA,NA,NA,NA,NA,NA,NA,"Gippsland","Operational",NA
+"65 Plus",1,39,89,65,47,47,53,88,53,42,66,63,31,12,4,1,NA,NA,NA,"Gippsland","Operational",NA
+"16-17",60,23,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Gippsland","Non Operational",NA
+"18-24",70,116,20,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Gippsland","Non Operational",NA
+"25-34",40,86,43,31,10,NA,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Gippsland","Non Operational",NA
+"35-44",37,89,30,28,24,11,4,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Gippsland","Non Operational",NA
+"45-54",49,106,49,24,27,20,19,16,2,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Gippsland","Non Operational",NA
+"55-64",46,127,52,33,31,40,39,18,25,13,2,NA,NA,NA,NA,NA,NA,NA,NA,"Gippsland","Non Operational",NA
+"65 Plus",24,81,54,42,36,21,38,46,46,19,31,36,40,21,9,1,1,NA,NA,"Gippsland","Non Operational",NA
+"16-17",24,26,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Grampians","Operational",NA
+"18-24",19,452,158,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Grampians","Operational",NA
+"25-34",7,239,417,400,77,1,1,NA,NA,NA,NA,NA,NA,NA,1,NA,NA,NA,NA,"Grampians","Operational",NA
+"35-44",14,147,204,226,235,230,88,7,NA,NA,NA,1,NA,NA,NA,NA,NA,NA,NA,"Grampians","Operational",NA
+"45-54",7,118,228,208,141,120,224,285,161,7,2,1,NA,NA,NA,NA,NA,NA,NA,"Grampians","Operational",NA
+"55-64",5,86,154,152,117,110,120,213,279,256,101,2,1,1,NA,NA,NA,NA,NA,"Grampians","Operational",NA
+"65 Plus",NA,35,64,72,60,44,59,98,107,93,191,183,144,42,14,NA,NA,NA,NA,"Grampians","Operational",NA
+"16-17",61,21,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Grampians","Non Operational",NA
+"18-24",56,168,35,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Grampians","Non Operational",NA
+"25-34",45,100,98,98,17,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Grampians","Non Operational",NA
+"35-44",41,82,66,44,59,67,20,5,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Grampians","Non Operational",NA
+"45-54",50,84,60,70,60,56,58,64,26,3,1,NA,NA,NA,NA,NA,NA,NA,NA,"Grampians","Non Operational",NA
+"55-64",31,70,55,76,35,78,73,104,92,49,33,NA,1,NA,NA,NA,NA,NA,NA,"Grampians","Non Operational",NA
+"65 Plus",11,43,55,62,36,64,81,188,94,58,90,110,177,52,41,4,NA,NA,NA,"Grampians","Non Operational",NA
+"16-17",23,33,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Hume","Operational",NA
+"18-24",34,418,179,NA,NA,NA,NA,NA,NA,NA,1,NA,NA,NA,NA,NA,NA,NA,NA,"Hume","Operational",NA
+"25-34",30,219,385,295,61,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Hume","Operational",NA
+"35-44",25,223,277,162,162,148,69,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Hume","Operational",NA
+"45-54",31,209,338,272,236,176,208,242,85,1,1,NA,NA,NA,NA,NA,NA,NA,NA,"Hume","Operational",NA
+"55-64",12,147,219,219,228,215,184,188,218,155,80,1,NA,NA,NA,NA,NA,NA,NA,"Hume","Operational",NA
+"65 Plus",7,57,121,153,124,98,124,160,100,90,163,155,121,33,8,1,NA,NA,NA,"Hume","Operational",NA
+"16-17",78,30,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Hume","Non Operational",NA
+"18-24",61,207,32,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Hume","Non Operational",NA
+"25-34",63,106,89,121,24,NA,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Hume","Non Operational",NA
+"35-44",62,130,72,61,80,82,45,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Hume","Non Operational",NA
+"45-54",56,146,111,88,94,54,91,94,23,NA,NA,1,NA,NA,NA,NA,NA,NA,NA,"Hume","Non Operational",NA
+"55-64",44,112,99,107,103,103,90,89,82,42,23,NA,3,NA,NA,NA,NA,NA,NA,"Hume","Non Operational",NA
+"65 Plus",25,92,96,89,105,107,132,216,135,84,126,130,138,82,42,4,2,NA,NA,"Hume","Non Operational",NA
+"16-17",12,23,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Loddon Mallee","Operational",NA
+"18-24",18,331,142,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Loddon Mallee","Operational",NA
+"25-34",5,144,244,228,35,NA,NA,NA,NA,NA,1,NA,NA,NA,NA,NA,NA,NA,NA,"Loddon Mallee","Operational",NA
+"35-44",10,182,160,144,155,136,61,3,2,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Loddon Mallee","Operational",NA
+"45-54",6,143,201,158,122,129,191,245,108,1,1,NA,NA,NA,NA,NA,NA,NA,NA,"Loddon Mallee","Operational",NA
+"55-64",6,87,124,110,88,92,95,171,231,223,83,2,NA,NA,NA,NA,NA,NA,NA,"Loddon Mallee","Operational",NA
+"65 Plus",2,26,54,51,41,46,39,75,67,53,134,108,83,20,6,NA,NA,NA,NA,"Loddon Mallee","Operational",NA
+"16-17",66,15,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Loddon Mallee","Non Operational",NA
+"18-24",64,180,49,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Loddon Mallee","Non Operational",NA
+"25-34",55,95,96,71,20,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Loddon Mallee","Non Operational",NA
+"35-44",61,71,39,51,55,41,17,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Loddon Mallee","Non Operational",NA
+"45-54",38,79,76,74,42,43,48,58,18,NA,1,NA,NA,NA,NA,NA,NA,NA,NA,"Loddon Mallee","Non Operational",NA
+"55-64",29,52,73,63,34,56,41,100,72,61,38,1,NA,NA,1,NA,NA,NA,NA,"Loddon Mallee","Non Operational",NA
+"65 Plus",17,45,88,74,47,63,57,137,77,40,125,113,167,59,47,11,1,NA,NA,"Loddon Mallee","Non Operational",NA
+"16-17",3,10,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Northern & Western","Operational",NA
+"18-24",5,126,35,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Northern & Western","Operational",NA
+"25-34",6,93,98,67,16,NA,NA,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Northern & Western","Operational",NA
+"35-44",7,101,63,36,41,29,9,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Northern & Western","Operational",NA
+"45-54",1,60,74,50,23,20,15,23,4,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Northern & Western","Operational",NA
+"55-64",1,25,31,30,21,19,19,24,17,3,5,NA,NA,NA,NA,NA,NA,NA,NA,"Northern & Western","Operational",NA
+"65 Plus",NA,6,9,11,12,9,9,13,15,5,11,7,3,NA,NA,NA,NA,NA,NA,"Northern & Western","Operational",NA
+"16-17",33,5,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Northern & Western","Non Operational",NA
+"18-24",42,37,5,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Northern & Western","Non Operational",NA
+"25-34",46,36,19,7,3,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Northern & Western","Non Operational",NA
+"35-44",26,36,15,9,13,6,3,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Northern & Western","Non Operational",NA
+"45-54",17,26,27,15,12,10,2,6,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Northern & Western","Non Operational",NA
+"55-64",9,18,18,21,12,4,9,20,7,2,1,1,NA,NA,NA,NA,NA,NA,NA,"Northern & Western","Non Operational",NA
+"65 Plus",3,15,15,9,17,18,11,21,34,13,9,8,7,2,3,NA,NA,NA,NA,"Northern & Western","Non Operational",NA
+"16-17",15,17,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Southern Metro","Operational",NA
+"18-24",30,196,33,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Southern Metro","Operational",NA
+"25-34",45,126,119,80,17,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Southern Metro","Operational",NA
+"35-44",16,115,79,70,61,44,10,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Southern Metro","Operational",NA
+"45-54",16,90,110,68,41,37,51,31,8,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Southern Metro","Operational",NA
+"55-64",12,48,52,34,33,28,33,27,24,18,10,NA,NA,NA,NA,NA,NA,NA,NA,"Southern Metro","Operational",NA
+"65 Plus",2,15,27,26,12,5,17,25,17,10,22,7,9,2,NA,NA,NA,NA,NA,"Southern Metro","Operational",NA
+"16-17",30,3,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Southern Metro","Non Operational",NA
+"18-24",47,40,9,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Southern Metro","Non Operational",NA
+"25-34",46,42,29,6,3,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Southern Metro","Non Operational",NA
+"35-44",34,40,27,13,12,5,1,NA,NA,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Southern Metro","Non Operational",NA
+"45-54",41,58,35,15,19,13,7,5,2,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Southern Metro","Non Operational",NA
+"55-64",23,49,35,14,10,10,9,11,9,11,2,NA,NA,NA,NA,NA,NA,NA,NA,"Southern Metro","Non Operational",NA
+"65 Plus",13,53,45,20,11,7,4,22,20,11,15,19,13,1,7,1,NA,NA,NA,"Southern Metro","Non Operational",NA
+"16-17",508,289,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,"Statewide","both",NA
+"18-24",624,3275,1021,NA,NA,NA,NA,NA,NA,NA,1,NA,NA,NA,NA,NA,NA,NA,NA,"Statewide","both",NA
+"25-34",527,1877,2415,1953,430,2,3,1,NA,1,1,NA,NA,NA,1,NA,NA,NA,NA,"Statewide","both",NA
+"35-44",438,1772,1535,1248,1337,1137,442,19,2,1,NA,1,NA,NA,NA,NA,NA,NA,NA,"Statewide","both",NA
+"45-54",413,1584,1910,1524,1173,1028,1286,1488,557,15,7,3,NA,NA,NA,NA,NA,NA,NA,"Statewide","both",NA
+"55-64",287,1132,1276,1204,1067,1048,1008,1402,1493,1113,486,14,7,1,2,NA,NA,NA,NA,"Statewide","both",NA
+"65 Plus",131,621,890,811,653,660,771,1358,980,702,1290,1195,1127,385,226,30,6,NA,NA,"Statewide","both",NA

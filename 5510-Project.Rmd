@@ -34,116 +34,33 @@ library(tidyr)
 
 # read the data
 library(readxl)
-incident<- read_excel("data/CFA-Incident-Responses.xlsx", sheet = 1)
+incident<- read_csv("data/incident.csv")
 ```
 
 
 ```{r}
 # count number of incident
-incident %>% 
+q1table <- incident %>% 
   count(code_description) %>% 
   arrange(desc(n)) %>% 
-  head(10) %>% 
+  head(10)  
 
-kable(caption = "The Top 10 Fire Incidents in Victoria during 2015-2016",
+kable(q1table, caption = "The Top 10 Fire Incidents in Victoria during 2015-2016",
       col.names = c("Case Name", "Count"))
 ```
 
 4. What is the volunteer age and serving length structure in 2016? (CFA Volunteer Demographics)
 
-```{r cleaning_vol, include = FALSE}
-#data cleaning
-volunteer_BS <- read_excel("data/CFA-Volunteer-Demographics.xlsx", sheet = 1, range = "A3:T10")  %>% 
-rename(age = ...1) %>% 
-  mutate(district = "Barwon South",
-         position = "Operational")
-
-volunteer_BS_non <- read_excel("data/CFA-Volunteer-Demographics.xlsx", sheet = 1, range = "A14:T21")  %>% 
-rename(age = ...1) %>% 
-  mutate(district = "Barwon South",
-         position = "Non Operational")
-
-volunteer_EM <- read_excel("data/CFA-Volunteer-Demographics.xlsx", sheet = 2, range = "A4:T11")  %>% 
-rename(age = ...1) %>% 
-  mutate(district = "Eastern Metro",
-         position = "Operational")
-
-volunteer_EM_non <- read_excel("data/CFA-Volunteer-Demographics.xlsx", sheet = 2, range = "A15:T22")  %>% 
-rename(age = ...1) %>% 
-  mutate(district = "Eastern Metro",
-         position = "Non Operational")
-
-volunteer_G <- read_excel("data/CFA-Volunteer-Demographics.xlsx", sheet = 3, range = "A3:T10")  %>% 
-rename(age = ...1) %>% 
-  mutate(district = "Gippsland",
-         position = "Operational")
-
-volunteer_G_non <- read_excel("data/CFA-Volunteer-Demographics.xlsx", sheet = 3, range = "A14:T21")  %>% 
-rename(age = ...1) %>% 
-  mutate(district = "Gippsland",
-         position = "Non Operational")
-
-volunteer_Gr <- read_excel("data/CFA-Volunteer-Demographics.xlsx", sheet = 4, range = "A3:T10")  %>% 
-rename(age = ...1) %>% 
-  mutate(district = "Grampians",
-         position = "Operational")
-
-volunteer_Gr_non <- read_excel("data/CFA-Volunteer-Demographics.xlsx", sheet = 4, range = "A14:T21")  %>% 
-rename(age = ...1) %>% 
-  mutate(district = "Grampians",
-         position = "Non Operational")
-
-volunteer_H <- read_excel("data/CFA-Volunteer-Demographics.xlsx", sheet = 5, range = "A3:T10")  %>% 
-rename(age = ...1) %>% 
-  mutate(district = "Hume",
-         position = "Operational")
-
-volunteer_H_non <- read_excel("data/CFA-Volunteer-Demographics.xlsx", sheet = 5, range = "A14:T21")  %>% 
-rename(age = ...1) %>% 
-  mutate(district = "Hume",
-         position = "Non Operational")
-
-volunteer_LM <- read_excel("data/CFA-Volunteer-Demographics.xlsx", sheet = 6, range = "A4:T11")  %>% 
-rename(age = ...1) %>% 
-  mutate(district = "Loddon Mallee",
-         position = "Operational")
-
-volunteer_LM_non <- read_excel("data/CFA-Volunteer-Demographics.xlsx", sheet = 6, range = "A15:T22")  %>% 
-rename(age = ...1) %>% 
-  mutate(district = "Loddon Mallee",
-         position = "Non Operational")
-
-volunteer_NW <- read_excel("data/CFA-Volunteer-Demographics.xlsx", sheet = 7, range = "A4:T11")  %>% 
-rename(age = ...1) %>% 
-  mutate(district = "Northern & Western",
-         position = "Operational")
-
-volunteer_NW_non <- read_excel("data/CFA-Volunteer-Demographics.xlsx", sheet = 7, range = "A15:T22")  %>% 
-rename(age = ...1) %>% 
-  mutate(district = "Northern & Western",
-         position = "Non Operational")
-
-volunteer_SM <- read_excel("data/CFA-Volunteer-Demographics.xlsx", sheet = 8, range = "A4:T11")  %>% 
-rename(age = ...1) %>% 
-  mutate(district = "Southern Metro",
-         position = "Operational")
-
-volunteer_SM_non <- read_excel("data/CFA-Volunteer-Demographics.xlsx", sheet = 8, range = "A15:T22")  %>% 
-rename(age = ...1) %>% 
-  mutate(district = "Southern Metro",
-         position = "Non Operational")
-
-state_vol <- read_excel("data/CFA-Volunteer-Demographics.xlsx", sheet = 9, range = "A3:T10")  %>% 
-rename(age = ...1) %>% 
-  mutate(district = "Statewide",
-         position = "both")
-
-district_vol <- bind_rows(volunteer_BS, volunteer_BS_non, volunteer_EM, volunteer_EM_non, volunteer_G, volunteer_G_non, volunteer_Gr, volunteer_Gr_non, volunteer_H, volunteer_H_non, volunteer_LM, volunteer_LM_non, volunteer_NW, volunteer_NW_non, volunteer_SM, volunteer_SM_non)
+```{r , include = FALSE}
+all_vol <- read_csv("data/volunteer_district.csv")
+state_vol <- district_vol %>% 
+  filter(district == "Statewide")
+  
+district_vol <- district_vol %>% 
+  filter(district != "Statewide")
 ```
 
 ```{r ,include = FALSE}
-#statewide volunteer structure
-
 #tidy
 state_vol <- state_vol %>% 
 rename("0-1" = `Less than 1`,
