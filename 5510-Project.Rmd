@@ -31,29 +31,54 @@ library(lubridate)
 
 
 ```{r}
-data_CFA_20 <- read_csv("~/5510_group_project/data/dat_q4_2020.csv")
-data_CFA
-```
-```{r}
-data_CFA_20 <- data_CFA_20%>%
-  rename(`Number of incidents per Brigade Area` = `Number of emergency incidents within the Brigade Area for the reporting period for Hazard Class 2`)
+CFA_19_20 <- read.csv("~/5510_group_project/data/dat_q4_2020.csv")%>%
+  rename(`Number of incidents per CFA area` = `Number.of.emergency.incidents.within.the.Brigade.Area.for.the.reporting.period.for.Hazard.Class.2`)%>%
+  rename(`Time it took CFA brigade to respond` = `The.time.in.which.90..of.emergency.incidents.were.responded.to.by.any.brigade`)%>%
+  rename(`Time it took CFA brigade to respond within` = `The.time.in.which.90..of.emergency.incidents.were.responded.to.by.the.brigade.within.their.own.Brigade.Area`)%>%
+  mutate(`Time it took CFA brigade to respond within`= paste0("00:",`Time it took CFA brigade to respond within`))%>%
+  mutate(`Time it took CFA brigade to respond` = paste0("00:",`Time it took CFA brigade to respond`))
 
-data_CFA_20
-```
+CFA_19_20
 
-```{r}
-data_CFA_20 <- data_CFA_20%>%
-  rename(Time = `The time in which 90% of emergency incidents were responded to by the brigade within their own Brigade Area`)
+
 ```
 
 ```{r}
-CFA_2020 <- data_CFA_20 %>%
+CFA_19_20%>%
+  mutate(`Number of incidents per CFA area` = as.numeric(`Number of incidents per CFA area`))
 
-group_by(Time) %>%
-summarise(mean(Time, na.rm = TRUE))
-
-CFA_2020
+CFA_19_20
 ```
+```{r}
+
+library(data.table)
+CFA_1 <- CFA_19_20
+CFA_1
+```
+```{r}
+install.packages("hms")
+library(hms)
+CFA_12 <-CFA_1$`Time it took CFA brigade to respond within` <- as_hms(CFA_1$`Time it took CFA brigade to respond within`)
+
+CFA_12
+```
+```{r}
+CFA_1 <- CFA_19_20
+```
+
+
+```{r}
+CFA_1 <- CFA_1%>%
+  hms("00:06:51":"00:06:13")
+CFA_1
+```
+
+
+
+
+
+
+
 
 
 
