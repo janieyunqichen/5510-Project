@@ -23,6 +23,7 @@ library(scales)
 library(stringr)      
 library(formattable)
 library(tidyr)
+library(knitr)
 ```
 
 
@@ -66,6 +67,7 @@ ggplot(fire_detect_nw) +
 
 
 fire_total_detects %>% 
+  select(Years, n) %>% 
   rename("Total Counts" = n) %>% 
   kable(caption = "Total detections by year", ) %>%
   kable_styling(c("hover", 
@@ -162,9 +164,9 @@ melb_air2 %>%
 
 ```
 
-```{r, fig.height='50%', fig.align='center'}
+```{r fig.align='center'}
 
-knitr::include_graphics('images/polution_table.png')
+knitr::include_graphics(here::here('images/polution_table.png'))
 
 ```
 
