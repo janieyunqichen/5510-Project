@@ -3,6 +3,8 @@ title: "5510-Projecxt"
 author: "T13_Wed_kable"
 date: "5/17/2021"
 output: html_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r , echo = FALSE, message = FALSE, warning = FALSE, include=FALSE}
@@ -25,24 +27,186 @@ library(formattable)
 library(tidyr)
 ```
 
-1. What is the most frequent fire incident during July 2015 to June 2016? (CFA Incident Responses)
+1. What is the most frequent fire incident from July 2015 to June 2016? 
 
-```{r}
-excel_sheets("data//CFA-Incident-Responses.xlsx")
-min(incident$incident_datetime)
+```{r,include = FALSE}
+#excel_sheets("data/CFA-Incident-Responses.xlsx")
 
 # read the data
 library(readxl)
 incident<- read_excel("data/CFA-Incident-Responses.xlsx", sheet = 1)
+```
 
 
+```{r}
 # count number of incident
-incident_count<- incident %>% 
+incident %>% 
   count(code_description) %>% 
   arrange(desc(n)) %>% 
   head(10) %>% 
-  kable()
+
+kable(caption = "The Top 10 Fire Incidents in Victoria during 2015-2016",
+      col.names = c("Case Name", "Count"))
 ```
 
 4. What is the volunteer age and serving length structure in 2016? (CFA Volunteer Demographics)
 
+```{r cleaning_vol, include = FALSE}
+#data cleaning
+volunteer_BS <- read_excel("data/CFA-Volunteer-Demographics.xlsx", sheet = 1, range = "A3:T10")  %>% 
+rename(age = ...1) %>% 
+  mutate(district = "Barwon South",
+         position = "Operational")
+
+volunteer_BS_non <- read_excel("data/CFA-Volunteer-Demographics.xlsx", sheet = 1, range = "A14:T21")  %>% 
+rename(age = ...1) %>% 
+  mutate(district = "Barwon South",
+         position = "Non Operational")
+
+volunteer_EM <- read_excel("data/CFA-Volunteer-Demographics.xlsx", sheet = 2, range = "A4:T11")  %>% 
+rename(age = ...1) %>% 
+  mutate(district = "Eastern Metro",
+         position = "Operational")
+
+volunteer_EM_non <- read_excel("data/CFA-Volunteer-Demographics.xlsx", sheet = 2, range = "A15:T22")  %>% 
+rename(age = ...1) %>% 
+  mutate(district = "Eastern Metro",
+         position = "Non Operational")
+
+volunteer_G <- read_excel("data/CFA-Volunteer-Demographics.xlsx", sheet = 3, range = "A3:T10")  %>% 
+rename(age = ...1) %>% 
+  mutate(district = "Gippsland",
+         position = "Operational")
+
+volunteer_G_non <- read_excel("data/CFA-Volunteer-Demographics.xlsx", sheet = 3, range = "A14:T21")  %>% 
+rename(age = ...1) %>% 
+  mutate(district = "Gippsland",
+         position = "Non Operational")
+
+volunteer_Gr <- read_excel("data/CFA-Volunteer-Demographics.xlsx", sheet = 4, range = "A3:T10")  %>% 
+rename(age = ...1) %>% 
+  mutate(district = "Grampians",
+         position = "Operational")
+
+volunteer_Gr_non <- read_excel("data/CFA-Volunteer-Demographics.xlsx", sheet = 4, range = "A14:T21")  %>% 
+rename(age = ...1) %>% 
+  mutate(district = "Grampians",
+         position = "Non Operational")
+
+volunteer_H <- read_excel("data/CFA-Volunteer-Demographics.xlsx", sheet = 5, range = "A3:T10")  %>% 
+rename(age = ...1) %>% 
+  mutate(district = "Hume",
+         position = "Operational")
+
+volunteer_H_non <- read_excel("data/CFA-Volunteer-Demographics.xlsx", sheet = 5, range = "A14:T21")  %>% 
+rename(age = ...1) %>% 
+  mutate(district = "Hume",
+         position = "Non Operational")
+
+volunteer_LM <- read_excel("data/CFA-Volunteer-Demographics.xlsx", sheet = 6, range = "A4:T11")  %>% 
+rename(age = ...1) %>% 
+  mutate(district = "Loddon Mallee",
+         position = "Operational")
+
+volunteer_LM_non <- read_excel("data/CFA-Volunteer-Demographics.xlsx", sheet = 6, range = "A15:T22")  %>% 
+rename(age = ...1) %>% 
+  mutate(district = "Loddon Mallee",
+         position = "Non Operational")
+
+volunteer_NW <- read_excel("data/CFA-Volunteer-Demographics.xlsx", sheet = 7, range = "A4:T11")  %>% 
+rename(age = ...1) %>% 
+  mutate(district = "Northern & Western",
+         position = "Operational")
+
+volunteer_NW_non <- read_excel("data/CFA-Volunteer-Demographics.xlsx", sheet = 7, range = "A15:T22")  %>% 
+rename(age = ...1) %>% 
+  mutate(district = "Northern & Western",
+         position = "Non Operational")
+
+volunteer_SM <- read_excel("data/CFA-Volunteer-Demographics.xlsx", sheet = 8, range = "A4:T11")  %>% 
+rename(age = ...1) %>% 
+  mutate(district = "Southern Metro",
+         position = "Operational")
+
+volunteer_SM_non <- read_excel("data/CFA-Volunteer-Demographics.xlsx", sheet = 8, range = "A15:T22")  %>% 
+rename(age = ...1) %>% 
+  mutate(district = "Southern Metro",
+         position = "Non Operational")
+
+state_vol <- read_excel("data/CFA-Volunteer-Demographics.xlsx", sheet = 9, range = "A3:T10")  %>% 
+rename(age = ...1) %>% 
+  mutate(district = "Statewide",
+         position = "both")
+
+district_vol <- bind_rows(volunteer_BS, volunteer_BS_non, volunteer_EM, volunteer_EM_non, volunteer_G, volunteer_G_non, volunteer_Gr, volunteer_Gr_non, volunteer_H, volunteer_H_non, volunteer_LM, volunteer_LM_non, volunteer_NW, volunteer_NW_non, volunteer_SM, volunteer_SM_non)
+```
+
+```{r ,include = FALSE}
+#statewide volunteer structure
+
+#tidy
+state_vol <- state_vol %>% 
+rename("0-1" = `Less than 1`,
+       "1-5" = `1-5 years`,
+       "6-10"= `6-10 years`,
+       "11-15" = `11-15 years`,
+       )
+```
+
+
+```{r ,include = FALSE}
+age_tidy_state <- state_vol %>% 
+  pivot_longer(cols = c(`0-1 years`, `1-5 years`, `6-10 years`, `11-15 years`, `16-20 years`, `21-25 years`, `26-30 years`, `31-35 years`,`36-40 years`,`41-45 years`,`46-50 years`,`51-55 years`,`56-60 years`,`61-65 years`,`66-70 years`,`71-75 years`,`76-80 years`,`81-85 years`),
+               names_to = "serve_years",
+               values_to = "count") %>% 
+  filter(str_detect(serve_years, "years")) %>% 
+  mutate(Serve_years = str_remove_all(serve_years, " years")) %>% 
+  select(-c(`Not Found`, serve_years))
+  
+
+age_tidy_state[is.na(age_tidy_state)] <- 0
+```
+
+1) Statewide age
+```{r ,include = FALSE}
+#the table of age distribution of the statewide volunteers
+age_state <- age_tidy_state %>% 
+  group_by(age) %>% 
+  summarise(tot_number = sum(count)) %>% 
+  arrange(age)
+```
+
+
+```{r}
+knitr::kable(age_state, caption = "Age Distribution of the Statewide Volunteers",
+        col.names = c("Age", "Count"))
+```
+
+
+```{r}
+#the plot of age distribution of the statewide volunteers
+ggplot(age_state, aes(x = age, y = tot_number)) +
+  geom_col()
+```
+
+2) Statewide serve year
+
+```{r}
+serve_state <- age_tidy_state %>% 
+  group_by(Serve_years) %>% 
+  summarise(tot_number = sum(count)) %>% 
+  arrange(Serve_years)
+```
+
+
+```{r}
+#the table of serve year of the statewide volunteers
+knitr::kable(serve_state, caption = "Total Serve Year of the Statewide Volunteers",
+        col.names = c("Serve Year", "Count"))
+```
+
+```{r}
+#the plot of serve year of the statewide volunteers
+ggplot(serve_state, aes(x = Serve_years, y = tot_number)) +
+  geom_col()
+```
