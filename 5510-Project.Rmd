@@ -24,3 +24,25 @@ library(stringr)
 library(formattable)
 library(tidyr)
 ```
+
+1. What is the most frequent fire incident during July 2015 to June 2016? (CFA Incident Responses)
+
+```{r}
+excel_sheets("data//CFA-Incident-Responses.xlsx")
+min(incident$incident_datetime)
+
+# read the data
+library(readxl)
+incident<- read_excel("data/CFA-Incident-Responses.xlsx", sheet = 1)
+
+
+# count number of incident
+incident_count<- incident %>% 
+  count(code_description) %>% 
+  arrange(desc(n)) %>% 
+  head(10) %>% 
+  kable()
+```
+
+4. What is the volunteer age and serving length structure in 2016? (CFA Volunteer Demographics)
+
