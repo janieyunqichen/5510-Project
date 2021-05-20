@@ -19,3 +19,10 @@ data_CFA_20 <- data_CFA_20%>%
 
 data_CFA_20
 ```
+
+
+CFA_19 <- chron(times= CFA_19_20$`Time it took CFA brigade to respond`)
+CFA_19_20 <- chron(times =CFA_19_20$`Time it took CFA brigade to respond within`)
+
+CFA_19_20
+
