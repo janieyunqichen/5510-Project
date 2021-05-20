@@ -71,3 +71,49 @@ leaflet(data = distribution_species)%>%
             title = NULL, opacity = 0.6)
   
 ```
+
+The summary of the affects on species
+```{r}
+# summary of the affected species
+overlap_summary <- read_excel("data/protected-species-in-fire-affected-areas-20Jan.xlsx", sheet = 2, range = "B13:J17")%>%
+  rename(Spatial_overlap = "Spatial Overlap")%>%
+  pivot_longer(cols = Bird: Spider,
+               names_to = "Species",
+               values_to = "Count_overlap")%>%
+  mutate(reorder(Species, Count_overlap))
+
+ggplot(overlap_summary,
+       aes(Spatial_overlap, Count_overlap,
+           fill = Species,
+           label = Species))+
+  geom_col(position = "fill",
+            alpha = 0.8)+
+  scale_fill_brewer(palette = "OrRd")+
+  xlab("Spatial overlap")+
+  ylab("Count")+
+  ggtitle("The summary of the affects on the spatial overlap")+
+  theme_bw()
+ggplotly()
+```
+
+```{r}
+category_summary <- read_excel("data/protected-species-in-fire-affected-areas-20Jan.xlsx", sheet = 2, range = "B22:J26")%>%
+  rename(Threatened = "...1")%>%
+  pivot_longer(cols = Bird: Spider,
+               names_to = "Species",
+               values_to = "Count_category")%>%
+  mutate(reorder(Species, Count_category))
+
+ggplot(category_summary,
+       aes(Threatened, Count_category,
+           fill = Species,
+           label = Species))+
+  geom_col(position = "fill",
+            alpha = 0.8)+
+  scale_fill_brewer(palette = "OrRd")+
+  xlab("Threatened")+
+  ylab("Count")+
+  ggtitle("The summary of the affects on the threatened situation")+
+  theme_bw()
+ggplotly()
+```
