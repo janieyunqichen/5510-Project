@@ -23,4 +23,51 @@ library(scales)
 library(stringr)      
 library(formattable)
 library(tidyr)
+library(sf)
+library(readxl)
+library(leaflet)
+```
+
+
+
+# How serious the threatened species affected by the Australian bushfire 2020, and what’s the distribution of them?
+
+For analysing the influences on these threatened species, this question was divided into two parts: the distribution of these species and summary the data about the damages, besides, there is a point need to explain, the original data of species is GIS data or we cannot track the species' location, so in this part the cleaned data cannot be saved as csv format. In addition, the spatial overlap and threatened status are regarded as the two focal variables on every category of species.
+
+The tidy dataset of the distribution of species which occur in areas affected by bushfire during 2019/20 season
+```{r}
+protected_species <- read_sf(here::here("data/snes_public_grids_08Aug2019_shapefile/snes_species_combined.shp")) %>%
+  select(sci_name, comm_name,threatened, tax_class, tax_king, geometry)
+```
+
+```{r}
+affected_species <- read_excel("data/protected-species-in-fire-affected-areas-20Jan.xlsx", sheet = 1, range= "C47:I378") %>%
+  rename(sci_name = "Scientific Name\r\nwith links to  Species Profile and Threats (SPRAT) database for map and conservation documents",
+         comm_name = "Common Name",
+         affected_area = "Percentage of the species modelled likely and known distribution within fire affected areas",
+         threatened_status = "EPBC Act listed Threatened Status")%>%
+  select(sci_name, comm_name, affected_area, threatened_status)
+
+# join affected_species with species
+bushfire_species <- affected_species %>%
+  left_join(protected_species, by = c("sci_name"))
+```
+
+```{r}
+distribution_species <- bushfire_species%>%
+  mutate(centroid = map(geometry, ~setNames(st_centroid(.x), c("x", "y")))) %>%
+   unnest_wider(centroid)
+```
+
+```{r}
+color <- colorFactor("Paired", distribution_species$tax_class)
+leaflet(data = distribution_species)%>%
+  addTiles()%>%
+  fitBounds(130, -40, 150,-10)%>%
+  addCircles(~x, ~y,
+             popup = ~(sci_name),
+             color = ~color(tax_class))%>%
+  addLegend("bottomright", pal = color, values = ~tax_class, 
+            title = NULL, opacity = 0.6)
+  
 ```
