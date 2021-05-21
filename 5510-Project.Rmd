@@ -30,11 +30,11 @@ library(leaflet)
 
 
 
-# How serious the threatened species affected by the Australian bushfire 2020, and what’s the distribution of them?
+# Q7: How serious the threatened species affected by the Australian bushfire 2020, and what’s the distribution of them?
 
-For analysing the influences on these threatened species, this question was divided into two parts: the distribution of these species and summary the data about the damages, besides, there is a point need to explain, the original data of species is GIS data or we cannot track the species' location, so in this part the cleaned data cannot be saved as csv format. In addition, the spatial overlap and threatened status are regarded as the two focal variables on every category of species.
+For analysing the influences on these threatened species, this question was divided into two parts: the threatened species distribution and summary the damages of bushfire. In addition, the spatial overlap and threatened status are regarded as the two focal variables on every category of species, so generally, we analysed the affects based on the two points.
 
-The tidy dataset of the distribution of species which occur in areas affected by bushfire during 2019/20 season
+In order to get the geographical coordinates of the species, we combined the data of the species of national environmental significance distributions which is GIS data with the data of species which affected by the bushfire. So here is a interactive map of the distribution for those species which occurred in areas affected by bushfire during 2019/20 season. 
 ```{r}
 protected_species <- read_sf(here::here("data/snes_public_grids_08Aug2019_shapefile/snes_species_combined.shp")) %>%
   select(sci_name, comm_name,threatened, tax_class, tax_king, geometry)
@@ -72,48 +72,53 @@ leaflet(data = distribution_species)%>%
   
 ```
 
-The summary of the affects on species
+The colour of the circle represents the species class, so it can be seen that those species who lived in the Southeastern of Australia, suffered the worst damage apparently, in addition, the plant belongs to Magnoliopsida class had the widest range of damage especially, with the class of Liliopsida followed behind.
+
+The following summary of the results are indicative only, it's just a brief analysis of potential impacts of the bushfire on the species.
 ```{r}
 # summary of the affected species
 overlap_summary <- read_excel("data/protected-species-in-fire-affected-areas-20Jan.xlsx", sheet = 2, range = "B13:J17")%>%
   rename(Spatial_overlap = "Spatial Overlap")%>%
   pivot_longer(cols = Bird: Spider,
                names_to = "Species",
-               values_to = "Count_overlap")%>%
-  mutate(reorder(Species, Count_overlap))
+               values_to = "Count_overlap")
 
 ggplot(overlap_summary,
        aes(Spatial_overlap, Count_overlap,
-           fill = Species,
-           label = Species))+
+           fill = Species))+
+  geom_col(position = "identity",
+            alpha = 0.8)+
+  scale_fill_brewer(palette = "OrRd")+
+  xlab("Spatial overlap")+
+  ylab("count")+
+  ggtitle("The summary of the affects on the spatial overlap")+
+  theme_bw()
+```
+
+According to the plot, it illustrates that more than 80% contained or known distribution had been damaged within the fire extent, besides, the Plant plays a role on the destruction to a varying degree, about 49 listed threatened species have been destroyed. However, most of listed species had more than 10% but less than 30% of the habitats damaged.
+
+```{r}
+category_spatial_summary <- read_excel("data/protected-species-in-fire-affected-areas-20Jan.xlsx", sheet = 2, range = "B4:F8")%>%
+  pivot_longer(cols = `Critically Endangered`: `Listed Migratory only`,
+               names_to = "threatened condition",
+               values_to = "total_Count")
+
+ggplot(category_spatial_summary,
+       aes(`Spatial Overlap`, total_Count,
+           fill = `threatened condition`))+
   geom_col(position = "fill",
             alpha = 0.8)+
   scale_fill_brewer(palette = "OrRd")+
   xlab("Spatial overlap")+
   ylab("Count")+
-  ggtitle("The summary of the affects on the spatial overlap")+
+  ggtitle("The summary of the affects on the spacial overlap by the threantened status")+
   theme_bw()
-ggplotly()
 ```
 
-```{r}
-category_summary <- read_excel("data/protected-species-in-fire-affected-areas-20Jan.xlsx", sheet = 2, range = "B22:J26")%>%
-  rename(Threatened = "...1")%>%
-  pivot_longer(cols = Bird: Spider,
-               names_to = "Species",
-               values_to = "Count_category")%>%
-  mutate(reorder(Species, Count_category))
+So basically, it's the vulnerable and endangered species which suffered the most from the bushfire, there are more 10% but less than 30% habitats area had been destroyed for the most of the vulnerable species, about 80 species of them affected, besides, 10% to 30% area of habitats disappeared for 43 listed endangered species as well.
 
-ggplot(category_summary,
-       aes(Threatened, Count_category,
-           fill = Species,
-           label = Species))+
-  geom_col(position = "fill",
-            alpha = 0.8)+
-  scale_fill_brewer(palette = "OrRd")+
-  xlab("Threatened")+
-  ylab("Count")+
-  ggtitle("The summary of the affects on the threatened situation")+
-  theme_bw()
-ggplotly()
-```
+# Conclusion
+
+To sum up, for most of the listed threatened species, there are more than 10% but less than 30% area has been destroyed, besides, the plants suffered the most serious destruction, with 107 plant species affected. The mammal frog and bird species had similar extent in the destruction.
+
+But actually, many species not currently listed under national environmental law will have had much of their range affected by the fires, and in some cases, that impact may mean that these species have become threatened. The Department will be considering assessments of these species in the near future I think, besides, our knowledge about species distributions, fire severity, other threats, and impact on plants and animals is incomplete, that requires us to update the information further.
