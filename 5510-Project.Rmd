@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ---
 title: "5510-Projecxt"
 author: "AryanSultan_T13_Wed_kable"
@@ -419,3 +420,244 @@ From the table we can see that Dandenong has had the highest number of incidents
 As per the analysis for question on the performance of the brigade, it is safe to say that CFA brigades performed well against the standard delivery service time of eight minutes for the hazard class two incidents. And as per the analysis for the question on the number of incidents, we can see that Dandenong appears to be the area that had highest number of incidents across all hazard classes. 
 
 
+=======
+---
+title: "5510-Projecxt"
+author: "T13_Wed_kable"
+date: "5/17/2021"
+output:
+  bookdown::html_document2: default
+  bookdown::pdf_document2: default
+---
+
+```{r , echo = FALSE, message = FALSE, warning = FALSE, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, 
+                      message=FALSE, 
+                      warning=FALSE)
+
+                    
+library(tidyverse)
+library(readr)
+library(kableExtra)
+library(bookdown)
+library(ggplot2)
+library(ggpubr)
+library(plotly)
+library(data.table)
+library(scales)
+library(stringr)      
+library(formattable)
+library(tidyr)
+library(knitr)
+library(bookdown)
+```
+
+```{r fire, warning=FALSE, echo=FALSE, eval=TRUE, message=FALSE}
+
+fire_detect <- read_csv("data/Table_MODIS_fire_counts_2002_2019_Victoria_per_fire_year.csv")
+country_area_state <- read_csv("data/country_area_state.csv")
+melb_air <- read_csv("data/melb_air.csv")
+fire_detect_nw <- read_csv("data/fire_detect_nw.csv")
+fire_total_detects <- read_csv("data/fire_total_detects.csv")
+perc_affected_state <- read_csv("data/perc_affected_state.csv")
+ft2total <- read_csv("data/ft2total.csv")
+ft3burnt <-  read_csv("data/ft3burnt.csv")
+ft4perc  <- read_csv("data/ft4perc.csv")
+  
+```
+
+
+
+## Fire Detections and Land Type in Bushfire Season
+
+
+According to the  information provided by the department of agriculture of Australian, in the figure \@ref(tab:tableyears) below can be seen the number of the fire detections by year. The number of cases registered by the season 2019/2020 were 103.627. The extent of land affected by the bushfires will be detailed i the next part of the report. something interesting to remark it that even though the season 2019/2020 seemed very hard for the country, in reality this number of cases is not compared with the number of observation for the same season in 2006/2007 and 2002/2003 that hold 3'327484 and 2'974.094 cases respectively in Victoria.
+
+
+
+
+```{r tableyears, message=FALSE, fig.pos="hold"}
+
+
+fire_total_detects %>% 
+  select(Years, n) %>% 
+  arrange(desc(n)) %>% 
+  rename("Total Counts" = n) %>% 
+  kable(caption = "Total detections by year") %>%
+ kable_styling(c("hover", 
+                  "condensed",
+                  position = "center", 
+                  fixed_thead = TRUE), 
+                latex_options = "HOLD_position", full_width = FALSE)
+
+```
+
+
+```{r a, message=FALSE, fig.width=15, fig.height=8, fig.cap="Number of Observations by Year", fig.align='default'}
+
+
+
+
+ ggplot(fire_total_detects, 
+                          aes(x = Years, 
+                              y = n)) +
+  geom_col(fill= 'coral3') +
+  coord_flip()+
+  labs( y = "Counts") +
+  geom_text(aes(label = n, size = 1, hjust= -0.5))+
+  theme(legend.position = "none")+
+  scale_y_continuous(limits = c(0,3500000))+
+  theme_bw()
+
+
+  
+
+```
+
+\clearpage
+
+
+### Percentage of Affected Land by State
+
+
+Taking in detail the number of the observations by state in the season 2019/2020, we can see that the states with major affectation of the forested land were Australian Capital Territory, Victoria and New south Wales with 92.78%, 92.02% and 90.15% respectively. See Figure \@ref(fig:affectedstate). The territory with the least affectation was Northern Territory (0%), followed by South Australia with 43.68%.
+
+```{r b, message=FALSE}
+
+perc_affected_state <- perc_affected_state  %>%
+  select(Jurisdiction, 
+         `Proportion of fire area that is forested (perc)`) %>% 
+  mutate("Proportion of fire" = 100-`Proportion of fire area that is forested (perc)`) %>% 
+  pivot_longer(names_to = "Burnt Area", values_to = "Percentage", cols = -Jurisdiction)
+
+```
+
+
+```{r affectedstate, message=FALSE, fig.align='center', fig.show="hold", fig.cap="Affectation by State"}
+
+ggplot(data = perc_affected_state, aes(x = Jurisdiction,
+                           y = Percentage, fill= `Burnt Area`)) +
+    geom_bar(position="stack", stat="identity")+ 
+    geom_text(aes(label = paste0(round(Percentage,2),"%")), position = position_stack(vjust = 0.5), size = 3)+
+    scale_y_continuous(labels = function(x) paste0(x, "%"), 
+                       breaks = seq(0, 100, 10))+
+    coord_flip()+
+    theme_bw()+
+    theme(legend.position = "bottom")
+   
+  
+ 
+```
+
+
+
+### Percentage of Forested Land Affected in Victoria by Type
+
+
+According to the classification of the land in Victoria, Multiple-use Public Forest got affected by 29%, whereas the Nature Conservation Reserve had 15% of burnt land. similarly the Unresolved tenure land lost 13% of it's extent by the fires. In the case of private land, around 6% was consumed by fires. See Figure \@ref(fig:affectedvic).
+
+
+```{r affectedvic, message=FALSE, fig.align='center', fig.show="hold", fig.cap="Land Type affected in Victoria"}
+
+
+ft4perc <- ft4perc  %>% 
+  select(...1,Vic.) %>% 
+  rename("Type of Forest" = ...1, "Burnt Land" = Vic.) %>% 
+  filter(`Type of Forest` %in% 
+           c("Leasehold forest", 
+             "Multiple-use public forest", 
+             "Nature conservation reserve", 
+             "Other Crown land", 
+             "Private forest", 
+             "Unresolved tenure")) %>% 
+  mutate("Safe Land" = 100-`Burnt Land`) %>% 
+  pivot_longer(names_to = "Burnt Area Victoria", values_to = "Percentage", cols = -`Type of Forest`)
+
+  ggplot(data = ft4perc, aes(x = `Type of Forest`,
+                           y = Percentage, fill= `Burnt Area Victoria`)) +
+    geom_bar(position= position_stack(reverse = T), stat="identity")+
+    coord_flip()+
+    theme(legend.position = "bottom")+
+    theme_bw() +
+    geom_text(aes(label = paste0(round(Percentage,2),"%")), position = position_stack(vjust = 0.5, reverse = T), size = 3)
+
+```
+
+
+
+\clearpage
+
+## Melbourne Air Quality Index
+
+The bushfires season had a huge negative impact in the air quality in Victoria, as an example we took data from the Environment Protection Authority in Australia which recorder the PM2.5 (Fine Particulate Matter 2.5) which is an air pollutant concern for the community's health, the higher the rate the worse impact for individuals. In the figure \@ref(fig:airyears) below can be seen the levels for the previous four years, with clearly a huge peak in January 2020.
+
+
+```{r airyears, warning=FALSE, message=FALSE , fig.align='center', fig.cap="Melbourne Air Quality"}
+
+melb_air2 <- melb_air %>%  select(date,pm25) %>% 
+  mutate(date = as.Date(date, format = "%d/%m/%Y"))
+
+melb_air2 %>%
+  ggplot()+
+  geom_line(aes(x = date, 
+                y = pm25), 
+            colour = "#FF6600")+
+  theme_bw()+
+  labs(x = "3 Year Historical Melbourne Air Index", 
+       y = "Air Index Score")+
+  scale_y_continuous(limits = c(0,280),
+                     breaks = seq(0,280,50))
+
+
+```
+
+
+The figure below shows the classification of the air quality index, this source will give a clearer idea of the readings of the bushfire season and for previous levels. 
+
+
+```{r c, fig.align='center', out.width="70%", message=FALSE, fig.cap="Air Quality Levels"}
+
+knitr::include_graphics(here::here('images/polution_table.png'))
+
+```
+
+Finally, having a closer look to the most affected months from January to April, we cans see that on 15th January the levels recorded was 272, clearly very unhealthy, the population needed to be indoors even more for those with respiratory affections. Certainly the first two weeks were highly affected by the pollution and the fires, all this happened mainly in the first two weeks of the year, leaving highly affected the fauna and flora. 
+
+```{r d, message=FALSE, fig.align='center', fig.cap="Bushfire Season 2019/2020 Air Quality in Melbourne"}
+
+
+melb_air2 %>% 
+  filter(date >= "2019-12-01" & date <= "2020-03-30" ) %>% 
+  
+
+ ggplot()+
+  geom_line(aes(x = date, 
+                y = pm25), 
+            colour = "#FF6600")+
+  theme_bw()+
+  labs(x = "Melbourne Air Index in 2020 (January to April)", 
+       y = "Air Index Score")+
+  scale_y_continuous(limits = c(0,300),
+                     breaks = seq(0,300,20))
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+>>>>>>> Nelson-Quintero
