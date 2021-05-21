@@ -362,6 +362,34 @@ binding_data
 
 Using the summary function we can see the maximum number of incidents across all hazard classes for specified districts for the given time frame. Data used here is the merged data of the four data sets, using bind_rows function.
 
+```{r}
+DataQ1_4 <-  read_csv("~/5510_group_project/data/Question_3_dat_2.csv")%>%
+  rename(Num_incdents1=`Number of incidents within the Brigade Area for the reporting period across all Hazard Classes Q1`)%>%
+  rename(Num_incdents2=`Number of incidents within the Brigade Area for the reporting period across all Hazard Classes Q2`)%>%
+  rename(Num_incdents3=`Number of incidents within the Brigade Area for the reporting period across all Hazard Classes Q3`)%>%
+  rename(Num_incdents4=`Number of incidents within the Brigade Area for the reporting period across all Hazard Classes Q4`)
+
+```
+
+
+
+```{r}  
+DataQ1 <- DataQ1_4 %>% 
+  select(Num_incdents1,
+         Num_incdents2,
+         Num_incdents3,
+         Num_incdents4)%>%
+  summary()%>%
+  kable(caption = "Summary of the incidents.") %>%
+  kable_styling(bootstrap_options = c("striped", "hover"))
+  
+DataQ1
+  
+```
+In the above table, we can see the summary for number of incidents in each quarter; we see that the highest number of incidents was recorded as `r max(DataQ1_4$Num_incdents2)` in the second quarter. 
+
+The data used here is the merged data that contains information on all four quarters. For the next steps, we will use the binding_data from above. 
+
 
 ```{r}
  Highest_NumberIncidents <- binding_data%>%
