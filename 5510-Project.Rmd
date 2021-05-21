@@ -38,6 +38,12 @@ library(ggthemes)
 
 ### Introduction 
 
+There are three critical components of CFA delivery services:
+Response time: This is measured from when the brigade is alerted to an event to when the brigade arrives at the scene.
+
+Brigade area: Each brigade has a defined brigade area, which specifies the operational footprint of the brigade.
+
+Hazard classes: Hazard class defines the type of risk for a given area. Each brigade area may contain multiple hazard classes. However, each hazard class has a predefined service delivery standards. 
 
 In the data we have two variables that record the amount of time it CFA brigade to respond to incidents in specified areas: 
 
@@ -126,7 +132,7 @@ data_20 %>%
   kable() %>%
 kable_styling(bootstrap_options = c("striped","hover"))
 ```
-The mean time that it took CFA brigades to respond to incidents in their own CFA brigade areas is `r meam(data_20$TimeResponse_within)`. This is very close to the target response time for brigades, which is eight minutes. 
+The mean time that it took CFA brigades to respond to incidents in their own CFA brigade areas is `r mean(data_20$TimeResponse_within)`. This is very close to the target response time for brigades, which is eight minutes. 
 
 
 
@@ -140,7 +146,13 @@ data20_avgRT(data_20$TimeResponse_within)
   
 
 ```
+For the year 2018/19, we have used the data belonging to the year 2018/19, which was acquired from the [CFA official site](https://discover.data.vic.gov.au/organization/country-fire-authority).
 
+The most recent data set from July to September 2019 showed CFA brigades responding to 9,830 incidents, of which 5,013 required an emergency response.
+
+In 87 per cent of emergencies, the community received a fire service within the standard response time, which was broadly consistent with previous quarters.[CFA News](https://news.cfa.vic.gov.au/-/cfa-releases-latest-response-data)
+
+For this part of the question, I repeated the same data cleaning steps as mentioned above.
 
 ```{r}
 data_19 <- read.csv("~/5510_group_project/data/dat_q4_2018_19.csv")%>%
@@ -173,6 +185,9 @@ data_19$TimeResponse <- chron(times=data_19$TimeResponse)
 
 data_19
 ```
+Let's visualize the data for the year 2018/19.
+
+
 
 ```{r}
 ggplot(data_19) +
@@ -198,8 +213,7 @@ data_19%>%
   kable() %>%
 kable_styling(bootstrap_options = c("striped","hover"))
 ```
-
-
+Using the summary function, we can see that the mean time taken by the CFA brigades to respond to the incidents in their own areas was `r mean(data_19$TimeResponse_within)`. This is agian very close to the target standard which was eight minutes.
 
 
 ```{r}
@@ -212,16 +226,36 @@ data19_avgRT(data_19$TimeResponse_within)
 
 ```
 
-
-
-#Question 3
-
-## Intriduction
-
-### Context
-
 ### Analysis
 
+Keeping it brief, we can state that CFA brigades' performance against standard time of eight minutes for the hazard class 2 was achieved successfully, since we see a little variation in terms of amount of time taken by the CFA. 
+
+## Which of the CFA brigade areas have had the highest number of incidents across Hazard classes for the reported period (2019/20) (four quarters). (CFA Emergency Response Time)
+
+### Introduction
+
+In this question, we have one variable that records the number of incidents across all hazard classes for all the specified districts. There are three predefined hazard classes: 2, 3 and 4. 
+ 
+ * Hazard class 2 (Medium Urban): This includes significant urban areas which are primarily residential including commercial centres, clusters of industrial and/or high density community services e.g. schools, correctional facilities, hospitals. (8 minutes SDS). 
+ 
+ * Hazard Class 3 (Low Urban): This includes all urban areas that are not included in Hazard Class 2 and includes predominantly residential occupancies and small industries. (10 minutes SDS). 
+ 
+ * Hazard Class 4 (Rural): This includes primarily the natural surroundings in terms of bush and grassland, but also involves isolated dwellings and structures within those areas.
+
+The variable of interest for us is : Number_Incidents_total.
+
+For this purpose, I did bit of data wrangling:
+
+ - renamed variables such that now we have a `CFA_Brigade_Area` variable, and `Number_Incidents_total`variable in each data set. (I had four datasets for Quarters 1, 2, 3,and 4)
+ 
+ - mutate Number of incidents into a numeric vector. 
+ 
+ - Join data using bind_rows
+
+### Context
+In this question we are concerned with district that has had the highest number of incidents across all hazard classes in the year 2019/20.
+
+Let's first visualize data from each data set for the quarters 1, 2, 3 and 4 for the year 2019/20.
 
 ```{r}
 dat_Q1_2020 <- read_csv("~/5510_group_project/data/dat_Q1_2020.csv") %>%
@@ -236,15 +270,15 @@ dat_Q1_2020
 ggplot(dat_Q1_2020, aes( x = Number_Incidents_total, 
                          y = CFA_Brigade_Area)) + 
 geom_point() +
-  theme_stata() + 
+  theme_light() + 
   theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1), axis.title.x = element_text(vjust=-1.8))+
   theme(axis.text.y =  element_text(angle = , vjust = 0.5, hjust=1), axis.title.y =  element_text(vjust=-1.8))+
-  scale_colour_stata() +
+  
   xlab("Incidents") +  
  ylab("Districts") +  
   ggtitle("Number of incidents") 
 ```
-
+The above plot shows us the number of incidents for the first quarter 2019/20. On the x-axis we have number of incidents and the y-axis we can see the names of districts.
 
 
 ```{r}
@@ -262,16 +296,14 @@ dat_Q2_2020
                             colour = factor(Number_Incidents_total)))+
                              
   geom_point() +  
-  theme_solarized_2(light = FALSE) +
+  theme_light() +
   theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1), axis.title.x = element_text(vjust=-1.8))+
   theme(axis.text.y =  element_text(angle = , vjust = 1, hjust=1), axis.title.y =  element_text(vjust=-1.8))+
   ggtitle("Number of incidents")
 
 ```
 
-
-
-
+Similiar to the plot above, this plot shows us the number of incidents for the second quarter 2019/20. On the x-axis we have number of incidents and the y-axis we can see the names of districts.
 
 
 
@@ -296,7 +328,7 @@ colour = factor(Number_Incidents_total)))  +
 ```
 
 
-
+The above plot shows us the number of incidents for the third quarter 2019/20. On the x-axis we have number of incidents and the y-axis we can see the names of districts.
 
 
 ```{r}
@@ -317,11 +349,20 @@ colour = factor(Number_Incidents_total))) +
 
 ```
 
+The above plot shows us the number of incidents for the fourth quarter 2019/20. On the x-axis we have number of incidents and the y-axis we can see the names of districts.
+
+
 ```{r}
 binding_data <- bind_rows(dat_Q1_2020,dat_Q2_2020,dat_Q3_2020,dat_Q4_2020)
 
 binding_data
 ```
+
+### Analysis
+
+Using the summary function we can see the maximum number of incidents across all hazard classes for specified districts for the given time frame. Data used here is the merged data of the four data sets, using bind_rows function.
+
+
 ```{r}
  Highest_NumberIncidents <- binding_data%>%
   select(Number_Incidents_total)%>%
@@ -331,7 +372,7 @@ summary()%>%
 
 Highest_NumberIncidents
 ```
-
+We can see that highest number of incidents are `r max(binding_data$Number_Incidents_total)`, so now using the filter function. let's see which district has `r max(binding_data$Number_Incidents_total)` incidents. 
 
 
 
@@ -343,5 +384,10 @@ binding_data%>%
   kable(caption = "Dandenong district has the highest number of incidents across all hazard classes in all of the four quarters.") %>%
   kable_styling(bootstrap_options = c("striped", "hover"))
 ```
+From the table we can see that Dandenong has had the highest number of incidents.
+
+## Conclusion
+
+As per the analysis for question on the performance of the brigade, it is safe to say that CFA brigades performed well against the standard delivery service time of eight minutes for the hazard class two incidents. And as per the analysis for the question on the number of incidents, we can see that Dandenong appears to be the area that had highest number of incidents across all hazard classes. 
 
 
