@@ -34,4 +34,7 @@ Do it for all the 4 small dataframes
 Then all the 4 datafranes will have one column in common -> ‘Quarter’
 
 Now bindrows,
-
+rename(Num_incdents=`Number of incidents within the Brigade Area for the reporting period across all Hazard Classes Q1`)%>%
+  rename(Num_incdents=`Number of incidents within the Brigade Area for the reporting period across all Hazard Classes Q2`)%>%
+  rename(Num_incdents=`Number of incidents within the Brigade Area for the reporting period across all Hazard Classes Q3`)%>%
+  rename(Num_incdents=`Number of incidents within the Brigade Area for the reporting period across all Hazard Classes Q4`)
