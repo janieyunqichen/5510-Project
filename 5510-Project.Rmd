@@ -196,17 +196,19 @@ data_19$TimeResponse_within <- chron(times= data_19$TimeResponse_within)
 data_19
 ```
 
+As a sample of the actions it can be seen the top 10 interventions for each suburb.
+
 ```{r}
 
 data_19$TimeResponse <- chron(times=data_19$TimeResponse)
 
-data_19
+head(data_19,10)
 ```
 Let's visualize the data for the year 2018/19.
 
 
 
-```{r}
+```{r, fig.height=12}
 ggplot(data_19) +
   geom_point(data = data_19,
 aes(x = TimeResponse_within,
