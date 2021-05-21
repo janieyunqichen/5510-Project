@@ -2,8 +2,10 @@
 title: "5510-Projecxt"
 author: "AryanSultan_T13_Wed_kable"
 date: "5/17/2021"
-output: 
-  html_document: 
+output:
+  pdf_document:
+    toc: yes
+  html_document:
     fig_height: 8
     fig_caption: yes
     number_sections: yes
