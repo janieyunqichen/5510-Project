@@ -26,3 +26,12 @@ CFA_19_20 <- chron(times =CFA_19_20$`Time it took CFA brigade to respond within`
 
 CFA_19_20
 
+Pivot longer on Quarter, call the new column as ‘Quarter’
+
+Do it for all the 4 small dataframes
+
+
+Then all the 4 datafranes will have one column in common -> ‘Quarter’
+
+Now bindrows,
+
