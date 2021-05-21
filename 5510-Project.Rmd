@@ -1,15 +1,14 @@
-<<<<<<< HEAD
 ---
 title: "5510-Projecxt"
 author: "AryanSultan_T13_Wed_kable"
 date: "5/17/2021"
-output: 
-  html_document: 
-    fig_height: 8
-    fig_caption: yes
-    number_sections: yes
-    toc: yes
+output:
+ bookdown::pdf_document2: default
+ bookdown::html_document2: default
+ keep_tex: yes
+   
 ---
+
 
 ```{r , echo = FALSE, message = FALSE, warning = FALSE, include=FALSE, eval = TRUE}
 knitr::opts_chunk$set(echo = TRUE, 
@@ -31,7 +30,24 @@ library(formattable)
 library(tidyr)
 library(lubridate)
 library(ggthemes)
+library(knitr)
+
 ```
+
+```{r reading, warning=FALSE, echo=FALSE, eval=TRUE, message=FALSE}
+
+fire_detect <- read_csv("data/Table_MODIS_fire_counts_2002_2019_Victoria_per_fire_year.csv")
+country_area_state <- read_csv("data/country_area_state.csv")
+melb_air <- read_csv("data/melb_air.csv")
+fire_detect_nw <- read_csv("data/fire_detect_nw.csv")
+fire_total_detects <- read_csv("data/fire_total_detects.csv")
+perc_affected_state <- read_csv("data/perc_affected_state.csv")
+ft2total <- read_csv("data/ft2total.csv")
+ft3burnt <-  read_csv("data/ft3burnt.csv")
+ft4perc  <- read_csv("data/ft4perc.csv")
+  
+```
+
 
 
 ## How long did it take on average for the CFA brigade to respond to incidents in their own areas for hazard class 2 in Q4 2018/19 and Q4 2019/20? Also, this will be analyzed against the standard time (given in the data for each of the hazard classes). (CFA Emergency Response Time)
@@ -70,7 +86,7 @@ CFA has service delivery standards, which specify a response time target for a b
 
 
 ```{r}
-data_20 <- read.csv("~/5510_group_project/data/dat_q4_2020.csv")%>%
+data_20 <- read.csv("data/dat_q4_2020.csv") %>%
   rename(CFA_district = CFA.District)%>%
   rename(CFA_Brigade_Area = CFA.Brigade.Area)%>%
   rename(Number_of_incidents = `Number.of.emergency.incidents.within.the.Brigade.Area.for.the.reporting.period.for.Hazard.Class.2`)%>%
@@ -156,7 +172,7 @@ In 87 per cent of emergencies, the community received a fire service within the 
 For this part of the question, I repeated the same data cleaning steps as mentioned above.
 
 ```{r}
-data_19 <- read.csv("~/5510_group_project/data/dat_q4_2018_19.csv")%>%
+data_19 <- read.csv("data/dat_q4_2018_19.csv")%>%
   rename(CFA_district = CFA.District)%>%
   rename(CFA_Brigade_Area = CFA.Brigade.Area)%>%
   rename(Number_of_incidents = `Number.of.emergency.incidents.within.the.Brigade.Area.for.the.reporting.period.for.Hazard.Class.2`)%>%
@@ -259,7 +275,7 @@ In this question we are concerned with district that has had the highest number 
 Let's first visualize data from each data set for the quarters 1, 2, 3 and 4 for the year 2019/20.
 
 ```{r}
-dat_Q1_2020 <- read_csv("~/5510_group_project/data/dat_Q1_2020.csv") %>%
+dat_Q1_2020 <- read_csv("data/dat_Q1_2020.csv") %>%
   rename(Number_Incidents_total =`Number of incidents within the Brigade Area for the reporting period across all Hazard Classes`)%>%
   rename(CFA_Brigade_Area = `CFA Brigade Area`)
 
@@ -283,7 +299,7 @@ The above plot shows us the number of incidents for the first quarter 2019/20. O
 
 
 ```{r}
-dat_Q2_2020 <- read_csv("~/5510_group_project/data/dat_Q2_2020.csv")%>%
+dat_Q2_2020 <- read_csv("data/dat_Q2_2020.csv")%>%
   rename(Number_Incidents_total = `Number of incidents within the Brigade Area for the reporting period across all Hazard Classes`)%>%
   rename(CFA_Brigade_Area = `CFA Brigade Area`)
 
@@ -312,7 +328,7 @@ Similiar to the plot above, this plot shows us the number of incidents for the s
 
 
 ```{r}
-dat_Q3_2020 <- read_csv("~/5510_group_project/data/dat_Q3_2020.csv") %>%
+dat_Q3_2020 <- read_csv("data/dat_Q3_2020.csv") %>%
   rename(Number_Incidents_total = `Number of incidents within the Brigade Area for the reporting period across all Hazard Classes`)%>%
   rename(CFA_Brigade_Area = `CFA Brigade Area`)
   
@@ -333,7 +349,7 @@ The above plot shows us the number of incidents for the third quarter 2019/20. O
 
 
 ```{r}
-dat_Q4_2020 <- read_csv("~/5510_group_project/data/dat_2020Q4.csv")%>%
+dat_Q4_2020 <- read_csv("data/dat_2020Q4.csv")%>%
   select(`CFA District`, `CFA Brigade Area`, `Number of incidents within the Brigade Area for the reporting period across all Hazard Classes`)%>%
   rename(Number_Incidents_total = `Number of incidents within the Brigade Area for the reporting period across all Hazard Classes`)%>%
     rename(CFA_Brigade_Area = `CFA Brigade Area`)
@@ -364,7 +380,7 @@ binding_data
 Using the summary function we can see the maximum number of incidents across all hazard classes for specified districts for the given time frame. Data used here is the merged data of the four data sets, using bind_rows function.
 
 ```{r}
-DataQ1_4 <-  read_csv("~/5510_group_project/data/Question_3_dat_2.csv")%>%
+DataQ1_4 <-  read_csv("data/Question_3_dat_2.csv")%>%
   rename(Num_incdents1=`Number of incidents within the Brigade Area for the reporting period across all Hazard Classes Q1`)%>%
   rename(Num_incdents2=`Number of incidents within the Brigade Area for the reporting period across all Hazard Classes Q2`)%>%
   rename(Num_incdents3=`Number of incidents within the Brigade Area for the reporting period across all Hazard Classes Q3`)%>%
@@ -420,51 +436,9 @@ From the table we can see that Dandenong has had the highest number of incidents
 As per the analysis for question on the performance of the brigade, it is safe to say that CFA brigades performed well against the standard delivery service time of eight minutes for the hazard class two incidents. And as per the analysis for the question on the number of incidents, we can see that Dandenong appears to be the area that had highest number of incidents across all hazard classes. 
 
 
-=======
----
-title: "5510-Projecxt"
-author: "T13_Wed_kable"
-date: "5/17/2021"
-output:
-  bookdown::html_document2: default
-  bookdown::pdf_document2: default
----
 
-```{r , echo = FALSE, message = FALSE, warning = FALSE, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, 
-                      message=FALSE, 
-                      warning=FALSE)
 
-                    
-library(tidyverse)
-library(readr)
-library(kableExtra)
-library(bookdown)
-library(ggplot2)
-library(ggpubr)
-library(plotly)
-library(data.table)
-library(scales)
-library(stringr)      
-library(formattable)
-library(tidyr)
-library(knitr)
-library(bookdown)
-```
 
-```{r fire, warning=FALSE, echo=FALSE, eval=TRUE, message=FALSE}
-
-fire_detect <- read_csv("data/Table_MODIS_fire_counts_2002_2019_Victoria_per_fire_year.csv")
-country_area_state <- read_csv("data/country_area_state.csv")
-melb_air <- read_csv("data/melb_air.csv")
-fire_detect_nw <- read_csv("data/fire_detect_nw.csv")
-fire_total_detects <- read_csv("data/fire_total_detects.csv")
-perc_affected_state <- read_csv("data/perc_affected_state.csv")
-ft2total <- read_csv("data/ft2total.csv")
-ft3burnt <-  read_csv("data/ft3burnt.csv")
-ft4perc  <- read_csv("data/ft4perc.csv")
-  
-```
 
 
 
@@ -488,7 +462,7 @@ fire_total_detects %>%
                   "condensed",
                   position = "center", 
                   fixed_thead = TRUE), 
-                latex_options = "HOLD_position", full_width = FALSE)
+                  full_width = FALSE)
 
 ```
 
@@ -528,7 +502,9 @@ perc_affected_state <- perc_affected_state  %>%
   select(Jurisdiction, 
          `Proportion of fire area that is forested (perc)`) %>% 
   mutate("Proportion of fire" = 100-`Proportion of fire area that is forested (perc)`) %>% 
-  pivot_longer(names_to = "Burnt Area", values_to = "Percentage", cols = -Jurisdiction)
+  pivot_longer(names_to = "Burnt Area", 
+               values_to = "Percentage", 
+               cols = -Jurisdiction)
 
 ```
 
@@ -536,9 +512,13 @@ perc_affected_state <- perc_affected_state  %>%
 ```{r affectedstate, message=FALSE, fig.align='center', fig.show="hold", fig.cap="Affectation by State"}
 
 ggplot(data = perc_affected_state, aes(x = Jurisdiction,
-                           y = Percentage, fill= `Burnt Area`)) +
-    geom_bar(position="stack", stat="identity")+ 
-    geom_text(aes(label = paste0(round(Percentage,2),"%")), position = position_stack(vjust = 0.5), size = 3)+
+                           y = Percentage, 
+                           fill= `Burnt Area`)) +
+    geom_bar(position="stack", 
+             stat="identity")+ 
+    geom_text(aes(label = paste0(round(Percentage,2),"%")), 
+              position = position_stack(vjust = 0.5), 
+              size = 3)+
     scale_y_continuous(labels = function(x) paste0(x, "%"), 
                        breaks = seq(0, 100, 10))+
     coord_flip()+
@@ -659,5 +639,3 @@ melb_air2 %>%
 
 
 
-
->>>>>>> Nelson-Quintero
