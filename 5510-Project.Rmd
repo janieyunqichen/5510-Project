@@ -1,3 +1,4 @@
+
 ---
 title: "5510-Projecxt"
 author: "AryanSultan_T13_Wed_kable"
@@ -47,6 +48,41 @@ ft4perc  <- read_csv("data/ft4perc.csv")
   
 ```
 
+## 1. What is the most frequent fire incident in Victoria (July 2015 to June 2016)? 
+
+```{r,include = FALSE}
+#excel_sheets("data/CFA-Incident-Responses.xlsx")
+
+# read the data
+library(readxl)
+incident<- read_csv("data/incident.csv")
+```
+
+
+```{r}
+# count number of incident
+q1table <- incident %>% 
+  count(code_description) %>% 
+  arrange(desc(n)) %>% 
+  head(10)  
+
+knitr::kable(q1table, caption = "The Top 10 Fire Incidents in Victoria during 2015-2016",
+      col.names = c("Case Name", "Count")) %>% 
+  kable_styling(c("hover", 
+                  "condensed",
+                  position = "center", 
+                  fixed_thead = TRUE))
+```
+
+
+From the table above, during 2015-2016, the top 3 most frequently happened fire incidents are not directly caused by human beings. 
+
+The top one is the **`r q1table$code_description[1]`** contains bushfire, wildfire, or rural fire. They are defined as the unplanned, unwanted, uncontrolled fire in an area of combustible vegetation starting in rural areas and urban areas.
+
+The second place is the **`r q1table$code_description[2]`**. The smoke released by any type of fire is a mixture of particles and chemicals produced by the incomplete burning of carbon-containing materials. All smoke contains carbon monoxide, carbon dioxide and particulate matter (PM or soot). 
+
+The third is **`r q1table$code_description[3]`**.  
+Based on the data supplied from New South Wales, organic products, including green waste, timber waste, and compost, are more likely to combust. Also, there is a large degree of uncertainty about the products that are involved in recorded fires.
 
 
 ## How long did it take on average for the CFA brigade to respond to incidents in their own areas for hazard class 2 in Q4 2018/19 and Q4 2019/20? Also, this will be analyzed against the standard time (given in the data for each of the hazard classes). (CFA Emergency Response Time)
@@ -442,6 +478,164 @@ As per the analysis for question on the performance of the brigade, it is safe t
 
 
 
+## 4. What is the volunteer structure in 2016?
+
+```{r , include = FALSE}
+all_vol <- read_csv("data/volunteer_district.csv")
+state_vol <- all_vol %>% 
+  filter(district == "Statewide")
+  
+district_vol <- all_vol %>% 
+  filter(district != "Statewide")
+
+#tidy
+state_vol <- state_vol %>% 
+rename("0-1 years" = `Less than 1`)
+
+district_vol <- district_vol %>% 
+rename("0-1 years" = `Less than 1`)
+```
+
+
+```{r ,include = FALSE}
+age_tidy_state <- state_vol %>% 
+  pivot_longer(cols = c(`0-1 years`, `1-5 years`, `6-10 years`, `11-15 years`, `16-20 years`, `21-25 years`, `26-30 years`, `31-35 years`,`36-40 years`,`41-45 years`,`46-50 years`,`51-55 years`,`56-60 years`,`61-65 years`,`66-70 years`,`71-75 years`,`76-80 years`,`81-85 years`,`86 plus`),
+               names_to = "serve_years",
+               values_to = "count") %>% 
+ # filter(str_detect(serve_years, "years")) %>% 
+ # mutate(Serve_years = str_remove_all(serve_years, " years")) %>% 
+  select(-c(`Not Found`))
+  
+
+age_tidy_state[is.na(age_tidy_state)] <- 0
+```
+
+#### 1. Statewide Age Distribution
+```{r ,include = FALSE}
+#prepare the data
+age_state <- age_tidy_state %>% 
+  group_by(age) %>% 
+  summarise(tot_number = sum(count))%>% 
+  mutate(percentage = tot_number/sum(tot_number)) %>% 
+  arrange(age)
+age_state$percentage <- percent(age_state$percentage)
+```
+
+
+```{r}
+#table for age distribution of the statewide volunteers
+knitr::kable(age_state, caption = "Age Distribution of the Statewide Volunteers",
+        col.names = c("Age", "Count", "Percentage")) %>% 
+  kable_styling(c("hover", 
+                  "condensed",
+                  position = "center", 
+                  fixed_thead = TRUE))
+```
+
+
+```{r}
+#the plot of age distribution of the statewide volunteers
+ggplot(age_state, aes(x = age, y = tot_number)) +
+  geom_col()+
+  labs(x = "Age", y = "Count", caption = "Age Distribution of the Statewide Volunteers") +
+  theme_classic()
+```
+
+From the above table and figure, among the whole Victoria state, half of the volunteers' age is greater than 45. There are more volunteers with the age increasing. The largest group of volunteers is aging older than 65. 
+
+#### 2. Statewide Serve Year Situation 
+
+```{r}
+
+serve_state <- age_tidy_state %>% 
+  group_by(serve_years) %>% 
+  summarise(tot_number = sum(count)) %>% 
+  mutate(percentage = tot_number/sum(tot_number)) %>% 
+  arrange(desc(percentage))
+
+library(formattable)
+serve_state$percentage <- percent(serve_state$percentage)
+```
+
+
+```{r}
+#the table of serve year of the statewide volunteers
+knitr::kable(serve_state, caption = "Total Serve Year of the Statewide Volunteers",
+        col.names = c("Serve Year","Count", "Percentage")) %>% 
+  kable_styling(c("hover", 
+                  "condensed",
+                  position = "center", 
+                  fixed_thead = TRUE))
+```
+
+
+```{r, fig.width=13, fig.align="center"}
+#the plot of serve year of the statewide volunteers
+ggplot(serve_state, aes(x = reorder(serve_years, -tot_number), y = tot_number)) +
+  geom_col()+
+  labs(x = "Serve Yers", y = "Count", caption = "Serve Year Situation of the Statewide Volunteers") +
+  theme_classic()
+```
+
+From the above table and the figure, 20% of the people have served as CFA volunteers for 1-5 years. Generally, the number of people is decreasing with the serving years is increasing. Notably, only 5% of people served less than one year, and six people served for 76-80 years.
+
+#### 3.Volunteer Number and Position Structure by District
+
+```{r , include=FALSE}
+tidy_district <- district_vol %>% 
+  pivot_longer(cols = c(`0-1 years`, `1-5 years`, `6-10 years`, `11-15 years`, `16-20 years`, `21-25 years`, `26-30 years`, `31-35 years`,`36-40 years`,`41-45 years`,`46-50 years`,`51-55 years`,`56-60 years`,`61-65 years`,`66-70 years`,`71-75 years`,`76-80 years`,`81-85 years`,`86 plus`),
+               names_to = "serve_years",
+               values_to = "count") %>% 
+  #filter(str_detect(serve_years, "years")) %>% 
+ # mutate(Serve_years = str_remove_all(serve_years, " years")) %>% 
+  select(-c(`Not Found`))
+  
+tidy_district[is.na(tidy_district)] <- 0
+
+q4p2 <- tidy_district %>% 
+  group_by(position, district) %>% 
+  summarise(count = sum(count)) 
+q4p2 <- q4p2 %>% 
+  group_by(district) %>% 
+  mutate(dis_sum = sum(count),
+         percentage = count/dis_sum)
+q4p2$percentage <- percent(q4p2$percentage)
+
+q4t1 <- tidy_district %>% 
+  group_by(district) %>% 
+  summarise(count = sum(count)) %>% 
+  arrange(desc(count))
+
+```
+
+```{r}
+knitr::kable(q4t1, caption = "Total Number of the Volunteers by District",
+        col.names = c("District","Count")) %>% 
+  kable_styling(c("hover", 
+                  "condensed",
+                  position = "center", 
+                  fixed_thead = TRUE))
+```
+From the table above, **`r q4t1$district[1]`**, **`r q4t1$district[2]`**, and **`r q4t1$district[3]`** have the most volunteer numbers. The difference between the highest and the lowest is significant, which is almost six times.
+
+
+```{r, fig.width=12, fig.align="center"}
+library(plotly)
+q4p <- ggplot(q4p2, aes(x = district, y = percentage, fill = position))+
+  geom_col(position = "stack")+
+  scale_fill_brewer(palette = "Dark2")
+ggplotly(q4p)
+```
+The CFA volunteer is consists of operational and non-operational positions. 
+
+The operational volunteers, as known as the firefighters, respond to fire, road accidents, and other incidents where risks are posed to life or property. The role also involves the management of vegetation, fire equipment, or assisting other emergency agencies. Many operational volunteers also undertake non-operational roles.
+
+The non-operational volunteer is the support role. They do not fight fires directly yet provide vital support to brigades. The role involves education across local communities, media and promotion, brigade health and safety management, and so on.
+
+The figure above shows that the percentage of operational and non-operational volunteers among all the districts is close, with roughly 35% for non-operational and 65% for operational.
+
+# Conclusion:
+In 2016, most volunteers were over 65 years old, and the majority had served for 1-5 years. Hume district had the most CFA volunteers. The percentage of operational and non-operational are about 35% and 65%.
 
 
 
@@ -631,13 +825,111 @@ melb_air2 %>%
 
 
 
+# Q7: How serious the threatened species affected by the Australian bushfire 2020, and what’s the distribution of them?
+
+For analysing the influences on these threatened species, this question was divided into two parts: the threatened species distribution and summary the damages of bushfire. In addition, the spatial overlap and threatened status are regarded as the two focal variables on every category of species, so generally, we analysed the affects based on the two points.
+
+In order to get the geographical coordinates of the species, we combined the data of the species of national environmental significance distributions which is GIS data with the data of species which affected by the bushfire. So here is a interactive map of the distribution for those species which occurred in areas affected by bushfire during 2019/20 season. 
+```{r}
+protected_species <- read_sf(here::here("data/snes_public_grids_08Aug2019_shapefile/snes_species_combined.shp")) %>%
+  select(sci_name, comm_name,threatened, tax_class, tax_king, geometry)
+```
+
+```{r}
+affected_species <- read_excel("data/protected-species-in-fire-affected-areas-20Jan.xlsx", sheet = 1, range= "C47:I378") %>%
+  rename(sci_name = "Scientific Name\r\nwith links to  Species Profile and Threats (SPRAT) database for map and conservation documents",
+         comm_name = "Common Name",
+         affected_area = "Percentage of the species modelled likely and known distribution within fire affected areas",
+         threatened_status = "EPBC Act listed Threatened Status")%>%
+  select(sci_name, comm_name, affected_area, threatened_status)
+
+# join affected_species with species
+bushfire_species <- affected_species %>%
+  left_join(protected_species, by = c("sci_name"))
+```
+
+```{r}
+distribution_species <- bushfire_species%>%
+  mutate(centroid = map(geometry, ~setNames(st_centroid(.x), c("x", "y")))) %>%
+   unnest_wider(centroid)
+```
+
+```{r}
+color <- colorFactor("Paired", distribution_species$tax_class)
+leaflet(data = distribution_species)%>%
+  addTiles()%>%
+  fitBounds(130, -40, 150,-10)%>%
+  addCircles(~x, ~y,
+             popup = ~(sci_name),
+             color = ~color(tax_class))%>%
+  addLegend("bottomright", pal = color, values = ~tax_class, 
+            title = NULL, opacity = 0.6)
+  
+```
+
+The colour of the circle represents the species class, so it can be seen that those species who lived in the Southeastern of Australia, suffered the worst damage apparently, in addition, the plant belongs to Magnoliopsida class had the widest range of damage especially, with the class of Liliopsida followed behind.
+
+The following summary of the results are indicative only, it's just a brief analysis of potential impacts of the bushfire on the species.
+```{r}
+# summary of the affected species
+overlap_summary <- read_excel("data/protected-species-in-fire-affected-areas-20Jan.xlsx", sheet = 2, range = "B13:J17")%>%
+  rename(Spatial_overlap = "Spatial Overlap")%>%
+  pivot_longer(cols = Bird: Spider,
+               names_to = "Species",
+               values_to = "Count_overlap")
+
+ggplot(overlap_summary,
+       aes(Spatial_overlap, Count_overlap,
+           fill = Species))+
+  geom_col(position = "identity",
+            alpha = 0.8)+
+  scale_fill_brewer(palette = "OrRd")+
+  xlab("Spatial overlap")+
+  ylab("count")+
+  ggtitle("The summary of the affects on the spatial overlap")+
+  theme_bw()
+```
+
+According to the plot, it illustrates that more than 80% contained or known distribution had been damaged within the fire extent, besides, the Plant plays a role on the destruction to a varying degree, about 49 listed threatened species have been destroyed. However, most of listed species had more than 10% but less than 30% of the habitats damaged.
+
+```{r}
+category_spatial_summary <- read_excel("data/protected-species-in-fire-affected-areas-20Jan.xlsx", sheet = 2, range = "B4:F8")%>%
+  pivot_longer(cols = `Critically Endangered`: `Listed Migratory only`,
+               names_to = "threatened condition",
+               values_to = "total_Count")
+
+ggplot(category_spatial_summary,
+       aes(`Spatial Overlap`, total_Count,
+           fill = `threatened condition`))+
+  geom_col(position = "fill",
+            alpha = 0.8)+
+  scale_fill_brewer(palette = "OrRd")+
+  xlab("Spatial overlap")+
+  ylab("Count")+
+  ggtitle("The summary of the affects on the spacial overlap by the threantened status")+
+  theme_bw()
+```
+
+So basically, it's the vulnerable and endangered species which suffered the most from the bushfire, there are more 10% but less than 30% habitats area had been destroyed for the most of the vulnerable species, about 80 species of them affected, besides, 10% to 30% area of habitats disappeared for 43 listed endangered species as well.
+
+# Conclusion
+
+To sum up, for most of the listed threatened species, there are more than 10% but less than 30% area has been destroyed, besides, the plants suffered the most serious destruction, with 107 plant species affected. The mammal frog and bird species had similar extent in the destruction.
+
+But actually, many species not currently listed under national environmental law will have had much of their range affected by the fires, and in some cases, that impact may mean that these species have become threatened. The Department will be considering assessments of these species in the near future I think, besides, our knowledge about species distributions, fire severity, other threats, and impact on plants and animals is incomplete, that requires us to update the information further.
 
 
+# Reference:
 
+Cambridge Advanced Learner's Dictionary (Third ed.). Cambridge University Press. 2008. ISBN 978-0-521-85804-5. Archived from the original on 13 August 2009.
 
+Department of Health. (n.d.). Retrieved from https://www.health.ny.gov/environmental/outdoors/air/smoke_from_fire.htm#:~:text=All.
 
+Fattal, A., Kelly, S., Liu, A., Giurco, D. 2016., Waste Fires in Australia: Cause for
+Concern? Prepared for the Department of Environment, Canberra by the UTS Institute for
+Sustainable Futures, Sydney.
 
-
+Volunteer with CFA. (2021, April 30). Retrieved from https://www.cfa.vic.gov.au/volunteer-careers/volunteers.
 
 
 
