@@ -9,8 +9,144 @@ output:
 
 
 
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(tidyverse)
+library(readr)
+library(readxl)
+library(kableExtra)
+library(bookdown)
+library(ggplot2)
+library(ggpubr)
+library(plotly)
+library(data.table)
+library(scales)
+library(stringr)      
+library(formattable)
+library(tidyr)
+library(lubridate)
+library(ggthemes)
+library(knitr)
+library(chron)
+```
+
+Column {data-width=300}
+-----------------------------------------------------------------------
+
+### Chart A
+
 ```{r}
-install.packages("flexdashboard")
+data_20 <- read.csv("data/dat_q4_2020.csv") %>%
+  rename(CFA_district = CFA.District)%>%
+  rename(CFA_Brigade_Area = CFA.Brigade.Area)%>%
+  rename(Number_of_incidents = `Number.of.emergency.incidents.within.the.Brigade.Area.for.the.reporting.period.for.Hazard.Class.2`)%>%
+  rename(TimeResponse = `The.time.in.which.90..of.emergency.incidents.were.responded.to.by.any.brigade`)%>%
+  rename(TimeResponse_within = `The.time.in.which.90..of.emergency.incidents.were.responded.to.by.the.brigade.within.their.own.Brigade.Area`)%>%
+  mutate(`TimeResponse_within`= paste0("00:",`TimeResponse_within`))%>%
+  mutate(TimeResponse = paste0("00:",TimeResponse))%>%
+  mutate(Number_of_incidents = as.numeric(Number_of_incidents))
+  
+data_20$TimeResponse_within <- chron(times= data_20$TimeResponse_within)
+
+data_20$TimeResponse <- chron(times=data_20$TimeResponse)
+
+data_20 %>%
+  select(TimeResponse_within)%>%
+  summary(data_20$TimeResponse_within)%>%
+  kable(caption = "Time Response within Brigade Area") %>%
+kable_styling(bootstrap_options = c("striped","hover"))
 
 ```
+
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Chart B
+```{r}
+data_19 <- read.csv("data/dat_q4_2018_19.csv")%>%
+  rename(CFA_district = CFA.District)%>%
+  rename(CFA_Brigade_Area = CFA.Brigade.Area)%>%
+  rename(Number_of_incidents = `Number.of.emergency.incidents.within.the.Brigade.Area.for.the.reporting.period.for.Hazard.Class.2`)%>%
+  rename(TimeResponse = `The.time.in.which.90..of.emergency.incidents.were.responded.to.by.any.brigade`)%>%
+  rename(TimeResponse_within = `The.time.in.which.90..of.emergency.incidents.were.responded.to.by.the.brigade.within.their.own.Brigade.Area`)%>%
+  filter(TimeResponse_within != "NULL")%>%
+  mutate(`TimeResponse_within`= paste0("00:",`TimeResponse_within`))%>%
+  mutate(TimeResponse = paste0("00:",TimeResponse))%>%
+  mutate(Number_of_incidents = as.numeric(Number_of_incidents))
+  
+
+data_19$TimeResponse_within <- chron(times= data_19$TimeResponse_within)
+
+
+data_19$TimeResponse <- chron(times=data_19$TimeResponse)
+
+data_19%>%
+  select(CFA_Brigade_Area,
+         TimeResponse_within)%>%
+  filter(TimeResponse_within >= 08:00)%>%
+  arrange(TimeResponse_within)%>%
+  kable(caption= "Table for the 2018/19 fourth quarter")%>%
+  kable_styling(bootstrap_options = c("striped","hover"))
+
+```
+
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+
+
+ 
+
+### Chart C
+
+```{r}
+dat_Q1_2020 <- read_csv("data/dat_Q1_2020.csv") %>%
+  rename(Number_Incidents_total =`Number of incidents within the Brigade Area for the reporting period across all Hazard Classes`)%>%
+  rename(CFA_Brigade_Area = `CFA Brigade Area`)
+
+dat_Q2_2020 <- read_csv("data/dat_Q2_2020.csv")%>%
+  rename(Number_Incidents_total = `Number of incidents within the Brigade Area for the reporting period across all Hazard Classes`)%>%
+  rename(CFA_Brigade_Area = `CFA Brigade Area`)
+
+dat_Q3_2020 <- read_csv("data/dat_Q3_2020.csv") %>%
+  rename(Number_Incidents_total = `Number of incidents within the Brigade Area for the reporting period across all Hazard Classes`)%>%
+  rename(CFA_Brigade_Area = `CFA Brigade Area`)
+
+dat_Q4_2020 <- read_csv("data/dat_2020Q4.csv")%>%
+  select(`CFA District`, `CFA Brigade Area`, `Number of incidents within the Brigade Area for the reporting period across all Hazard Classes`)%>%
+  rename(Number_Incidents_total = `Number of incidents within the Brigade Area for the reporting period across all Hazard Classes`)%>%
+    rename(CFA_Brigade_Area = `CFA Brigade Area`)
+
+binding_data <- bind_rows(dat_Q1_2020,dat_Q2_2020,dat_Q3_2020,dat_Q4_2020)
+
+ binding_data%>%
+  select(Number_Incidents_total)%>%
+summary()%>%
+  kable(caption = "This is the summary of number of incidents across all hazard classes") %>%
+  kable_styling(bootstrap_options = c("striped", "hover"))
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+### Chart D
+```{r}
+DataQ1_4 <-  read_csv("data/Question_3_dat_2.csv")%>%
+  rename(Num_incdents1=`Number of incidents within the Brigade Area for the reporting period across all Hazard Classes Q1`)%>%
+  rename(Num_incdents2=`Number of incidents within the Brigade Area for the reporting period across all Hazard Classes Q2`)%>%
+  rename(Num_incdents3=`Number of incidents within the Brigade Area for the reporting period across all Hazard Classes Q3`)%>%
+  rename(Num_incdents4=`Number of incidents within the Brigade Area for the reporting period across all Hazard Classes Q4`)
+
+DataQ1_4 %>% 
+  select(Num_incdents1,
+         Num_incdents2,
+         Num_incdents3,
+         Num_incdents4)%>%
+  summary()%>%
+  kable(caption = "Summary of the incidents.") %>%
+  kable_styling(bootstrap_options = c("striped", "hover"))
+
+```
+
 

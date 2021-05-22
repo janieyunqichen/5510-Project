@@ -13,8 +13,6 @@ editor_options:
 
 
 ```{r , echo = FALSE, message = FALSE, warning = FALSE, include=FALSE, eval = TRUE}
-
-                  
 library(tidyverse)
 library(readr)
 library(readxl)
