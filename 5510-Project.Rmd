@@ -639,7 +639,6 @@ library(plotly)
 q4p <- ggplot(q4p2, aes(x = district, y = percentage, fill = position))+
   geom_col(position = "stack")+
   scale_fill_manual(values = c("#aaaaaa","#e1701a"))
-#  scale_fill_brewer(palette = "Dark2")
 ggplotly(q4p)
 ```
 The CFA volunteer is consists of operational and non-operational positions. 
