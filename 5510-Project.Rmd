@@ -7,6 +7,8 @@ output:
  bookdown::pdf_document2: default
  keep_tex: yes
  number_sections: yes
+editor_options: 
+  chunk_output_type: console
 ---
 
 
@@ -15,6 +17,7 @@ output:
                   
 library(tidyverse)
 library(readr)
+library(readxl)
 library(kableExtra)
 library(bookdown)
 library(ggplot2)
@@ -30,6 +33,7 @@ library(ggthemes)
 library(knitr)
 library(sf)
 library(leaflet)
+library(hrbrthemes)
 
 ```
 
@@ -53,13 +57,12 @@ ft4perc  <- read_csv("data/ft4perc.csv")
 
 
 
-# The most frequent fire incident in Victoria (July 2015 to June 2016) 
+# The Most Frequent Fire Incident in Victoria (July 2015 to June 2016) 
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, message=FALSE}
 #excel_sheets("data/CFA-Incident-Responses.xlsx")
 
 # read the data
-library(readxl)
 incident<- read_csv("data/incident.csv")
 ```
 
@@ -88,6 +91,9 @@ The second place is the **`r q1table$code_description[2]`**. The smoke released 
 
 The third is **`r q1table$code_description[3]`**.  
 Based on the data supplied from New South Wales, organic products, including green waste, timber waste, and compost, are more likely to combust. Also, there is a large degree of uncertainty about the products that are involved in recorded fires.
+
+\clearpage
+
 
 \clearpage
 
@@ -463,7 +469,9 @@ As per the analysis for question on the performance of the brigade, it is safe t
 
 
 
-# The volunteer structure for 2016
+
+
+# The Volunteer Structure For 2016
 
 ```{r , message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, message=FALSE}
 all_vol <- read_csv("data/volunteer_district.csv")
@@ -487,8 +495,6 @@ age_tidy_state <- state_vol %>%
   pivot_longer(cols = c(`0-1 years`, `1-5 years`, `6-10 years`, `11-15 years`, `16-20 years`, `21-25 years`, `26-30 years`, `31-35 years`,`36-40 years`,`41-45 years`,`46-50 years`,`51-55 years`,`56-60 years`,`61-65 years`,`66-70 years`,`71-75 years`,`76-80 years`,`81-85 years`,`86 plus`),
                names_to = "serve_years",
                values_to = "count") %>% 
- # filter(str_detect(serve_years, "years")) %>% 
- # mutate(Serve_years = str_remove_all(serve_years, " years")) %>% 
   select(-c(`Not Found`))
   
 
@@ -521,7 +527,8 @@ knitr::kable(age_state, caption = "Age Distribution of the Statewide Volunteers"
 ```{r fig41, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, message=FALSE, fig.cap="Age Distribution of the Statewide Volunteers"}
 #the plot of age distribution of the statewide volunteers
 ggplot(age_state, aes(x = age, y = tot_number)) +
-  geom_col()+
+  geom_col(fill = "#e1701a")+
+  geom_text(aes(label = tot_number, vjust = -0.5))+
   labs(x = "Age", y = "Count", caption = "Age Distribution of the Statewide Volunteers") +
   theme_classic()
 ```
@@ -557,7 +564,8 @@ knitr::kable(serve_state, caption = "Total Serve Year of the Statewide Volunteer
 ```{r fig42, fig.width=13, fig.align="center", fig.cap= "Serve Year Situation of the Statewide Volunteers", echo=FALSE, eval=TRUE, warning=FALSE}
 #the plot of serve year of the statewide volunteers
 ggplot(serve_state, aes(x = reorder(serve_years, -tot_number), y = tot_number)) +
-  geom_col()+
+  geom_col(fill = "#e1701a")+
+  geom_text(aes(label = tot_number, vjust = -0.3))+
   labs(x = "Serve Yers", y = "Count", caption = "Serve Year Situation of the Statewide Volunteers") +
   theme_classic()
 ```
@@ -608,7 +616,7 @@ From the table above \@ref(tab:q43), **`r q4t1$district[1]`**, **`r q4t1$distric
 library(plotly)
 q4p <- ggplot(q4p2, aes(x = district, y = percentage, fill = position))+
   geom_col(position = "stack")+
-  scale_fill_brewer(palette = "Dark2")
+  scale_fill_manual(values = c("#aaaaaa","#e1701a"))
 ggplotly(q4p)
 ```
 The CFA volunteer is consists of operational and non-operational positions. 
@@ -618,6 +626,7 @@ The operational volunteers, as known as the firefighters, respond to fire, road 
 The non-operational volunteer is the support role. They do not fight fires directly yet provide vital support to brigades. The role involves education across local communities, media and promotion, brigade health and safety management, and so on.
 
 The figure \@ref(fig:fig43) above shows that the percentage of operational and non-operational volunteers among all the districts is close, with roughly 35% for non-operational and 65% for operational.
+
 
 
 
@@ -750,7 +759,8 @@ ft4perc <- ft4perc  %>%
 
 # Melbourne Air Quality Index
 
-The bushfires season had a huge negative impact in the air quality in Victoria, as an example we took data from the Environment Protection Authority in Australia which recorder the PM2.5 (Fine Particulate Matter 2.5) which is an air pollutant concern for the community's health, the higher the rate the worse impact for individuals. In the figure \@ref(fig:airyears) below can be seen the levels for the previous four years, with clearly a huge peak in January 2020.
+The bushfires season had a huge negative impact in the air quality in Victoria, as an example we took data from the Environment Protection Authority in Australia which recorder the PM2.5 (Fine Particulate Matter 2.5) which is an air pollutant concern for the community's health, the higher the rate the worse impact for individuals. In the figure \@ref(fig:airyears) below can be seen the levels for the previous four years, with clearly a huge peak in January 2020. According to Vadourlakis & Et Al, the particles can introduce inflammation in the lungs and even translocate to the bloodstream system, also when having higher temperatures this can increase the rate of mortality. Other places around Australia, specially in New South Wales, had PM2.5 levels over 600.![Link](https://www.mja.com.au/system/files/issues/212_08/mja250511.pdf)
+
 
 
 ```{r airyears, warning=FALSE, message=FALSE , fig.align='center', fig.cap="Melbourne Air Quality"}
@@ -861,40 +871,40 @@ overlap_summary <- read_excel("data/protected-species-in-fire-affected-areas-20J
                names_to = "Species",
                values_to = "Count_overlap")
 
-ggplot(overlap_summary,
+p1 <- ggplot(overlap_summary,
        aes(Spatial_overlap, Count_overlap,
            fill = Species))+
   geom_col(position = "identity",
             alpha = 0.8)+
-  scale_fill_brewer(palette = "OrRd")+
+  scale_fill_brewer(palette = "PuBu")+
   xlab("Spatial overlap")+
   ylab("count")+
   ggtitle("The summary of the affects on the spatial overlap")+
   theme_bw()
+ggplotly(p1)
 ```
 
 According to the plot \@ref(fig:dataSummary1), it illustrates that more than 80% contained or known distribution had been damaged within the fire extent, besides, the Plant plays a role on the destruction to a varying degree, about 49 listed threatened species have been destroyed. However, most of listed species had more than 10% but less than 30% of the habitats damaged.
 
-```{r datSummary2, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, fig.cap="The summary of the affects on the spacial overlap by the threantened status"}
-category_spatial_summary <- read_excel("data/protected-species-in-fire-affected-areas-20Jan.xlsx", sheet = 2, range = "B4:F8")%>%
-  pivot_longer(cols = `Critically Endangered`: `Listed Migratory only`,
-               names_to = "threatened condition",
-               values_to = "total_Count")
+```{r datSummary2, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, fig.cap="The summary of the affects on the threatened situation by species category"}
 
-ggplot(category_spatial_summary,
-       aes(`Spatial Overlap`, total_Count,
-           fill = `threatened condition`))+
-  geom_col(position = "fill",
-            alpha = 0.8)+
-  scale_fill_brewer(palette = "OrRd")+
-  xlab("Spatial overlap")+
-  ylab("Count")+
-  ggtitle("The summary of the affects on the spacial overlap by the threantened status")+
-  theme_bw()
+category_summary <- read_excel("data/protected-species-in-fire-affected-areas-20Jan.xlsx", sheet = 2, range = "B22:J26")%>%
+  rename(Threatened = "...1")%>%
+  pivot_longer(cols = Bird: Spider,
+               names_to = "Species",
+               values_to = "Count_category")
+
+ p2<-ggplot(category_summary, aes(Threatened, Species, fill= Count_category)) + 
+  geom_tile(alpha = 0.6)+
+  scale_fill_distiller(palette = "PuBu") +
+  labs(x="", y="")+
+  theme_ipsum()+
+  ggtitle("The summary of the affects on the threatened situation by species category")
+
+ggplotly(p2)
 ```
 
-According to the plot \@ref(fig:datSummary2), it's the vulnerable and endangered species which suffered the most from the bushfire, there are more 10% but less than 30% habitats area had been destroyed for the most of the vulnerable species, about 80 species of them affected, besides, 10% to 30% area of habitats disappeared for 43 listed endangered species as well.
-
+According to the plot \@ref(fig:datSummary2), it seems that, for the vulnerable species, it's the plant which occurred the most serious destruction, besides, in terms of the endangered or critically endangered species, the other species like fish, bird, frog and mammals, were not as serious as the plants. In addition, there were 4 migratory species affected because of the bushfire.
 
 # Reference:
 
@@ -909,6 +919,7 @@ Sustainable Futures, Sydney.
 Volunteer with CFA. (2021, April 30). Retrieved from https://www.cfa.vic.gov.au/volunteer-careers/volunteers.
 
 
+Vardoulakis, S., Jalaludin, B. B., Morgan, G. G., Hanigan, I. C., & Johnston, F. H. (2020). Bushfire smoke: urgent need for a national health protection strategy. The Medical Journal of Australia, 212(8), 349.
 
-
+CFA official News https://news.cfa.vic.gov.au/-/cfa-release-latest-response-data
 
