@@ -165,20 +165,14 @@ In 87 per cent of incidents that required emergency response, the community rece
 
 Let's visualize the data first.
 
-```{r plotting-data20, message=FALSE, fig.width=15, fig.height=8, fig.align='default'}
-ggplot(data_20) +
-  geom_point(data = data_20,
-aes(x = TimeResponse_within,
-y = CFA_Brigade_Area),
-color = "red",
-alpha = 2)+
-  theme_grey()+
-  theme(axis.text.x = element_text(angle =  , vjust = 0.5, hjust=1), axis.title.x = element_text(vjust=-1.8))+
-  labs(x = "Time Response in minutes",
-y = "Brigade Areas")
-   
-
- 
+```{r plotting-data20, message=FALSE, echo=FALSE, warning=FALSE, eval=TRUE}
+ data_20%>%
+  select(CFA_Brigade_Area,
+         TimeResponse_within)%>%
+  
+  arrange(TimeResponse_within)%>%
+  kable(caption= "Table for the 2018/19 fourth quarter")%>%
+  kable_styling(bootstrap_options = c("striped","hover"))
 
 ```
 
@@ -189,25 +183,13 @@ y = "Brigade Areas")
 data_20 %>%
   select(TimeResponse_within)%>%
   summary(data_20$TimeResponse_within)%>%
-  kable() %>%
+  kable(caption = "Time Response within Brigade Area") %>%
 kable_styling(bootstrap_options = c("striped","hover"))
 ```
 
 
-The mean time that it took CFA brigades to respond to incidents in their own CFA brigade areas is `r mean(data_20$TimeResponse_within)`. This is very close to the target response time for brigades, which is eight minutes. 
+The mean time that it took CFA brigades to respond to incidents in their own CFA brigade areas is **eight minutes and thirty-seven seconds**. This is very close to the target response time for brigades, which is **eight minutes**. 
 
-
-
-```{r function, eval=TRUE, echo=FALSE,message=FALSE}
-data20_avgRT <- function(TimeResponse_within){
-  
-  m = sum(TimeResponse_within)/length(TimeResponse_within)
-  return(m)
-}
-data20_avgRT(data_20$TimeResponse_within)
-  
-
-```
 
 \clearpage
 
@@ -216,7 +198,7 @@ For the year 2018/19, we have used the data belonging to the year 2018/19, which
 
 The most recent data set from July to September 2019 showed CFA brigades responding to 9,830 incidents, of which 5,013 required an emergency response.
 
-In 87 per cent of emergencies, the community received a fire service within the standard response time, which was broadly consistent with previous quarters.[CFA News](https://news.cfa.vic.gov.au/-/cfa-releases-latest-response-data)
+In 87 per cent of emergencies, the community received a fire service within the standard response time, which was broadly consistent with previous quarters. More on this [here](https://news.cfa.vic.gov.au/-/cfa-releases-latest-response-data)
 
 For this part of the question, I repeated the same data cleaning steps as mentioned above.
 
@@ -242,7 +224,7 @@ data_19$TimeResponse_within <- chron(times= data_19$TimeResponse_within)
 
 ```
 
-As a sample of the actions it can be seen the top 10 interventions for each suburb.
+
 
 ```{r conT, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, message=FALSE}
 
@@ -254,23 +236,20 @@ data_19$TimeResponse <- chron(times=data_19$TimeResponse)
 
 \clearpage
 
-Let's visualize the data for the year 2018/19 quarter four.
+Let's visualize the data for the year 2018/19 quarter four for districts where it took between seven and twelve minutes to respond to an incident.
 
 
 
-```{r plot-19, message=FALSE, fig.width=15, fig.height=20, fig.align='default'}
-ggplot(data_19)+
-       geom_point(data = data_19,
-           aes(x = TimeResponse_within,
-               y = CFA_Brigade_Area),
-           color = "red",
-           alpha = 1)+
-  theme_gray()+
-  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1), axis.title.x = element_text(vjust=-1.8))+
-  theme(axis.text.y =  element_text(angle = , vjust = 1, hjust=1), axis.title.y =  element_text(vjust=-1.8))+
-  labs(x = "Time Response",
-       y = "Brigade Areas")
+```{r plot-19, message=FALSE, fig.width=13, fig.height=12, fig.align='default'}
 
+data_19%>%
+  select(CFA_Brigade_Area,
+         TimeResponse_within)%>%
+  filter(TimeResponse_within >= 08:00)%>%
+  arrange(TimeResponse_within)%>%
+  kable(caption= "Table for the 2018/19 fourth quarter")%>%
+  kable_styling(bootstrap_options = c("striped","hover"))
+ 
 ```
 
 
@@ -284,19 +263,7 @@ kable_styling(bootstrap_options = c("striped","hover"))
 ```
 
 
-Using the summary function, we can see that the mean time taken by the CFA brigades to respond to the incidents in their own areas was `r mean(data_19$TimeResponse_within)` as visible from \@ref(tab:tb19Sum) . This is again very close to the target standard which was eight minutes.
-
-
-```{r}
-data19_avgRT <- function(TimeResponse_within){
-  
-  m = sum(TimeResponse_within, na.rm = TRUE)/length(TimeResponse_within)
-  return(m)
-}
-data19_avgRT(data_19$TimeResponse_within) 
-
-```
-
+Using the summary function, we can see that the mean time taken by the CFA brigades to respond to the incidents in their own areas was **eight minutes and fifty-six seconds** as visible from \@ref(tab:tb19Sum) . This is again very close to the target standard which was **eight minutes**.
 
 
 Keeping it brief, we can state that CFA brigades' performance against standard time of eight minutes for the hazard class 2 was achieved successfully, since we see a little variation in terms of amount of time taken by the CFA. 
@@ -328,7 +295,7 @@ In this question we are concerned with district that has had the highest number 
 
 Let's first visualize data from each data set for the quarters 1, 2, 3 and 4 for the year 2019/20.
 
-```{r reading-data, message=FALSE, eval=TRUE, echo=FALSE}
+```{r reading-data, message=FALSE, eval=TRUE, echo=FALSE, warning = FALSE}
 dat_Q1_2020 <- read_csv("data/dat_Q1_2020.csv") %>%
   rename(Number_Incidents_total =`Number of incidents within the Brigade Area for the reporting period across all Hazard Classes`)%>%
   rename(CFA_Brigade_Area = `CFA Brigade Area`)
@@ -337,12 +304,14 @@ dat_Q1_2020 <- read_csv("data/dat_Q1_2020.csv") %>%
 ```
 
 
-```{r plotIncidents, message=FALSE, fig.width=15, fig.height=20, fig.align='default', fig.cap="Number of incidents"}
-ggplot(dat_Q1_2020, aes( x = Number_Incidents_total, 
-                         y = CFA_Brigade_Area,
+```{r plotIncidents, message=FALSE, fig.width=12, fig.height=8, fig.align='default', fig.cap="Number of incidents"}
+ggplot(dat_Q1_2020, aes( x = CFA_Brigade_Area,
+                         y = Number_Incidents_total,
                          fill=Number_Incidents_total)) + 
   geom_bar(stat = "identity", 
 position = "dodge")+
+  theme_base()+
+  theme(axis.text.x = element_text(angle = 90 , vjust = 0.5, hjust=0.5), axis.title.x = element_text(vjust=-1.8))+
   xlab("Incidents") +  
  ylab("Districts") +  
   ggtitle("Number of incidents") 
@@ -359,12 +328,13 @@ dat_Q2_2020 <- read_csv("data/dat_Q2_2020.csv")%>%
 ```
 
 
-```{r, eval = TRUE, echo= FALSE, message=FALSE, fig.width=15, fig.height=20, fig.align='default', fig.cap="Number of incidents" }
- ggplot(dat_Q2_2020, aes( x = Number_Incidents_total, 
-                         y = CFA_Brigade_Area,
-                         fill=Number_Incidents_total)) + 
-  geom_bar(stat = "identity", 
-position = "dodge")+
+```{r, eval = TRUE, echo= FALSE, message=FALSE, fig.width=15, fig.height=8, fig.align='default', fig.cap="Number of incidents" }
+ ggplot(dat_Q2_2020, aes( x =  CFA_Brigade_Area,
+                         y = Number_Incidents_total
+                         )) + 
+  geom_col()+
+  theme_base()+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=0.5), axis.title.x = element_text(vjust=-1.8))+
   xlab("Incidents") +  
  ylab("Districts") +  
   ggtitle("Number of incidents") 
@@ -375,10 +345,7 @@ Similar to the plot above, this plot shows us the number of incidents for the se
 
 
 
-
-
-
-```{r reading-merged, message=FALSE, eval=TRUE, echo=FALSE}
+```{r reading-merged, message=FALSE, eval=TRUE, echo=FALSE, warning=FALSE}
 dat_Q3_2020 <- read_csv("data/dat_Q3_2020.csv") %>%
   rename(Number_Incidents_total = `Number of incidents within the Brigade Area for the reporting period across all Hazard Classes`)%>%
   rename(CFA_Brigade_Area = `CFA Brigade Area`)
@@ -387,32 +354,42 @@ dat_Q3_2020 <- read_csv("data/dat_Q3_2020.csv") %>%
 
 ```
 
-```{r reading-mergedData, message=FALSE, eval=TRUE, echo=FALSE, fig.width=15, fig.height=20, fig.align='default', fig.cap="Inicdents for the third quarter 2019/20"}
- ggplot(dat_Q3_2020) +
-geom_point(aes(x = Number_Incidents_total,
-y = CFA_Brigade_Area,
-colour = factor(Number_Incidents_total)))  +
-  theme_classic()
+```{r reading-mergedData, message=FALSE, eval=TRUE, echo=FALSE, fig.width=15, fig.height=10, fig.align='default', fig.cap="Inicdents for the third quarter 2019/20", warning=FALSE}
+ ggplot(dat_Q3_2020, aes( x = CFA_Brigade_Area, 
+                         y = Number_Incidents_total
+                         )) +
+geom_col()+
+  theme_base()+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=0.5), axis.title.x = element_text(vjust=-1.8))+
+  xlab("Incidents") +  
+ ylab("Districts") +  
+  ggtitle("Number of incidents") 
 ```
 
 
 The above plot \@ref(fig:reading-mergedData) shows us the number of incidents for the third quarter 2019/20. On the x-axis we have number of incidents and the y-axis we can see the names of districts.
 
 
-```{r reading-q4, message=FALSE, eval=TRUE, echo=FALSE}
+```{r reading-q4, message=FALSE, eval=TRUE, echo=FALSE, warning=FALSE}
 dat_Q4_2020 <- read_csv("data/dat_2020Q4.csv")%>%
   select(`CFA District`, `CFA Brigade Area`, `Number of incidents within the Brigade Area for the reporting period across all Hazard Classes`)%>%
   rename(Number_Incidents_total = `Number of incidents within the Brigade Area for the reporting period across all Hazard Classes`)%>%
     rename(CFA_Brigade_Area = `CFA Brigade Area`)
 ```
 
-```{r plotting, fig.width=15, fig.height=20, fig.align='default', fig.cap="Number of incidents for the fourth quarter 2019/20"}
-ggplot(dat_Q4_2020) +
-geom_point(aes(x = Number_Incidents_total,
-y = CFA_Brigade_Area,
-colour = factor(Number_Incidents_total))) +
-  theme_igray()
-
+```{r plotting, fig.width=12, fig.height=10, fig.align='default', fig.cap="Number of incidents for the fourth quarter 2019/20"}
+ggplot(dat_Q4_2020,
+       aes(x = CFA_Brigade_Area,
+y =  Number_Incidents_total)) +
+geom_col() +
+scale_fill_brewer(
+palette = "Dark2"
+)+
+  theme_clean()+
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=0.5), axis.title.x = element_text(vjust=-1.8))+
+  xlab("Incidents") +  
+ ylab("Districts") +  
+  ggtitle("Number of incidents") 
 ```
 
 The above plot \@ref(fig:plotting) shows us the number of incidents for the fourth quarter 2019/20. On the x-axis we have number of incidents and the y-axis we can see the names of districts.
@@ -421,7 +398,6 @@ The above plot \@ref(fig:plotting) shows us the number of incidents for the four
 ```{r, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE}
 binding_data <- bind_rows(dat_Q1_2020,dat_Q2_2020,dat_Q3_2020,dat_Q4_2020)
 
-binding_data
 ```
 
 
@@ -437,7 +413,7 @@ DataQ1_4 <-  read_csv("data/Question_3_dat_2.csv")%>%
 
 ```
 
-
+\clearpage
 
 ```{r TabNum, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, message=FALSE}  
 DataQ1 <- DataQ1_4 %>% 
@@ -448,8 +424,6 @@ DataQ1 <- DataQ1_4 %>%
   summary()%>%
   kable(caption = "Summary of the incidents.") %>%
   kable_styling(bootstrap_options = c("striped", "hover"))
-  
-DataQ1
   
 ```
 
@@ -465,7 +439,6 @@ summary()%>%
   kable(caption = "This is the summary of number of incidents across all hazard classes") %>%
   kable_styling(bootstrap_options = c("striped", "hover"))
 
-Highest_NumberIncidents
 ```
 
 
