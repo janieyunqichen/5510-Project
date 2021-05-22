@@ -15,6 +15,7 @@ output:
                   
 library(tidyverse)
 library(readr)
+library(readxl)
 library(kableExtra)
 library(bookdown)
 library(ggplot2)
@@ -30,6 +31,7 @@ library(ggthemes)
 library(knitr)
 library(sf)
 library(leaflet)
+library(hrbrthemes)
 
 ```
 
@@ -888,40 +890,40 @@ overlap_summary <- read_excel("data/protected-species-in-fire-affected-areas-20J
                names_to = "Species",
                values_to = "Count_overlap")
 
-ggplot(overlap_summary,
+p1 <- ggplot(overlap_summary,
        aes(Spatial_overlap, Count_overlap,
            fill = Species))+
   geom_col(position = "identity",
             alpha = 0.8)+
-  scale_fill_brewer(palette = "OrRd")+
+  scale_fill_brewer(palette = "PuBu")+
   xlab("Spatial overlap")+
   ylab("count")+
   ggtitle("The summary of the affects on the spatial overlap")+
   theme_bw()
+ggplotly(p1)
 ```
 
 According to the plot \@ref(fig:dataSummary1), it illustrates that more than 80% contained or known distribution had been damaged within the fire extent, besides, the Plant plays a role on the destruction to a varying degree, about 49 listed threatened species have been destroyed. However, most of listed species had more than 10% but less than 30% of the habitats damaged.
 
-```{r datSummary2, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, fig.cap="The summary of the affects on the spacial overlap by the threantened status"}
-category_spatial_summary <- read_excel("data/protected-species-in-fire-affected-areas-20Jan.xlsx", sheet = 2, range = "B4:F8")%>%
-  pivot_longer(cols = `Critically Endangered`: `Listed Migratory only`,
-               names_to = "threatened condition",
-               values_to = "total_Count")
+```{r datSummary2, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, fig.cap="The summary of the affects on the threatened situation by species category"}
 
-ggplot(category_spatial_summary,
-       aes(`Spatial Overlap`, total_Count,
-           fill = `threatened condition`))+
-  geom_col(position = "fill",
-            alpha = 0.8)+
-  scale_fill_brewer(palette = "OrRd")+
-  xlab("Spatial overlap")+
-  ylab("Count")+
-  ggtitle("The summary of the affects on the spacial overlap by the threantened status")+
-  theme_bw()
+category_summary <- read_excel("data/protected-species-in-fire-affected-areas-20Jan.xlsx", sheet = 2, range = "B22:J26")%>%
+  rename(Threatened = "...1")%>%
+  pivot_longer(cols = Bird: Spider,
+               names_to = "Species",
+               values_to = "Count_category")
+
+ p2<-ggplot(category_summary, aes(Threatened, Species, fill= Count_category)) + 
+  geom_tile(alpha = 0.6)+
+  scale_fill_distiller(palette = "PuBu") +
+  labs(x="", y="")+
+  theme_ipsum()+
+  ggtitle("The summary of the affects on the threatened situation by species category")
+
+ggplotly(p2)
 ```
 
-According to the plot \@ref(fig:datSummary2), it's the vulnerable and endangered species which suffered the most from the bushfire, there are more 10% but less than 30% habitats area had been destroyed for the most of the vulnerable species, about 80 species of them affected, besides, 10% to 30% area of habitats disappeared for 43 listed endangered species as well.
-
+According to the plot \@ref(fig:datSummary2), it seems that, for the vulnerable species, it's the plant which occurred the most serious destruction, besides, in terms of the endangered or critically endangered species, it's the plant which suffered the most from the bushfire always. 
 
 # Reference:
 
