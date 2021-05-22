@@ -1,10 +1,9 @@
 ---
-title: "Country Fire Condition"
+title: "Presentation for Country Fire Condition"
 output: 
   flexdashboard::flex_dashboard:
-    orientation: rows
+    orientation: columns
     vertical_layout: fill
-    source_code: embed
 ---
 
 
@@ -28,6 +27,9 @@ library(ggthemes)
 library(knitr)
 library(sf)
 library(leaflet)
+library(hrbrthemes)
+library(readxl)
+```
 ```
 
 ```{r,include=FALSE}
@@ -95,10 +97,6 @@ q4t1 <- tidy_district %>%
   group_by(district) %>% 
   summarise(count = sum(count)) %>% 
   arrange(desc(count))
-
-#Janie
-###############################################################
-
 
 ```
 
@@ -175,4 +173,192 @@ q4p <- ggplot(q4p2, aes(x = district, y = percentage, fill = position))+
 ggplotly(q4p)
 ```
 
+
+
+```{r}
+
+
+fire_detect <- read_csv("data/Table_MODIS_fire_counts_2002_2019_Victoria_per_fire_year.csv")
+country_area_state <- read_csv("data/country_area_state.csv")
+melb_air <- read_csv("data/melb_air.csv")
+fire_detect_nw <- read_csv("data/fire_detect_nw.csv")
+fire_total_detects <- read_csv("data/fire_total_detects.csv")
+perc_affected_state <- read_csv("data/perc_affected_state.csv")
+ft2total <- read_csv("data/ft2total.csv")
+ft3burnt <-  read_csv("data/ft3burnt.csv")
+ft4perc  <- read_csv("data/ft4perc.csv")
+  
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Australian Bushfires 2019/20 {data-icon="ion-fireball"}
+==================
+Row{data-height=250}
+--------
+
+### Number of Fire Detections in Victoria
+```{r, fig.with=10}
+tablefires <- fire_total_detects %>%
+  select(n) %>% 
+  filter(n == min(n))
+
+valueBox(tablefires$n,icon = "ion-fireball",caption = "Number of fire Detections in Victoria",color = "orange")
+```
+
+
+
+Row
+----------
+
+### Area affected by State
+
+```{r b, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, message=FALSE}
+
+perc_affected_state <- perc_affected_state  %>%
+  select(Jurisdiction, 
+         `Proportion of fire area that is forested (perc)`) %>% 
+  mutate("Proportion of fire" = 100-`Proportion of fire area that is forested (perc)`) %>% 
+  pivot_longer(names_to = "Burnt Area", 
+               values_to = "Percentage", 
+               cols = -Jurisdiction)
+
+```
+
+
+```{r affectedstate, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, fig.align='center', fig.show="hold", fig.cap="Affectation by State"}
+
+ggplot(data = perc_affected_state, aes(x = Jurisdiction,
+                           y = Percentage, 
+                           fill= `Burnt Area`)) +
+    geom_bar(position="stack", 
+             stat="identity")+ 
+    geom_text(aes(label = paste0(round(Percentage,2),"%")), 
+              position = position_stack(vjust = 0.5), 
+              size = 3)+
+    scale_y_continuous(labels = function(x) paste0(x, "%"), 
+                       breaks = seq(0, 100, 10))+
+    coord_flip()+
+    theme_bw()+
+    theme(legend.position = "bottom")
+   
+  
+ 
+```
+
+
+
+### Victorian Land affected by Type
+
+```{r affectedvic, message=FALSE, fig.align='center', fig.show="hold", fig.cap="Land Type affected in Victoria"}
+
+
+ft4perc <- ft4perc  %>% 
+  select(...1,Vic.) %>% 
+  rename("Type of Forest" = ...1, "Burnt Land" = Vic.) %>% 
+  filter(`Type of Forest` %in% 
+           c("Leasehold forest", 
+             "Multiple-use public forest", 
+             "Nature conservation reserve", 
+             "Other Crown land", 
+             "Private forest", 
+             "Unresolved tenure")) %>% 
+  mutate("Safe Land" = 100-`Burnt Land`) %>% 
+  pivot_longer(names_to = "Burnt Area Victoria", values_to = "Percentage", cols = -`Type of Forest`)
+
+  ggplot(data = ft4perc, aes(x = `Type of Forest`,
+                           y = Percentage, fill= `Burnt Area Victoria`)) +
+    geom_bar(position= position_stack(reverse = T), stat="identity")+
+    coord_flip()+
+    theme_bw() +
+    geom_text(aes(label = paste0(round(Percentage,2),"%")), position = position_stack(vjust = 0.5, reverse = T), size = 3)+
+    theme(legend.position = "bottom")
+
+```
+
+
+
+
+
+Melbourne Air Quality {data-icon="ion-ios-cloud-outline"}
+====================
+
+
+Row{data-height=250}
+--------
+
+### Air Quality Index
+
+```{r figindex, fig.align='center', out.width="70%", message=FALSE, fig.cap="Air Quality Levels"}
+
+knitr::include_graphics(here::here('images/polution_table.png'))
+
+```
+
+
+
+
+
+
+
+
+Row{data-height=250}
+--------
+
+### Melbourne Air Quality Index (4 Years)
+
+```{r airyears, warning=FALSE, message=FALSE , fig.align='center', fig.cap="Melbourne Air Quality"}
+
+melb_air2 <- melb_air %>%  select(date,pm25) %>% 
+  mutate(date = as.Date(date, format = "%d/%m/%Y"))
+
+melb_air2 %>%
+  ggplot()+
+  geom_line(aes(x = date, 
+                y = pm25), 
+            colour = "#FF6600")+
+  theme_bw()+
+  labs(x = "3 Year Historical Melbourne Air Index", 
+       y = "Air Index Score")+
+  scale_y_continuous(limits = c(0,280),
+                     breaks = seq(0,280,50))
+
+
+```
+
+### Melbourne Air Quality Index 2020
+
+
+```{r figmelb, message=FALSE, fig.align='center', fig.cap="Bushfire Season 2019/2020 Air Quality in Melbourne"}
+
+
+melb_air2 %>% 
+  filter(date >= "2019-12-01" & date <= "2020-03-30" ) %>% 
+  
+
+ ggplot()+
+  geom_line(aes(x = date, 
+                y = pm25), 
+            colour = "#FF6600")+
+  theme_bw()+
+  labs(x = "Melbourne Air Index in 2020 (January to April)", 
+       y = "Air Index Score")+
+  scale_y_continuous(limits = c(0,300),
+                     breaks = seq(0,300,20))
+
+
+```
 
