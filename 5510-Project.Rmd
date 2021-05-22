@@ -7,6 +7,8 @@ output:
  bookdown::pdf_document2: default
  keep_tex: yes
  number_sections: yes
+editor_options: 
+  chunk_output_type: console
 ---
 
 
@@ -55,13 +57,12 @@ ft4perc  <- read_csv("data/ft4perc.csv")
 
 
 
-# The most frequent fire incident in Victoria (July 2015 to June 2016) 
+# The Most Frequent Fire Incident in Victoria (July 2015 to June 2016) 
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, message=FALSE}
 #excel_sheets("data/CFA-Incident-Responses.xlsx")
 
 # read the data
-library(readxl)
 incident<- read_csv("data/incident.csv")
 ```
 
@@ -492,7 +493,7 @@ As per the analysis for question on the performance of the brigade, it is safe t
 
 
 
-# The volunteer structure for 2016
+# The Volunteer Structure For 2016
 
 ```{r , message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, message=FALSE}
 all_vol <- read_csv("data/volunteer_district.csv")
@@ -516,8 +517,6 @@ age_tidy_state <- state_vol %>%
   pivot_longer(cols = c(`0-1 years`, `1-5 years`, `6-10 years`, `11-15 years`, `16-20 years`, `21-25 years`, `26-30 years`, `31-35 years`,`36-40 years`,`41-45 years`,`46-50 years`,`51-55 years`,`56-60 years`,`61-65 years`,`66-70 years`,`71-75 years`,`76-80 years`,`81-85 years`,`86 plus`),
                names_to = "serve_years",
                values_to = "count") %>% 
- # filter(str_detect(serve_years, "years")) %>% 
- # mutate(Serve_years = str_remove_all(serve_years, " years")) %>% 
   select(-c(`Not Found`))
   
 
@@ -550,7 +549,8 @@ knitr::kable(age_state, caption = "Age Distribution of the Statewide Volunteers"
 ```{r fig41, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, message=FALSE, fig.cap="Age Distribution of the Statewide Volunteers"}
 #the plot of age distribution of the statewide volunteers
 ggplot(age_state, aes(x = age, y = tot_number)) +
-  geom_col()+
+  geom_col(fill = "#e1701a")+
+  geom_text(aes(label = tot_number, vjust = -0.5))+
   labs(x = "Age", y = "Count", caption = "Age Distribution of the Statewide Volunteers") +
   theme_classic()
 ```
@@ -586,7 +586,8 @@ knitr::kable(serve_state, caption = "Total Serve Year of the Statewide Volunteer
 ```{r fig42, fig.width=13, fig.align="center", fig.cap= "Serve Year Situation of the Statewide Volunteers", echo=FALSE, eval=TRUE, warning=FALSE}
 #the plot of serve year of the statewide volunteers
 ggplot(serve_state, aes(x = reorder(serve_years, -tot_number), y = tot_number)) +
-  geom_col()+
+  geom_col(fill = "#e1701a")+
+  geom_text(aes(label = tot_number, vjust = -0.3))+
   labs(x = "Serve Yers", y = "Count", caption = "Serve Year Situation of the Statewide Volunteers") +
   theme_classic()
 ```
@@ -637,7 +638,8 @@ From the table above \@ref(tab:q43), **`r q4t1$district[1]`**, **`r q4t1$distric
 library(plotly)
 q4p <- ggplot(q4p2, aes(x = district, y = percentage, fill = position))+
   geom_col(position = "stack")+
-  scale_fill_brewer(palette = "Dark2")
+  scale_fill_manual(values = c("#aaaaaa","#e1701a"))
+#  scale_fill_brewer(palette = "Dark2")
 ggplotly(q4p)
 ```
 The CFA volunteer is consists of operational and non-operational positions. 
@@ -647,6 +649,7 @@ The operational volunteers, as known as the firefighters, respond to fire, road 
 The non-operational volunteer is the support role. They do not fight fires directly yet provide vital support to brigades. The role involves education across local communities, media and promotion, brigade health and safety management, and so on.
 
 The figure \@ref(fig:fig43) above shows that the percentage of operational and non-operational volunteers among all the districts is close, with roughly 35% for non-operational and 65% for operational.
+
 
 
 
