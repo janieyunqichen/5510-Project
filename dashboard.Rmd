@@ -2,7 +2,7 @@
 title: "Country Fire Condition"
 output: 
   flexdashboard::flex_dashboard:
-    orientation: rows
+    orientation: columns
     vertical_layout: fill
     source_code: embed
 ---
@@ -96,13 +96,9 @@ q4t1 <- tidy_district %>%
   summarise(count = sum(count)) %>% 
   arrange(desc(count))
 
-#Janie
-###############################################################
-
-
 ```
 
-The Most Frequent Fire Incident in Victoria
+The Most Frequent Fire Incident in Victoria {data-icon="ion-android-options"}
 =================================================================================
 Row
 ---------------------------------------------------------------------------------
@@ -121,10 +117,10 @@ knitr::kable(q1table, caption = "The Top 10 Fire Incidents in Victoria during 20
                   fixed_thead = TRUE))
 ```
 
-The Volunteer Structure For 2016
+The Volunteer Structure For 2016 {data-icon="ion-android-contact"}
 =================================================================================
 
-Column {data-width=650}
+Column {data-width=500}
 ---------------------------------------------------------------------------------
 
 ### Statewide Age Distribution
@@ -151,7 +147,7 @@ ggplot(serve_state, aes(x = reorder(serve_years, -tot_number), y = tot_number)) 
   theme_classic()
 ```
 
-Column {data-width=350}
+Column {data-width=500}
 ---------------------------------------------------------------------------------
 
 ### Volunteer Number and Position Structure by District
