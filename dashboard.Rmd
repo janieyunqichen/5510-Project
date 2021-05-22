@@ -1,5 +1,5 @@
 ---
-title: "Presentation for Country Fire Condition"
+title: "Country Fire Condition"
 output: 
   flexdashboard::flex_dashboard:
     orientation: rows
@@ -9,8 +9,170 @@ output:
 
 
 
-```{r}
-install.packages("flexdashboard")
+```{r, echo = FALSE, message = FALSE, warning = FALSE, include=FALSE, eval = TRUE}
+library(flexdashboard)
+library(tidyverse)
+library(readr)
+library(kableExtra)
+library(bookdown)
+library(ggplot2)
+library(ggpubr)
+library(plotly)
+library(data.table)
+library(scales)
+library(stringr)      
+library(formattable)
+library(tidyr)
+library(lubridate)
+library(ggthemes)
+library(knitr)
+library(sf)
+library(leaflet)
+```
+
+```{r,include=FALSE}
+incident<- read_csv("data/incident.csv")
+
+all_vol <- read_csv("data/volunteer_district.csv")
+state_vol <- all_vol %>% 
+  filter(district == "Statewide")
+  
+district_vol <- all_vol %>% 
+  filter(district != "Statewide")
+
+#tidy
+state_vol <- state_vol %>% 
+rename("0-1 years" = `Less than 1`)
+
+district_vol <- district_vol %>% 
+rename("0-1 years" = `Less than 1`)
+
+age_tidy_state <- state_vol %>% 
+  pivot_longer(cols = c(`0-1 years`, `1-5 years`, `6-10 years`, `11-15 years`, `16-20 years`, `21-25 years`, `26-30 years`, `31-35 years`,`36-40 years`,`41-45 years`,`46-50 years`,`51-55 years`,`56-60 years`,`61-65 years`,`66-70 years`,`71-75 years`,`76-80 years`,`81-85 years`,`86 plus`),
+               names_to = "serve_years",
+               values_to = "count") %>% 
+  select(-c(`Not Found`))
+  
+age_tidy_state[is.na(age_tidy_state)] <- 0
+
+#prepare the data
+age_state <- age_tidy_state %>% 
+  group_by(age) %>% 
+  summarise(tot_number = sum(count))%>% 
+  mutate(percentage = tot_number/sum(tot_number)) %>% 
+  arrange(age)
+age_state$percentage <- percent(age_state$percentage)
+
+serve_state <- age_tidy_state %>% 
+  group_by(serve_years) %>% 
+  summarise(tot_number = sum(count)) %>% 
+  mutate(percentage = tot_number/sum(tot_number)) %>% 
+  arrange(desc(percentage))
+
+library(formattable)
+serve_state$percentage <- percent(serve_state$percentage)
+
+tidy_district <- district_vol %>% 
+  pivot_longer(cols = c(`0-1 years`, `1-5 years`, `6-10 years`, `11-15 years`, `16-20 years`, `21-25 years`, `26-30 years`, `31-35 years`,`36-40 years`,`41-45 years`,`46-50 years`,`51-55 years`,`56-60 years`,`61-65 years`,`66-70 years`,`71-75 years`,`76-80 years`,`81-85 years`,`86 plus`),
+               names_to = "serve_years",
+               values_to = "count") %>% 
+  #filter(str_detect(serve_years, "years")) %>% 
+ # mutate(Serve_years = str_remove_all(serve_years, " years")) %>% 
+  select(-c(`Not Found`))
+  
+tidy_district[is.na(tidy_district)] <- 0
+
+q4p2 <- tidy_district %>% 
+  group_by(position, district) %>% 
+  summarise(count = sum(count)) 
+q4p2 <- q4p2 %>% 
+  group_by(district) %>% 
+  mutate(dis_sum = sum(count),
+         percentage = count/dis_sum)
+q4p2$percentage <- percent(q4p2$percentage)
+
+q4t1 <- tidy_district %>% 
+  group_by(district) %>% 
+  summarise(count = sum(count)) %>% 
+  arrange(desc(count))
+
+#Janie
+###############################################################
+
 
 ```
+
+The Most Frequent Fire Incident in Victoria
+=================================================================================
+Row
+---------------------------------------------------------------------------------
+### The Most Frequent Fire Incident in Victoria (July 2015 to June 2016)
+```{r q1}
+# count number of incident
+q1table <- incident %>% 
+  count(code_description) %>% 
+  arrange(desc(n)) %>% 
+  head(10)  
+
+knitr::kable(q1table, caption = "The Top 10 Fire Incidents in Victoria during 2015-2016",
+      col.names = c("Case Name", "Count")) %>% 
+  kable_styling(c("hover", 
+                  "condensed",
+                  fixed_thead = TRUE))
+```
+
+The Volunteer Structure For 2016
+=================================================================================
+
+Column {data-width=650}
+---------------------------------------------------------------------------------
+
+### Statewide Age Distribution
+
+```{r fig41, fig.cap="Age Distribution of the Statewide Volunteers"}
+#the plot of age distribution of the statewide volunteers
+ggplot(age_state, aes(x = age, y = tot_number)) +
+  geom_col(fill = "#e1701a")+
+  geom_text(aes(label = tot_number, vjust = -0.5))+
+  labs(x = "Age", y = "Count", caption = "Age Distribution of the Statewide Volunteers") +
+  theme_classic()
+```
+
+
+
+### Statewide Serve Year Situation 
+
+```{r fig42, fig.width=13, fig.align="center", fig.cap= "Serve Year Situation of the Statewide Volunteers", echo=FALSE, eval=TRUE, warning=FALSE}
+#the plot of serve year of the statewide volunteers
+ggplot(serve_state, aes(x = reorder(serve_years, -tot_number), y = tot_number)) +
+  geom_col(fill = "#e1701a")+
+  geom_text(aes(label = tot_number, vjust = -0.3))+
+  labs(x = "Serve Yers", y = "Count", caption = "Serve Year Situation of the Statewide Volunteers") +
+  theme_classic()
+```
+
+Column {data-width=350}
+---------------------------------------------------------------------------------
+
+### Volunteer Number and Position Structure by District
+
+```{r q43, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, message=FALSE}
+knitr::kable(q4t1, caption = "Total Number of the Volunteers by District",
+        col.names = c("District","Count")) %>% 
+  kable_styling(c("hover", 
+                  "condensed",
+                  position = "center", 
+                  fixed_thead = TRUE))
+```
+
+
+```{r fig43, fig.width=12, fig.height=3, fig.align="center",message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, message=FALSE, fig.cap="the percentage of operational and non-operational volunteers among all the districts"}
+library(plotly)
+q4p <- ggplot(q4p2, aes(x = district, y = percentage, fill = position))+
+  geom_col(position = "stack")+
+  scale_fill_manual(values = c("#aaaaaa","#e1701a"))
+#  scale_fill_brewer(palette = "Dark2")
+ggplotly(q4p)
+```
+
 

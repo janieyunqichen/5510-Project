@@ -7,8 +7,11 @@ output:
  bookdown::pdf_document2: default
  keep_tex: yes
  number_sections: yes
+<<<<<<< HEAD
 editor_options: 
   chunk_output_type: console
+=======
+>>>>>>> janie
 ---
 
 
@@ -17,7 +20,10 @@ editor_options:
                   
 library(tidyverse)
 library(readr)
+<<<<<<< HEAD
 library(readxl)
+=======
+>>>>>>> janie
 library(kableExtra)
 library(bookdown)
 library(ggplot2)
@@ -33,7 +39,10 @@ library(ggthemes)
 library(knitr)
 library(sf)
 library(leaflet)
+<<<<<<< HEAD
 library(hrbrthemes)
+=======
+>>>>>>> janie
 
 ```
 
@@ -549,8 +558,12 @@ knitr::kable(age_state, caption = "Age Distribution of the Statewide Volunteers"
 ```{r fig41, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, message=FALSE, fig.cap="Age Distribution of the Statewide Volunteers"}
 #the plot of age distribution of the statewide volunteers
 ggplot(age_state, aes(x = age, y = tot_number)) +
+<<<<<<< HEAD
   geom_col(fill = "#e1701a")+
   geom_text(aes(label = tot_number, vjust = -0.5))+
+=======
+  geom_col()+
+>>>>>>> janie
   labs(x = "Age", y = "Count", caption = "Age Distribution of the Statewide Volunteers") +
   theme_classic()
 ```
@@ -586,8 +599,12 @@ knitr::kable(serve_state, caption = "Total Serve Year of the Statewide Volunteer
 ```{r fig42, fig.width=13, fig.align="center", fig.cap= "Serve Year Situation of the Statewide Volunteers", echo=FALSE, eval=TRUE, warning=FALSE}
 #the plot of serve year of the statewide volunteers
 ggplot(serve_state, aes(x = reorder(serve_years, -tot_number), y = tot_number)) +
+<<<<<<< HEAD
   geom_col(fill = "#e1701a")+
   geom_text(aes(label = tot_number, vjust = -0.3))+
+=======
+  geom_col()+
+>>>>>>> janie
   labs(x = "Serve Yers", y = "Count", caption = "Serve Year Situation of the Statewide Volunteers") +
   theme_classic()
 ```
@@ -638,7 +655,11 @@ From the table above \@ref(tab:q43), **`r q4t1$district[1]`**, **`r q4t1$distric
 library(plotly)
 q4p <- ggplot(q4p2, aes(x = district, y = percentage, fill = position))+
   geom_col(position = "stack")+
+<<<<<<< HEAD
   scale_fill_manual(values = c("#aaaaaa","#e1701a"))
+=======
+  scale_fill_brewer(palette = "Dark2")
+>>>>>>> janie
 ggplotly(q4p)
 ```
 The CFA volunteer is consists of operational and non-operational positions. 
@@ -653,7 +674,10 @@ The figure \@ref(fig:fig43) above shows that the percentage of operational and n
 
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> janie
 # Fire Detections and Land Type in Bushfire Season
 
 
@@ -781,8 +805,12 @@ ft4perc <- ft4perc  %>%
 
 # Melbourne Air Quality Index
 
+<<<<<<< HEAD
 The bushfires season had a huge negative impact in the air quality in Victoria, as an example we took data from the Environment Protection Authority in Australia which recorder the PM2.5 (Fine Particulate Matter 2.5) which is an air pollutant concern for the community's health, the higher the rate the worse impact for individuals. In the figure \@ref(fig:airyears) below can be seen the levels for the previous four years, with clearly a huge peak in January 2020. According to Vadourlakis & Et Al, the particles can introduce inflammation in the lungs and even translocate to the bloodstream system, also when having higher temperatures this can increase the rate of mortality. Other places around Australia, specially in New South Wales, had PM2.5 levels over 600.![Link](https://www.mja.com.au/system/files/issues/212_08/mja250511.pdf)
 
+=======
+The bushfires season had a huge negative impact in the air quality in Victoria, as an example we took data from the Environment Protection Authority in Australia which recorder the PM2.5 (Fine Particulate Matter 2.5) which is an air pollutant concern for the community's health, the higher the rate the worse impact for individuals. In the figure \@ref(fig:airyears) below can be seen the levels for the previous four years, with clearly a huge peak in January 2020.
+>>>>>>> janie
 
 
 ```{r airyears, warning=FALSE, message=FALSE , fig.align='center', fig.cap="Melbourne Air Quality"}
@@ -893,21 +921,33 @@ overlap_summary <- read_excel("data/protected-species-in-fire-affected-areas-20J
                names_to = "Species",
                values_to = "Count_overlap")
 
+<<<<<<< HEAD
 p1 <- ggplot(overlap_summary,
+=======
+ggplot(overlap_summary,
+>>>>>>> janie
        aes(Spatial_overlap, Count_overlap,
            fill = Species))+
   geom_col(position = "identity",
             alpha = 0.8)+
+<<<<<<< HEAD
   scale_fill_brewer(palette = "PuBu")+
+=======
+  scale_fill_brewer(palette = "OrRd")+
+>>>>>>> janie
   xlab("Spatial overlap")+
   ylab("count")+
   ggtitle("The summary of the affects on the spatial overlap")+
   theme_bw()
+<<<<<<< HEAD
 ggplotly(p1)
+=======
+>>>>>>> janie
 ```
 
 According to the plot \@ref(fig:dataSummary1), it illustrates that more than 80% contained or known distribution had been damaged within the fire extent, besides, the Plant plays a role on the destruction to a varying degree, about 49 listed threatened species have been destroyed. However, most of listed species had more than 10% but less than 30% of the habitats damaged.
 
+<<<<<<< HEAD
 ```{r datSummary2, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, fig.cap="The summary of the affects on the threatened situation by species category"}
 
 category_summary <- read_excel("data/protected-species-in-fire-affected-areas-20Jan.xlsx", sheet = 2, range = "B22:J26")%>%
@@ -927,6 +967,28 @@ ggplotly(p2)
 ```
 
 According to the plot \@ref(fig:datSummary2), it seems that, for the vulnerable species, it's the plant which occurred the most serious destruction, besides, in terms of the endangered or critically endangered species, the other species like fish, bird, frog and mammals, were not as serious as the plants. In addition, there were 4 migratory species affected because of the bushfire.
+=======
+```{r datSummary2, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, fig.cap="The summary of the affects on the spacial overlap by the threantened status"}
+category_spatial_summary <- read_excel("data/protected-species-in-fire-affected-areas-20Jan.xlsx", sheet = 2, range = "B4:F8")%>%
+  pivot_longer(cols = `Critically Endangered`: `Listed Migratory only`,
+               names_to = "threatened condition",
+               values_to = "total_Count")
+
+ggplot(category_spatial_summary,
+       aes(`Spatial Overlap`, total_Count,
+           fill = `threatened condition`))+
+  geom_col(position = "fill",
+            alpha = 0.8)+
+  scale_fill_brewer(palette = "OrRd")+
+  xlab("Spatial overlap")+
+  ylab("Count")+
+  ggtitle("The summary of the affects on the spacial overlap by the threantened status")+
+  theme_bw()
+```
+
+According to the plot \@ref(fig:datSummary2), it's the vulnerable and endangered species which suffered the most from the bushfire, there are more 10% but less than 30% habitats area had been destroyed for the most of the vulnerable species, about 80 species of them affected, besides, 10% to 30% area of habitats disappeared for 43 listed endangered species as well.
+
+>>>>>>> janie
 
 # Reference:
 
@@ -941,6 +1003,10 @@ Sustainable Futures, Sydney.
 Volunteer with CFA. (2021, April 30). Retrieved from https://www.cfa.vic.gov.au/volunteer-careers/volunteers.
 
 
+<<<<<<< HEAD
 Vardoulakis, S., Jalaludin, B. B., Morgan, G. G., Hanigan, I. C., & Johnston, F. H. (2020). Bushfire smoke: urgent need for a national health protection strategy. The Medical Journal of Australia, 212(8), 349.
+=======
+
+>>>>>>> janie
 
 
