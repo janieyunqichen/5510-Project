@@ -781,7 +781,8 @@ ft4perc <- ft4perc  %>%
 
 # Melbourne Air Quality Index
 
-The bushfires season had a huge negative impact in the air quality in Victoria, as an example we took data from the Environment Protection Authority in Australia which recorder the PM2.5 (Fine Particulate Matter 2.5) which is an air pollutant concern for the community's health, the higher the rate the worse impact for individuals. In the figure \@ref(fig:airyears) below can be seen the levels for the previous four years, with clearly a huge peak in January 2020.
+The bushfires season had a huge negative impact in the air quality in Victoria, as an example we took data from the Environment Protection Authority in Australia which recorder the PM2.5 (Fine Particulate Matter 2.5) which is an air pollutant concern for the community's health, the higher the rate the worse impact for individuals. In the figure \@ref(fig:airyears) below can be seen the levels for the previous four years, with clearly a huge peak in January 2020. According to Vadourlakis & Et Al, the particles can introduce inflammation in the lungs and even translocate to the bloodstream system, also when having higher temperatures this can increase the rate of mortality. Other places around Australia, specially in New South Wales, had PM2.5 levels over 600.![Link](https://www.mja.com.au/system/files/issues/212_08/mja250511.pdf)
+
 
 
 ```{r airyears, warning=FALSE, message=FALSE , fig.align='center', fig.cap="Melbourne Air Quality"}
@@ -940,6 +941,6 @@ Sustainable Futures, Sydney.
 Volunteer with CFA. (2021, April 30). Retrieved from https://www.cfa.vic.gov.au/volunteer-careers/volunteers.
 
 
-
+Vardoulakis, S., Jalaludin, B. B., Morgan, G. G., Hanigan, I. C., & Johnston, F. H. (2020). Bushfire smoke: urgent need for a national health protection strategy. The Medical Journal of Australia, 212(8), 349.
 
 
