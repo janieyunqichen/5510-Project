@@ -925,7 +925,7 @@ category_summary <- read_excel("data/protected-species-in-fire-affected-areas-20
 ggplotly(p2)
 ```
 
-According to the plot \@ref(fig:datSummary2), it seems that, for the vulnerable species, it's the plant which occurred the most serious destruction, besides, in terms of the endangered or critically endangered species, it's the plant which suffered the most from the bushfire always. 
+According to the plot \@ref(fig:datSummary2), it seems that, for the vulnerable species, it's the plant which occurred the most serious destruction, besides, in terms of the endangered or critically endangered species, the other species like fish, bird, frog and mammals, were not as serious as the plants. In addition, there were 4 migratory species affected because of the bushfire.
 
 # Reference:
 
