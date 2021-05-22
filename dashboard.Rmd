@@ -1,0 +1,16 @@
+---
+title: "Presentation for Country Fire Condition"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    vertical_layout: fill
+    source_code: embed
+---
+
+
+
+```{r}
+install.packages("flexdashboard")
+
+```
+
