@@ -1,12 +1,16 @@
 ---
-title: "5510-Projecxt"
-author: "T13_Wed_kable"
+title: "5510-Project"
+author: "AryanSultan_T13_Wed_kable"
 date: "5/17/2021"
-output: html_document
+output:
+ bookdown::html_document2: default
+ bookdown::pdf_document2: default
+ keep_tex: yes
 ---
 
-```{r , echo = FALSE, message = FALSE, warning = FALSE, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, 
+
+```{r , echo = FALSE, message = FALSE, warning = FALSE, include=FALSE, eval = TRUE}
+knitr::opts_chunk$set(echo = TRUE, 
                       message=FALSE, 
                       warning=FALSE)
 
@@ -26,6 +30,796 @@ library(tidyr)
 library(sf)
 library(readxl)
 library(leaflet)
+library(lubridate)
+library(ggthemes)
+library(knitr)
+```
+
+
+
+
+```{r reading, warning=FALSE, echo=FALSE, eval=TRUE, message=FALSE}
+
+fire_detect <- read_csv("data/Table_MODIS_fire_counts_2002_2019_Victoria_per_fire_year.csv")
+country_area_state <- read_csv("data/country_area_state.csv")
+melb_air <- read_csv("data/melb_air.csv")
+fire_detect_nw <- read_csv("data/fire_detect_nw.csv")
+fire_total_detects <- read_csv("data/fire_total_detects.csv")
+perc_affected_state <- read_csv("data/perc_affected_state.csv")
+ft2total <- read_csv("data/ft2total.csv")
+ft3burnt <-  read_csv("data/ft3burnt.csv")
+ft4perc  <- read_csv("data/ft4perc.csv")
+  
+```
+
+## 1. What is the most frequent fire incident in Victoria (July 2015 to June 2016)? 
+
+```{r,include = FALSE}
+#excel_sheets("data/CFA-Incident-Responses.xlsx")
+
+# read the data
+library(readxl)
+incident<- read_csv("data/incident.csv")
+```
+
+
+```{r}
+# count number of incident
+q1table <- incident %>% 
+  count(code_description) %>% 
+  arrange(desc(n)) %>% 
+  head(10)  
+
+knitr::kable(q1table, caption = "The Top 10 Fire Incidents in Victoria during 2015-2016",
+      col.names = c("Case Name", "Count")) %>% 
+  kable_styling(c("hover", 
+                  "condensed",
+                  position = "center", 
+                  fixed_thead = TRUE))
+```
+
+
+From the table above, during 2015-2016, the top 3 most frequently happened fire incidents are not directly caused by human beings. 
+
+The top one is the **`r q1table$code_description[1]`** contains bushfire, wildfire, or rural fire. They are defined as the unplanned, unwanted, uncontrolled fire in an area of combustible vegetation starting in rural areas and urban areas.
+
+The second place is the **`r q1table$code_description[2]`**. The smoke released by any type of fire is a mixture of particles and chemicals produced by the incomplete burning of carbon-containing materials. All smoke contains carbon monoxide, carbon dioxide and particulate matter (PM or soot). 
+
+The third is **`r q1table$code_description[3]`**.  
+Based on the data supplied from New South Wales, organic products, including green waste, timber waste, and compost, are more likely to combust. Also, there is a large degree of uncertainty about the products that are involved in recorded fires.
+
+
+## How long did it take on average for the CFA brigade to respond to incidents in their own areas for hazard class 2 in Q4 2018/19 and Q4 2019/20? Also, this will be analyzed against the standard time (given in the data for each of the hazard classes). (CFA Emergency Response Time)
+
+
+### Introduction 
+
+There are three critical components of CFA delivery services:
+Response time: This is measured from when the brigade is alerted to an event to when the brigade arrives at the scene.
+
+Brigade area: Each brigade has a defined brigade area, which specifies the operational footprint of the brigade.
+
+Hazard classes: Hazard class defines the type of risk for a given area. Each brigade area may contain multiple hazard classes. However, each hazard class has a predefined service delivery standards. 
+
+In the data we have two variables that record the amount of time it CFA brigade to respond to incidents in specified areas: 
+
+ * The time in which 90% of emergency incidents were responded to by any brigade; and, 
+ 
+ * The time in which 90% of emergency incidents were responded to by the brigade within their own Brigade Area
+ 
+The variable of interest for us is : The time in which 90% of emergency incidents were responded to by the brigade within their own Brigade Area. The reason is because we want to find out the mean time in which CFA brigade responded to incidents in their own brigade areas. 
+
+For this purpose, I did bit of data wrangling:
+
+ - renamed variables such that now we have a `TimeReponse` variable, and `TimeReponse_within`variable. 
+ 
+ - mutate Number of incidents into a numeric vector. 
+ 
+ - Changed the character variables to time using the contributed library chron.
+ 
+ 
+ 
+For this specific question, we are going to analyze the data for ***Hazard Class 2*** that covers significant urban areas and is primarily residential including commercial centres, clusters of industrial and/or high density community services e.g. schools, correctional facilities, hospitals. 
+
+CFA has service delivery standards, which specify a response time target for a brigade to attend an emergency incident. The service delivery standard (response time) for Hazard Class 2 is **8 minutes**. Hence the analysis will be carried against this standard response time.
+
+
+```{r}
+data_20 <- read.csv("data/dat_q4_2020.csv") %>%
+  rename(CFA_district = CFA.District)%>%
+  rename(CFA_Brigade_Area = CFA.Brigade.Area)%>%
+  rename(Number_of_incidents = `Number.of.emergency.incidents.within.the.Brigade.Area.for.the.reporting.period.for.Hazard.Class.2`)%>%
+  rename(TimeResponse = `The.time.in.which.90..of.emergency.incidents.were.responded.to.by.any.brigade`)%>%
+  rename(TimeResponse_within = `The.time.in.which.90..of.emergency.incidents.were.responded.to.by.the.brigade.within.their.own.Brigade.Area`)%>%
+  mutate(`TimeResponse_within`= paste0("00:",`TimeResponse_within`))%>%
+  mutate(TimeResponse = paste0("00:",TimeResponse))%>%
+  mutate(Number_of_incidents = as.numeric(Number_of_incidents))
+
+data_20
+
+
+```
+
+```{r}
+library(chron)
+
+data_20$TimeResponse_within <- chron(times= data_20$TimeResponse_within)
+
+
+data_20
+```
+
+```{r}
+data_20$TimeResponse <- chron(times=data_20$TimeResponse)
+
+data_20
+```
+### Context
+
+
+The most recent data from April to June 2020 showed CFA brigades responded to 9,120 incidents, of which 4,893 required an emergency response.
+
+In 87 per cent of incidents that required emergency response, the community received a fire service within the standard response time, which was broadly consistent with previous quarters.[CFA News](https://news.cfa.vic.gov.au/-/cfa-release-latest-response-data)
+
+Let's visualize the data first.
+
+```{r}
+ggplot(data_20) +
+  geom_point(data = data_20,
+aes(x = TimeResponse_within,
+y = CFA_Brigade_Area),
+color = "red",
+alpha = 0.6)+
+  theme_classic()+
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1), axis.title.x = element_text(vjust=-1.8))+
+  labs(x = "Time Response in minutes",
+y = "Brigade Areas")
+   
+
+ 
+
+```
+
+
+```{r}
+data_20 %>%
+  select(TimeResponse_within)%>%
+  summary(data_20$TimeResponse_within)%>%
+  kable() %>%
+kable_styling(bootstrap_options = c("striped","hover"))
+```
+The mean time that it took CFA brigades to respond to incidents in their own CFA brigade areas is `r mean(data_20$TimeResponse_within)`. This is very close to the target response time for brigades, which is eight minutes. 
+
+
+
+```{r}
+data20_avgRT <- function(TimeResponse_within){
+  
+  m = sum(TimeResponse_within)/length(TimeResponse_within)
+  return(m)
+}
+data20_avgRT(data_20$TimeResponse_within)
+  
+
+```
+For the year 2018/19, we have used the data belonging to the year 2018/19, which was acquired from the [CFA official site](https://discover.data.vic.gov.au/organization/country-fire-authority).
+
+The most recent data set from July to September 2019 showed CFA brigades responding to 9,830 incidents, of which 5,013 required an emergency response.
+
+In 87 per cent of emergencies, the community received a fire service within the standard response time, which was broadly consistent with previous quarters.[CFA News](https://news.cfa.vic.gov.au/-/cfa-releases-latest-response-data)
+
+For this part of the question, I repeated the same data cleaning steps as mentioned above.
+
+```{r}
+data_19 <- read.csv("data/dat_q4_2018_19.csv")%>%
+  rename(CFA_district = CFA.District)%>%
+  rename(CFA_Brigade_Area = CFA.Brigade.Area)%>%
+  rename(Number_of_incidents = `Number.of.emergency.incidents.within.the.Brigade.Area.for.the.reporting.period.for.Hazard.Class.2`)%>%
+  rename(TimeResponse = `The.time.in.which.90..of.emergency.incidents.were.responded.to.by.any.brigade`)%>%
+  rename(TimeResponse_within = `The.time.in.which.90..of.emergency.incidents.were.responded.to.by.the.brigade.within.their.own.Brigade.Area`)%>%
+  filter(TimeResponse_within != "NULL")%>%
+  mutate(`TimeResponse_within`= paste0("00:",`TimeResponse_within`))%>%
+  mutate(TimeResponse = paste0("00:",TimeResponse))%>%
+  mutate(Number_of_incidents = as.numeric(Number_of_incidents))
+  
+
+data_19  
+```
+```{r}
+library(chron)
+
+data_19$TimeResponse_within <- chron(times= data_19$TimeResponse_within)
+
+
+
+data_19
+```
+
+As a sample of the actions it can be seen the top 10 interventions for each suburb.
+
+```{r}
+
+data_19$TimeResponse <- chron(times=data_19$TimeResponse)
+
+head(data_19,10)
+```
+Let's visualize the data for the year 2018/19.
+
+
+
+```{r, fig.height=12}
+ggplot(data_19) +
+  geom_point(data = data_19,
+aes(x = TimeResponse_within,
+y = CFA_Brigade_Area),
+color = "red",
+alpha = 0.6)+
+  theme_classic()+
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1), axis.title.x = element_text(vjust=-1.8))+
+  theme(axis.text.y =  element_text(angle = , vjust = 1, hjust=1), axis.title.y =  element_text(vjust=-1.8))+
+labs(x = "Time Response",
+y = "Brigade Areas")
+
+```
+
+
+
+```{r}
+data_19%>%
+  select(TimeResponse_within)%>%
+  summary(data_19$TimeResponse_within)%>%
+  kable() %>%
+kable_styling(bootstrap_options = c("striped","hover"))
+```
+Using the summary function, we can see that the mean time taken by the CFA brigades to respond to the incidents in their own areas was `r mean(data_19$TimeResponse_within)`. This is agian very close to the target standard which was eight minutes.
+
+
+```{r}
+data19_avgRT <- function(TimeResponse_within){
+  
+  m = sum(TimeResponse_within, na.rm = TRUE)/length(TimeResponse_within)
+  return(m)
+}
+data19_avgRT(data_19$TimeResponse_within) 
+
+```
+
+### Analysis
+
+Keeping it brief, we can state that CFA brigades' performance against standard time of eight minutes for the hazard class 2 was achieved successfully, since we see a little variation in terms of amount of time taken by the CFA. 
+
+## Which of the CFA brigade areas have had the highest number of incidents across Hazard classes for the reported period (2019/20) (four quarters). (CFA Emergency Response Time)
+
+### Introduction
+
+In this question, we have one variable that records the number of incidents across all hazard classes for all the specified districts. There are three predefined hazard classes: 2, 3 and 4. 
+ 
+ * Hazard class 2 (Medium Urban): This includes significant urban areas which are primarily residential including commercial centres, clusters of industrial and/or high density community services e.g. schools, correctional facilities, hospitals. (8 minutes SDS). 
+ 
+ * Hazard Class 3 (Low Urban): This includes all urban areas that are not included in Hazard Class 2 and includes predominantly residential occupancies and small industries. (10 minutes SDS). 
+ 
+ * Hazard Class 4 (Rural): This includes primarily the natural surroundings in terms of bush and grassland, but also involves isolated dwellings and structures within those areas.
+
+The variable of interest for us is : Number_Incidents_total.
+
+For this purpose, I did bit of data wrangling:
+
+ - renamed variables such that now we have a `CFA_Brigade_Area` variable, and `Number_Incidents_total`variable in each data set. (I had four datasets for Quarters 1, 2, 3,and 4)
+ 
+ - mutate Number of incidents into a numeric vector. 
+ 
+ - Join data using bind_rows
+
+### Context
+In this question we are concerned with district that has had the highest number of incidents across all hazard classes in the year 2019/20.
+
+Let's first visualize data from each data set for the quarters 1, 2, 3 and 4 for the year 2019/20.
+
+```{r}
+dat_Q1_2020 <- read_csv("data/dat_Q1_2020.csv") %>%
+  rename(Number_Incidents_total =`Number of incidents within the Brigade Area for the reporting period across all Hazard Classes`)%>%
+  rename(CFA_Brigade_Area = `CFA Brigade Area`)
+
+dat_Q1_2020
+```
+
+
+```{r}
+ggplot(dat_Q1_2020, aes( x = Number_Incidents_total, 
+                         y = CFA_Brigade_Area)) + 
+geom_point() +
+  theme_light() + 
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1), axis.title.x = element_text(vjust=-1.8))+
+  theme(axis.text.y =  element_text(angle = , vjust = 0.5, hjust=1), axis.title.y =  element_text(vjust=-1.8))+
+  
+  xlab("Incidents") +  
+ ylab("Districts") +  
+  ggtitle("Number of incidents") 
+```
+The above plot shows us the number of incidents for the first quarter 2019/20. On the x-axis we have number of incidents and the y-axis we can see the names of districts.
+
+
+```{r}
+dat_Q2_2020 <- read_csv("data/dat_Q2_2020.csv")%>%
+  rename(Number_Incidents_total = `Number of incidents within the Brigade Area for the reporting period across all Hazard Classes`)%>%
+  rename(CFA_Brigade_Area = `CFA Brigade Area`)
+
+dat_Q2_2020
+```
+
+
+```{r, eval = TRUE}
+ ggplot(dat_Q2_2020, aes(x = Number_Incidents_total ,    
+                            y = CFA_Brigade_Area,
+                            colour = factor(Number_Incidents_total)))+
+                             
+  geom_point() +  
+  theme_light() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1), axis.title.x = element_text(vjust=-1.8))+
+  theme(axis.text.y =  element_text(angle = , vjust = 1, hjust=1), axis.title.y =  element_text(vjust=-1.8))+
+  ggtitle("Number of incidents")
+
+```
+
+Similiar to the plot above, this plot shows us the number of incidents for the second quarter 2019/20. On the x-axis we have number of incidents and the y-axis we can see the names of districts.
+
+
+
+
+
+
+```{r}
+dat_Q3_2020 <- read_csv("data/dat_Q3_2020.csv") %>%
+  rename(Number_Incidents_total = `Number of incidents within the Brigade Area for the reporting period across all Hazard Classes`)%>%
+  rename(CFA_Brigade_Area = `CFA Brigade Area`)
+  
+
+dat_Q3_2020
+```
+
+```{r}
+ ggplot(dat_Q3_2020) +
+geom_point(aes(x = Number_Incidents_total,
+y = CFA_Brigade_Area,
+colour = factor(Number_Incidents_total)))  +
+  theme_classic()
+```
+
+
+The above plot shows us the number of incidents for the third quarter 2019/20. On the x-axis we have number of incidents and the y-axis we can see the names of districts.
+
+
+```{r}
+dat_Q4_2020 <- read_csv("data/dat_2020Q4.csv")%>%
+  select(`CFA District`, `CFA Brigade Area`, `Number of incidents within the Brigade Area for the reporting period across all Hazard Classes`)%>%
+  rename(Number_Incidents_total = `Number of incidents within the Brigade Area for the reporting period across all Hazard Classes`)%>%
+    rename(CFA_Brigade_Area = `CFA Brigade Area`)
+  
+dat_Q4_2020
+```
+
+```{r}
+ggplot(dat_Q4_2020) +
+geom_point(aes(x = Number_Incidents_total,
+y = CFA_Brigade_Area,
+colour = factor(Number_Incidents_total))) +
+  theme_igray()
+
+```
+
+The above plot shows us the number of incidents for the fourth quarter 2019/20. On the x-axis we have number of incidents and the y-axis we can see the names of districts.
+
+
+```{r}
+binding_data <- bind_rows(dat_Q1_2020,dat_Q2_2020,dat_Q3_2020,dat_Q4_2020)
+
+binding_data
+```
+
+### Analysis
+
+Using the summary function we can see the maximum number of incidents across all hazard classes for specified districts for the given time frame. Data used here is the merged data of the four data sets, using bind_rows function.
+
+```{r}
+DataQ1_4 <-  read_csv("data/Question_3_dat_2.csv")%>%
+  rename(Num_incdents1=`Number of incidents within the Brigade Area for the reporting period across all Hazard Classes Q1`)%>%
+  rename(Num_incdents2=`Number of incidents within the Brigade Area for the reporting period across all Hazard Classes Q2`)%>%
+  rename(Num_incdents3=`Number of incidents within the Brigade Area for the reporting period across all Hazard Classes Q3`)%>%
+  rename(Num_incdents4=`Number of incidents within the Brigade Area for the reporting period across all Hazard Classes Q4`)
+
+```
+
+
+
+```{r}  
+DataQ1 <- DataQ1_4 %>% 
+  select(Num_incdents1,
+         Num_incdents2,
+         Num_incdents3,
+         Num_incdents4)%>%
+  summary()%>%
+  kable(caption = "Summary of the incidents.") %>%
+  kable_styling(bootstrap_options = c("striped", "hover"))
+  
+DataQ1
+  
+```
+In the above table, we can see the summary for number of incidents in each quarter; we see that the highest number of incidents was recorded as `r max(DataQ1_4$Num_incdents2)` in the second quarter. 
+
+The data used here is the merged data that contains information on all four quarters. For the next steps, we will use the binding_data from above. 
+
+
+```{r}
+ Highest_NumberIncidents <- binding_data%>%
+  select(Number_Incidents_total)%>%
+summary()%>%
+  kable(caption = "This is the summary of number of incidents across all hazard classes") %>%
+  kable_styling(bootstrap_options = c("striped", "hover"))
+
+Highest_NumberIncidents
+```
+We can see that highest number of incidents are `r max(binding_data$Number_Incidents_total)`, so now using the filter function. let's see which district has `r max(binding_data$Number_Incidents_total)` incidents. 
+
+
+
+```{r}
+binding_data%>%
+  select(-X1,
+         -`CFA District`)%>%
+  filter(Number_Incidents_total == "374" )%>%
+  kable(caption = "Dandenong district has the highest number of incidents across all hazard classes in all of the four quarters.") %>%
+  kable_styling(bootstrap_options = c("striped", "hover"))
+```
+From the table we can see that Dandenong has had the highest number of incidents.
+
+## Conclusion
+
+As per the analysis for question on the performance of the brigade, it is safe to say that CFA brigades performed well against the standard delivery service time of eight minutes for the hazard class two incidents. And as per the analysis for the question on the number of incidents, we can see that Dandenong appears to be the area that had highest number of incidents across all hazard classes. 
+
+
+
+## 4. What is the volunteer structure in 2016?
+
+```{r , include = FALSE}
+all_vol <- read_csv("data/volunteer_district.csv")
+state_vol <- all_vol %>% 
+  filter(district == "Statewide")
+  
+district_vol <- all_vol %>% 
+  filter(district != "Statewide")
+
+#tidy
+state_vol <- state_vol %>% 
+rename("0-1 years" = `Less than 1`)
+
+district_vol <- district_vol %>% 
+rename("0-1 years" = `Less than 1`)
+```
+
+
+```{r ,include = FALSE}
+age_tidy_state <- state_vol %>% 
+  pivot_longer(cols = c(`0-1 years`, `1-5 years`, `6-10 years`, `11-15 years`, `16-20 years`, `21-25 years`, `26-30 years`, `31-35 years`,`36-40 years`,`41-45 years`,`46-50 years`,`51-55 years`,`56-60 years`,`61-65 years`,`66-70 years`,`71-75 years`,`76-80 years`,`81-85 years`,`86 plus`),
+               names_to = "serve_years",
+               values_to = "count") %>% 
+ # filter(str_detect(serve_years, "years")) %>% 
+ # mutate(Serve_years = str_remove_all(serve_years, " years")) %>% 
+  select(-c(`Not Found`))
+  
+
+age_tidy_state[is.na(age_tidy_state)] <- 0
+```
+
+#### 1. Statewide Age Distribution
+```{r ,include = FALSE}
+#prepare the data
+age_state <- age_tidy_state %>% 
+  group_by(age) %>% 
+  summarise(tot_number = sum(count))%>% 
+  mutate(percentage = tot_number/sum(tot_number)) %>% 
+  arrange(age)
+age_state$percentage <- percent(age_state$percentage)
+```
+
+
+```{r}
+#table for age distribution of the statewide volunteers
+knitr::kable(age_state, caption = "Age Distribution of the Statewide Volunteers",
+        col.names = c("Age", "Count", "Percentage")) %>% 
+  kable_styling(c("hover", 
+                  "condensed",
+                  position = "center", 
+                  fixed_thead = TRUE))
+```
+
+
+```{r}
+#the plot of age distribution of the statewide volunteers
+ggplot(age_state, aes(x = age, y = tot_number)) +
+  geom_col()+
+  labs(x = "Age", y = "Count", caption = "Age Distribution of the Statewide Volunteers") +
+  theme_classic()
+```
+
+From the above table and figure, among the whole Victoria state, half of the volunteers' age is greater than 45. There are more volunteers with the age increasing. The largest group of volunteers is aging older than 65. 
+
+#### 2. Statewide Serve Year Situation 
+
+```{r}
+
+serve_state <- age_tidy_state %>% 
+  group_by(serve_years) %>% 
+  summarise(tot_number = sum(count)) %>% 
+  mutate(percentage = tot_number/sum(tot_number)) %>% 
+  arrange(desc(percentage))
+
+library(formattable)
+serve_state$percentage <- percent(serve_state$percentage)
+```
+
+
+```{r}
+#the table of serve year of the statewide volunteers
+knitr::kable(serve_state, caption = "Total Serve Year of the Statewide Volunteers",
+        col.names = c("Serve Year","Count", "Percentage")) %>% 
+  kable_styling(c("hover", 
+                  "condensed",
+                  position = "center", 
+                  fixed_thead = TRUE))
+```
+
+
+```{r, fig.width=13, fig.align="center"}
+#the plot of serve year of the statewide volunteers
+ggplot(serve_state, aes(x = reorder(serve_years, -tot_number), y = tot_number)) +
+  geom_col()+
+  labs(x = "Serve Yers", y = "Count", caption = "Serve Year Situation of the Statewide Volunteers") +
+  theme_classic()
+```
+
+From the above table and the figure, 20% of the people have served as CFA volunteers for 1-5 years. Generally, the number of people is decreasing with the serving years is increasing. Notably, only 5% of people served less than one year, and six people served for 76-80 years.
+
+#### 3.Volunteer Number and Position Structure by District
+
+```{r , include=FALSE}
+tidy_district <- district_vol %>% 
+  pivot_longer(cols = c(`0-1 years`, `1-5 years`, `6-10 years`, `11-15 years`, `16-20 years`, `21-25 years`, `26-30 years`, `31-35 years`,`36-40 years`,`41-45 years`,`46-50 years`,`51-55 years`,`56-60 years`,`61-65 years`,`66-70 years`,`71-75 years`,`76-80 years`,`81-85 years`,`86 plus`),
+               names_to = "serve_years",
+               values_to = "count") %>% 
+  #filter(str_detect(serve_years, "years")) %>% 
+ # mutate(Serve_years = str_remove_all(serve_years, " years")) %>% 
+  select(-c(`Not Found`))
+  
+tidy_district[is.na(tidy_district)] <- 0
+
+q4p2 <- tidy_district %>% 
+  group_by(position, district) %>% 
+  summarise(count = sum(count)) 
+q4p2 <- q4p2 %>% 
+  group_by(district) %>% 
+  mutate(dis_sum = sum(count),
+         percentage = count/dis_sum)
+q4p2$percentage <- percent(q4p2$percentage)
+
+q4t1 <- tidy_district %>% 
+  group_by(district) %>% 
+  summarise(count = sum(count)) %>% 
+  arrange(desc(count))
+
+```
+
+```{r}
+knitr::kable(q4t1, caption = "Total Number of the Volunteers by District",
+        col.names = c("District","Count")) %>% 
+  kable_styling(c("hover", 
+                  "condensed",
+                  position = "center", 
+                  fixed_thead = TRUE))
+```
+From the table above, **`r q4t1$district[1]`**, **`r q4t1$district[2]`**, and **`r q4t1$district[3]`** have the most volunteer numbers. The difference between the highest and the lowest is significant, which is almost six times.
+
+
+```{r, fig.width=12, fig.align="center"}
+library(plotly)
+q4p <- ggplot(q4p2, aes(x = district, y = percentage, fill = position))+
+  geom_col(position = "stack")+
+  scale_fill_brewer(palette = "Dark2")
+ggplotly(q4p)
+```
+The CFA volunteer is consists of operational and non-operational positions. 
+
+The operational volunteers, as known as the firefighters, respond to fire, road accidents, and other incidents where risks are posed to life or property. The role also involves the management of vegetation, fire equipment, or assisting other emergency agencies. Many operational volunteers also undertake non-operational roles.
+
+The non-operational volunteer is the support role. They do not fight fires directly yet provide vital support to brigades. The role involves education across local communities, media and promotion, brigade health and safety management, and so on.
+
+The figure above shows that the percentage of operational and non-operational volunteers among all the districts is close, with roughly 35% for non-operational and 65% for operational.
+
+# Conclusion:
+In 2016, most volunteers were over 65 years old, and the majority had served for 1-5 years. Hume district had the most CFA volunteers. The percentage of operational and non-operational are about 35% and 65%.
+
+
+
+
+
+## Fire Detections and Land Type in Bushfire Season
+
+
+According to the  information provided by the department of agriculture of Australian, in the figure \@ref(tab:tableyears) below can be seen the number of the fire detections by year. The number of cases registered by the season 2019/2020 were 103.627. The extent of land affected by the bushfires will be detailed i the next part of the report. something interesting to remark it that even though the season 2019/2020 seemed very hard for the country, in reality this number of cases is not compared with the number of observation for the same season in 2006/2007 and 2002/2003 that hold 3'327484 and 2'974.094 cases respectively in Victoria.
+
+
+
+
+```{r tableyears, message=FALSE, fig.pos="hold"}
+
+
+fire_total_detects %>% 
+  select(Years, n) %>% 
+  arrange(desc(n)) %>% 
+  rename("Total Counts" = n) %>% 
+  kable(caption = "Total detections by year") %>%
+ kable_styling(c("hover", 
+                  "condensed",
+                  position = "center", 
+                  fixed_thead = TRUE), 
+                  full_width = FALSE)
+
+```
+
+
+```{r a, message=FALSE, fig.width=15, fig.height=8, fig.cap="Number of Observations by Year", fig.align='default'}
+
+
+
+
+ ggplot(fire_total_detects, 
+                          aes(x = Years, 
+                              y = n)) +
+  geom_col(fill= 'coral3') +
+  coord_flip()+
+  labs( y = "Counts") +
+  geom_text(aes(label = n, size = 1, hjust= -0.5))+
+  theme(legend.position = "none")+
+  scale_y_continuous(limits = c(0,3500000))+
+  theme_bw()
+
+
+  
+
+```
+
+\clearpage
+
+
+### Percentage of Affected Land by State
+
+
+Taking in detail the number of the observations by state in the season 2019/2020, we can see that the states with major affectation of the forested land were Australian Capital Territory, Victoria and New south Wales with 92.78%, 92.02% and 90.15% respectively. See Figure \@ref(fig:affectedstate). The territory with the least affectation was Northern Territory (0%), followed by South Australia with 43.68%.
+
+```{r b, message=FALSE}
+
+perc_affected_state <- perc_affected_state  %>%
+  select(Jurisdiction, 
+         `Proportion of fire area that is forested (perc)`) %>% 
+  mutate("Proportion of fire" = 100-`Proportion of fire area that is forested (perc)`) %>% 
+  pivot_longer(names_to = "Burnt Area", 
+               values_to = "Percentage", 
+               cols = -Jurisdiction)
+
+```
+
+
+```{r affectedstate, message=FALSE, fig.align='center', fig.show="hold", fig.cap="Affectation by State"}
+
+ggplot(data = perc_affected_state, aes(x = Jurisdiction,
+                           y = Percentage, 
+                           fill= `Burnt Area`)) +
+    geom_bar(position="stack", 
+             stat="identity")+ 
+    geom_text(aes(label = paste0(round(Percentage,2),"%")), 
+              position = position_stack(vjust = 0.5), 
+              size = 3)+
+    scale_y_continuous(labels = function(x) paste0(x, "%"), 
+                       breaks = seq(0, 100, 10))+
+    coord_flip()+
+    theme_bw()+
+    theme(legend.position = "bottom")
+   
+  
+ 
+```
+
+
+
+### Percentage of Forested Land Affected in Victoria by Type
+
+
+According to the classification of the land in Victoria, Multiple-use Public Forest got affected by 29%, whereas the Nature Conservation Reserve had 15% of burnt land. similarly the Unresolved tenure land lost 13% of it's extent by the fires. In the case of private land, around 6% was consumed by fires. See Figure \@ref(fig:affectedvic).
+
+
+```{r affectedvic, message=FALSE, fig.align='center', fig.show="hold", fig.cap="Land Type affected in Victoria"}
+
+
+ft4perc <- ft4perc  %>% 
+  select(...1,Vic.) %>% 
+  rename("Type of Forest" = ...1, "Burnt Land" = Vic.) %>% 
+  filter(`Type of Forest` %in% 
+           c("Leasehold forest", 
+             "Multiple-use public forest", 
+             "Nature conservation reserve", 
+             "Other Crown land", 
+             "Private forest", 
+             "Unresolved tenure")) %>% 
+  mutate("Safe Land" = 100-`Burnt Land`) %>% 
+  pivot_longer(names_to = "Burnt Area Victoria", values_to = "Percentage", cols = -`Type of Forest`)
+
+  ggplot(data = ft4perc, aes(x = `Type of Forest`,
+                           y = Percentage, fill= `Burnt Area Victoria`)) +
+    geom_bar(position= position_stack(reverse = T), stat="identity")+
+    coord_flip()+
+    theme(legend.position = "bottom")+
+    theme_bw() +
+    geom_text(aes(label = paste0(round(Percentage,2),"%")), position = position_stack(vjust = 0.5, reverse = T), size = 3)
+
+```
+
+
+
+\clearpage
+
+## Melbourne Air Quality Index
+
+The bushfires season had a huge negative impact in the air quality in Victoria, as an example we took data from the Environment Protection Authority in Australia which recorder the PM2.5 (Fine Particulate Matter 2.5) which is an air pollutant concern for the community's health, the higher the rate the worse impact for individuals. In the figure \@ref(fig:airyears) below can be seen the levels for the previous four years, with clearly a huge peak in January 2020.
+
+
+```{r airyears, warning=FALSE, message=FALSE , fig.align='center', fig.cap="Melbourne Air Quality"}
+
+melb_air2 <- melb_air %>%  select(date,pm25) %>% 
+  mutate(date = as.Date(date, format = "%d/%m/%Y"))
+
+melb_air2 %>%
+  ggplot()+
+  geom_line(aes(x = date, 
+                y = pm25), 
+            colour = "#FF6600")+
+  theme_bw()+
+  labs(x = "3 Year Historical Melbourne Air Index", 
+       y = "Air Index Score")+
+  scale_y_continuous(limits = c(0,280),
+                     breaks = seq(0,280,50))
+
+
+```
+
+
+The figure below shows the classification of the air quality index, this source will give a clearer idea of the readings of the bushfire season and for previous levels. 
+
+
+```{r c, fig.align='center', out.width="70%", message=FALSE, fig.cap="Air Quality Levels"}
+
+knitr::include_graphics(here::here('images/polution_table.png'))
+
+```
+
+Finally, having a closer look to the most affected months from January to April, we cans see that on 15th January the levels recorded was 272, clearly very unhealthy, the population needed to be indoors even more for those with respiratory affections. Certainly the first two weeks were highly affected by the pollution and the fires, all this happened mainly in the first two weeks of the year, leaving highly affected the fauna and flora. 
+
+```{r d, message=FALSE, fig.align='center', fig.cap="Bushfire Season 2019/2020 Air Quality in Melbourne"}
+
+
+melb_air2 %>% 
+  filter(date >= "2019-12-01" & date <= "2020-03-30" ) %>% 
+  
+
+ ggplot()+
+  geom_line(aes(x = date, 
+                y = pm25), 
+            colour = "#FF6600")+
+  theme_bw()+
+  labs(x = "Melbourne Air Index in 2020 (January to April)", 
+       y = "Air Index Score")+
+  scale_y_continuous(limits = c(0,300),
+                     breaks = seq(0,300,20))
+
+
 ```
 
 
@@ -122,3 +916,16 @@ So basically, it's the vulnerable and endangered species which suffered the most
 To sum up, for most of the listed threatened species, there are more than 10% but less than 30% area has been destroyed, besides, the plants suffered the most serious destruction, with 107 plant species affected. The mammal frog and bird species had similar extent in the destruction.
 
 But actually, many species not currently listed under national environmental law will have had much of their range affected by the fires, and in some cases, that impact may mean that these species have become threatened. The Department will be considering assessments of these species in the near future I think, besides, our knowledge about species distributions, fire severity, other threats, and impact on plants and animals is incomplete, that requires us to update the information further.
+
+
+# Reference:
+
+Cambridge Advanced Learner's Dictionary (Third ed.). Cambridge University Press. 2008. ISBN 978-0-521-85804-5. Archived from the original on 13 August 2009.
+
+Department of Health. (n.d.). Retrieved from https://www.health.ny.gov/environmental/outdoors/air/smoke_from_fire.htm#:~:text=All.
+
+Fattal, A., Kelly, S., Liu, A., Giurco, D. 2016., Waste Fires in Australia: Cause for
+Concern? Prepared for the Department of Environment, Canberra by the UTS Institute for
+Sustainable Futures, Sydney.
+
+Volunteer with CFA. (2021, April 30). Retrieved from https://www.cfa.vic.gov.au/volunteer-careers/volunteers.
