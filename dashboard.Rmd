@@ -2,8 +2,9 @@
 title: "Presentation for Country Fire Condition"
 output: 
   flexdashboard::flex_dashboard:
-    orientation: columns
+    orientation: rows
     vertical_layout: fill
+    source_code: embed
 ---
 
 
@@ -27,9 +28,6 @@ library(ggthemes)
 library(knitr)
 library(sf)
 library(leaflet)
-library(hrbrthemes)
-library(readxl)
-```
 ```
 
 ```{r,include=FALSE}
@@ -361,4 +359,9 @@ melb_air2 %>%
 
 
 ```
+
+
+
+
+
 

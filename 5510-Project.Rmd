@@ -911,7 +911,7 @@ According to the plot \@ref(fig:datSummary2), it seems that, for the vulnerable 
 Cambridge Advanced Learner's Dictionary (Third ed.). Cambridge University Press. 2008. ISBN 978-0-521-85804-5. Archived from the original on 13 August 2009.
 
 Department of Health. (n.d.). Retrieved from https://www.health.ny.gov/environmental/outdoors/air/smoke_from_fire.htm#:~:text=All.
-
+ 
 Fattal, A., Kelly, S., Liu, A., Giurco, D. 2016., Waste Fires in Australia: Cause for
 Concern? Prepared for the Department of Environment, Canberra by the UTS Institute for
 Sustainable Futures, Sydney.
