@@ -128,7 +128,8 @@ Column {data-width=650}
 ```{r fig41, fig.cap="Age Distribution of the Statewide Volunteers"}
 #the plot of age distribution of the statewide volunteers
 ggplot(age_state, aes(x = age, y = tot_number)) +
-  geom_col()+
+  geom_col(fill = "#e1701a")+
+  geom_text(aes(label = tot_number, vjust = -0.5))+
   labs(x = "Age", y = "Count", caption = "Age Distribution of the Statewide Volunteers") +
   theme_classic()
 ```
@@ -140,7 +141,8 @@ ggplot(age_state, aes(x = age, y = tot_number)) +
 ```{r fig42, fig.width=13, fig.align="center", fig.cap= "Serve Year Situation of the Statewide Volunteers", echo=FALSE, eval=TRUE, warning=FALSE}
 #the plot of serve year of the statewide volunteers
 ggplot(serve_state, aes(x = reorder(serve_years, -tot_number), y = tot_number)) +
-  geom_col()+
+  geom_col(fill = "#e1701a")+
+  geom_text(aes(label = tot_number, vjust = -0.3))+
   labs(x = "Serve Yers", y = "Count", caption = "Serve Year Situation of the Statewide Volunteers") +
   theme_classic()
 ```
@@ -164,7 +166,8 @@ knitr::kable(q4t1, caption = "Total Number of the Volunteers by District",
 library(plotly)
 q4p <- ggplot(q4p2, aes(x = district, y = percentage, fill = position))+
   geom_col(position = "stack")+
-  scale_fill_brewer(palette = "Dark2")
+  scale_fill_manual(values = c("#aaaaaa","#e1701a"))
+#  scale_fill_brewer(palette = "Dark2")
 ggplotly(q4p)
 ```
 
