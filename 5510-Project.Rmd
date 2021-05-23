@@ -913,6 +913,17 @@ ggplotly(p2)
 
 According to the plot \@ref(fig:datSummary2), it seems that, for the vulnerable species, it's the plant which occurred the most serious destruction, besides, in terms of the endangered or critically endangered species, the other species like fish, bird, frog and mammals, were not as serious as the plants. In addition, there were 4 migratory species affected because of the bushfire.
 
+
+# Conclusion
+
+As per the analysis for question on the performance of the brigade, it is safe to say that CFA brigades performed well against the standard delivery service time of eight minutes for the hazard class two incidents. And as per the analysis for the question on the number of incidents, we can see that Dandenong appears to be the area that had highest number of incidents across all hazard classes.
+
+The most frequent fire incident is Small vegetation fire (one hectare or less) which contains bushfire, wildfire, or rural fire. In 2016, most volunteers were over 65 years old, and the majority had served for 1-5 years. Hume district had the most CFA volunteers. The percentage of operational and non-operational are about 35% and 65%.
+
+For analysing the effects on the species, most of the plants, there are more than 10% but less than 30% area has been destroyed, with 107 plant species affected. What's more,  in terms of the threatened condition, it's the plants  suffered the most serious destruction as well, but the effects on the other species like mammal, frog and bird species, they all had similar extent in the destruction, not as serious as the plants.
+
+But actually, many species not currently listed under national environmental law will have had much of their range affected by the fires, and in some cases, that impact may mean that these species have become threatened. The Department will be considering assessments of these species in the near future I think, besides, our knowledge about species distributions, fire severity, other threats, and impact on plants and animals is incomplete, that requires us to update the information further.
+
 # Reference:
 
 Cambridge Advanced Learner's Dictionary (Third ed.). Cambridge University Press. 2008. ISBN 978-0-521-85804-5. Archived from the original on 13 August 2009.
