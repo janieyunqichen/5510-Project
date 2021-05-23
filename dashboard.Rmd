@@ -102,7 +102,7 @@ kable_styling(bootstrap_options = c("striped","hover"))
 The number of incidents for four quarters 2019/20 {data-icon="ion-android-contact"}
 =================================================================================
 
-Column {data-width=600}
+Column {data-width=650}
 ---------------------------------------------------------------------------------
  
 
@@ -129,22 +129,50 @@ dat_Q4_2020 <- read_csv("data/dat_2020Q4.csv")%>%
 binding_data <- bind_rows(dat_Q1_2020,dat_Q2_2020,dat_Q3_2020,dat_Q4_2020)
 ```
 
-```{r, eval = TRUE, echo= FALSE, message=FALSE, fig.width=15, fig.height=15, fig.align='default', fig.cap="Number of incidents"}
+```{r}
+dat_Q1_2020 <- read_csv("data/dat_Q1_2020.csv") %>%
+  rename(Number_Incidents_total =`Number of incidents within the Brigade Area for the reporting period across all Hazard Classes`)%>%
+  rename(CFA_Brigade_Area = `CFA Brigade Area`)
 
-ggplot(binding_data,
-       aes(x = Number_Incidents_total,
-           y= CFA_Brigade_Area))+ 
-  geom_col()+
+dat_Q2_2020 <- read_csv("data/dat_Q2_2020.csv")%>%
+  rename(Number_Incidents_total = `Number of incidents within the Brigade Area for the reporting period across all Hazard Classes`)%>%
+  rename(CFA_Brigade_Area = `CFA Brigade Area`)
+
+dat_Q3_2020 <- read_csv("data/dat_Q3_2020.csv") %>%
+  rename(Number_Incidents_total = `Number of incidents within the Brigade Area for the reporting period across all Hazard Classes`)%>%
+  rename(CFA_Brigade_Area = `CFA Brigade Area`)
+
+dat_Q4_2020 <- read_csv("data/dat_2020Q4.csv")%>%
+  select(`CFA District`, `CFA Brigade Area`, `Number of incidents within the Brigade Area for the reporting period across all Hazard Classes`)%>%
+  rename(Number_Incidents_total = `Number of incidents within the Brigade Area for the reporting period across all Hazard Classes`)%>%
+    rename(CFA_Brigade_Area = `CFA Brigade Area`)
+
+binding_data <- bind_rows(dat_Q1_2020,dat_Q2_2020,dat_Q3_2020,dat_Q4_2020)
+```
+
+```{r, eval = TRUE, echo= FALSE, message=FALSE, fig.width=8, fig.height=6, fig.align='default', fig.cap="Number of incidents"}
+binding_data1 <- binding_data%>%
+  select(`CFA District`,
+         CFA_Brigade_Area,
+         Number_Incidents_total)%>%
+  arrange(desc(Number_Incidents_total))%>%
+
+head(10)
+
+
+ggplot(binding_data1,
+       aes(x = CFA_Brigade_Area,
+           y= Number_Incidents_total))+ 
+  geom_col(fill = "#00abff")+
   theme_base()+
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=0.5), axis.title.x = element_text(vjust=-1.8))+
   xlab("Incidents") +  
  ylab("Districts") +  
   ggtitle("Number of incidents") 
+
+
  
 ```
 
-The number of incidents for four quarters 2019/20-Summary {data-icon="ion-android-contact"}
-=================================================================================
 
 Row
 ---------------------------------------------------------------------------------
@@ -169,9 +197,6 @@ DataQ1_4 %>%
   kable_styling(bootstrap_options = c("striped", "hover"))
 
 ```
-
-
-
 
 
 ```{r,include=FALSE}
@@ -242,28 +267,6 @@ q4t1 <- tidy_district %>%
 
 ```
 
-The Most Frequent Fire Incident in Victoria {data-icon="ion-android-options"}
-=================================================================================
-Row
----------------------------------------------------------------------------------
-### The Most Frequent Fire Incident in Victoria (July 2015 to June 2016)
-```{r q1}
-# count number of incident
-q1table <- incident %>% 
-  count(code_description) %>% 
-  arrange(desc(n)) %>% 
-  head(10)  
-
-knitr::kable(q1table, caption = "The Top 10 Fire Incidents in Victoria during 2015-2016",
-      col.names = c("Case Name", "Count")) %>% 
-  kable_styling(c("hover", 
-                  "condensed",
-                  fixed_thead = TRUE))
-```
-
-
-
-
 
 The Volunteer Structure For 2016 {data-icon="ion-android-contact"}
 =================================================================================
@@ -317,6 +320,31 @@ q4p <- ggplot(q4p2, aes(x = district, y = percentage, fill = position))+
 #  scale_fill_brewer(palette = "Dark2")
 ggplotly(q4p)
 ```
+
+
+
+
+The Most Frequent Fire Incident in Victoria {data-icon="ion-android-options"}
+=================================================================================
+Row
+---------------------------------------------------------------------------------
+### The Most Frequent Fire Incident in Victoria (July 2015 to June 2016)
+```{r q1}
+# count number of incident
+q1table <- incident %>% 
+  count(code_description) %>% 
+  arrange(desc(n)) %>% 
+  head(10)  
+
+knitr::kable(q1table, caption = "The Top 10 Fire Incidents in Victoria during 2015-2016",
+      col.names = c("Case Name", "Count")) %>% 
+  kable_styling(c("hover", 
+                  "condensed",
+                  fixed_thead = TRUE))
+```
+
+
+
 
 
 
