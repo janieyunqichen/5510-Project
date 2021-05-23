@@ -916,27 +916,27 @@ According to the plot \@ref(fig:datSummary2), it seems that, for the vulnerable 
 
 # Conclusion
 
-As per the analysis for question on the performance of the brigade, it is safe to say that CFA brigades performed well against the standard delivery service time of eight minutes for the hazard class two incidents. And as per the analysis for the question on the number of incidents, we can see that Dandenong appears to be the area that had highest number of incidents across all hazard classes.
+As per the analysis for the question on the brigade's performance, it is safe to say that CFA brigades performed well against the standard delivery service time of eight minutes for the hazard class two incidents. Furthermore, as per the analysis for the number of incidents, we can see that Dandenong appears to be the area with the highest number of incidents across all hazard classes.
 
 The most frequent fire incident is Small vegetation fire (one hectare or less) which contains bushfire, wildfire, or rural fire. In 2016, most volunteers were over 65 years old, and the majority had served for 1-5 years. Hume district had the most CFA volunteers. The percentage of operational and non-operational are about 35% and 65%.
 
-For analysing the effects on the species, most of the plants, there are more than 10% but less than 30% area has been destroyed, with 107 plant species affected. What's more,  in terms of the threatened condition, it's the plants  suffered the most serious destruction as well, but the effects on the other species like mammal, frog and bird species, they all had similar extent in the destruction, not as serious as the plants.
+For analyzing the effects on the species, most of the plants have more than 10%, but less than 30% area has been destroyed, with 107 plant species affected. In terms of the threatening condition, the plants suffered the most severe destruction as well. However, the effects on the other species like mammal, frog, and bird species all had similar extent in the destruction, not as severe as the plants.
 
-But actually, many species not currently listed under national environmental law will have had much of their range affected by the fires, and in some cases, that impact may mean that these species have become threatened. The Department will be considering assessments of these species in the near future I think, besides, our knowledge about species distributions, fire severity, other threats, and impact on plants and animals is incomplete, that requires us to update the information further.
+Nevertheless, many species not currently listed under national environmental law will have had much of their range affected by the fires. In some cases, that impact may mean that these species have become threatened. The Department will be considering assessments of these species soon. Besides, our knowledge about species distributions, fire severity, other threats, and impact on plants and animals is incomplete, which requires us to update the information further.
 
 # Reference:
 
-Cambridge Advanced Learner's Dictionary (Third ed.). Cambridge University Press. 2008. ISBN 978-0-521-85804-5. Archived from the original on 13 August 2009.
+* Cambridge Advanced Learner's Dictionary (Third ed.). Cambridge University Press. 2008. ISBN 978-0-521-85804-5. Archived from the original on 13 August 2009.
 
-Department of Health. (n.d.). Retrieved from https://www.health.ny.gov/environmental/outdoors/air/smoke_from_fire.htm#:~:text=All.
+* CFA official News https://news.cfa.vic.gov.au/-/cfa-release-latest-response-data
 
-Fattal, A., Kelly, S., Liu, A., Giurco, D. 2016., Waste Fires in Australia: Cause for
-Concern? Prepared for the Department of Environment, Canberra by the UTS Institute for
-Sustainable Futures, Sydney.
+* Department of Health. (n.d.). Retrieved from https://www.health.ny.gov/environmental/outdoors/air/smoke_from_fire.htm#:~:text=All.
 
-Volunteer with CFA. (2021, April 30). Retrieved from https://www.cfa.vic.gov.au/volunteer-careers/volunteers.
+* Fattal, A., Kelly, S., Liu, A., Giurco, D. 2016., Waste Fires in Australia: Cause for Concern? Prepared for the Department of Environment, Canberra by the UTS Institute for Sustainable Futures, Sydney.
+
+* Volunteer with CFA. (2021, April 30). Retrieved from https://www.cfa.vic.gov.au/volunteer-careers/volunteers.
 
 
-Vardoulakis, S., Jalaludin, B. B., Morgan, G. G., Hanigan, I. C., & Johnston, F. H. (2020). Bushfire smoke: urgent need for a national health protection strategy. The Medical Journal of Australia, 212(8), 349.
+* Vardoulakis, S., Jalaludin, B. B., Morgan, G. G., Hanigan, I. C., & Johnston, F. H. (2020). Bushfire smoke: urgent need for a national health protection strategy. The Medical Journal of Australia, 212(8), 349.
 
-CFA official News https://news.cfa.vic.gov.au/-/cfa-release-latest-response-data
+
