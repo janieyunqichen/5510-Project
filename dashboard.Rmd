@@ -1,9 +1,10 @@
 ---
-title: "Presentation for Country Fire Condition"
+title: "Country Fire Condition"
 output: 
   flexdashboard::flex_dashboard:
     orientation: columns
     vertical_layout: fill
+    source_code: embed
 ---
 
 
@@ -29,8 +30,8 @@ library(sf)
 library(leaflet)
 library(hrbrthemes)
 library(readxl)
+library(chron)
 ```
-
 
 ```{r,include=FALSE}
 incident<- read_csv("data/incident.csv")
@@ -100,7 +101,7 @@ q4t1 <- tidy_district %>%
 
 ```
 
-The Most Frequent Fire Incident in Victoria
+The Most Frequent Fire Incident in Victoria {data-icon="ion-android-options"}
 =================================================================================
 Row
 ---------------------------------------------------------------------------------
@@ -119,10 +120,151 @@ knitr::kable(q1table, caption = "The Top 10 Fire Incidents in Victoria during 20
                   fixed_thead = TRUE))
 ```
 
-The Volunteer Structure For 2016
+
+
+The CFA Brigades Response Time to Incidents within their Areas (2019/20) {data-icon="ion-android-options"}
+=================================================================================
+Row
+-----------------------------------------------------------------------
+
+### The CFA Brigades Response Time to Incidents within their Areas (2019/20)
+
+```{r, include = FALSE}
+data_20 <- read.csv("data/dat_q4_2020.csv") %>%
+  rename(CFA_district = CFA.District)%>%
+  rename(CFA_Brigade_Area = CFA.Brigade.Area)%>%
+  rename(Number_of_incidents = `Number.of.emergency.incidents.within.the.Brigade.Area.for.the.reporting.period.for.Hazard.Class.2`)%>%
+  rename(TimeResponse = `The.time.in.which.90..of.emergency.incidents.were.responded.to.by.any.brigade`)%>%
+  rename(TimeResponse_within = `The.time.in.which.90..of.emergency.incidents.were.responded.to.by.the.brigade.within.their.own.Brigade.Area`)%>%
+  mutate(`TimeResponse_within`= paste0("00:",`TimeResponse_within`))%>%
+  mutate(TimeResponse = paste0("00:",TimeResponse))%>%
+  mutate(Number_of_incidents = as.numeric(Number_of_incidents))
+  
+data_20$TimeResponse_within <- chron(times= data_20$TimeResponse_within)
+
+data_20$TimeResponse <- chron(times=data_20$TimeResponse)
+```
+
+```{r dat1}
+data_20 %>%
+  select(TimeResponse_within)%>%
+  summary(data_20$TimeResponse_within)%>%
+  kable(caption = "Time Response within Brigade Area") %>%
+kable_styling(bootstrap_options = c("striped","hover"))
+
+```
+
+
+The CFA Brigades Response Time to Incidents within their Areas (2018/19) {data-icon="ion-android-options"}
+=================================================================================
+Row
+-----------------------------------------------------------------------
+### The CFA Brigades Response Time to Incidents within their Areas (201/29)
+```{r, include= FALSE}
+data_19 <- read.csv("data/dat_q4_2018_19.csv")%>%
+  rename(CFA_district = CFA.District)%>%
+  rename(CFA_Brigade_Area = CFA.Brigade.Area)%>%
+  rename(Number_of_incidents = `Number.of.emergency.incidents.within.the.Brigade.Area.for.the.reporting.period.for.Hazard.Class.2`)%>%
+  rename(TimeResponse = `The.time.in.which.90..of.emergency.incidents.were.responded.to.by.any.brigade`)%>%
+  rename(TimeResponse_within = `The.time.in.which.90..of.emergency.incidents.were.responded.to.by.the.brigade.within.their.own.Brigade.Area`)%>%
+  filter(TimeResponse_within != "NULL")%>%
+  mutate(`TimeResponse_within`= paste0("00:",`TimeResponse_within`))%>%
+  mutate(TimeResponse = paste0("00:",TimeResponse))%>%
+  mutate(Number_of_incidents = as.numeric(Number_of_incidents))
+  
+
+data_19$TimeResponse_within <- chron(times= data_19$TimeResponse_within)
+
+
+data_19$TimeResponse <- chron(times=data_19$TimeResponse)
+```
+
+```{r dat2}
+data_19%>%
+  select(TimeResponse_within)%>%
+  summary(data_19$TimeResponse_within)%>%
+  kable(caption = "Summary for data 2019 Q4" ) %>%
+kable_styling(bootstrap_options = c("striped","hover"))
+
+```
+
+
+The number of incidents for four quarters 2019/20 {data-icon="ion-android-contact"}
 =================================================================================
 
-Column {data-width=650}
+Column {data-width=500}
+---------------------------------------------------------------------------------
+ 
+
+### The number of incidents for four quarters 2019/20
+
+```{r}
+dat_Q1_2020 <- read_csv("data/dat_Q1_2020.csv") %>%
+  rename(Number_Incidents_total =`Number of incidents within the Brigade Area for the reporting period across all Hazard Classes`)%>%
+  rename(CFA_Brigade_Area = `CFA Brigade Area`)
+
+dat_Q2_2020 <- read_csv("data/dat_Q2_2020.csv")%>%
+  rename(Number_Incidents_total = `Number of incidents within the Brigade Area for the reporting period across all Hazard Classes`)%>%
+  rename(CFA_Brigade_Area = `CFA Brigade Area`)
+
+dat_Q3_2020 <- read_csv("data/dat_Q3_2020.csv") %>%
+  rename(Number_Incidents_total = `Number of incidents within the Brigade Area for the reporting period across all Hazard Classes`)%>%
+  rename(CFA_Brigade_Area = `CFA Brigade Area`)
+
+dat_Q4_2020 <- read_csv("data/dat_2020Q4.csv")%>%
+  select(`CFA District`, `CFA Brigade Area`, `Number of incidents within the Brigade Area for the reporting period across all Hazard Classes`)%>%
+  rename(Number_Incidents_total = `Number of incidents within the Brigade Area for the reporting period across all Hazard Classes`)%>%
+    rename(CFA_Brigade_Area = `CFA Brigade Area`)
+
+binding_data <- bind_rows(dat_Q1_2020,dat_Q2_2020,dat_Q3_2020,dat_Q4_2020)
+```
+
+```{r, eval = TRUE, echo= FALSE, message=FALSE, fig.width=15, fig.height=15, fig.align='default', fig.cap="Number of incidents"}
+
+ggplot(binding_data,
+       aes(x = Number_Incidents_total,
+           y= CFA_Brigade_Area))+ 
+  geom_col()+
+  theme_base()+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=0.5), axis.title.x = element_text(vjust=-1.8))+
+  xlab("Incidents") +  
+ ylab("Districts") +  
+  ggtitle("Number of incidents") 
+ 
+```
+
+The number of incidents for four quarters 2019/20-Summary {data-icon="ion-android-contact"}
+=================================================================================
+
+Row
+---------------------------------------------------------------------------------
+### The number of incidents for four quarters 2019/20
+```{r}
+DataQ1_4 <-  read_csv("data/Question_3_dat_2.csv")%>%
+  rename(Num_incdents1=`Number of incidents within the Brigade Area for the reporting period across all Hazard Classes Q1`)%>%
+  rename(Num_incdents2=`Number of incidents within the Brigade Area for the reporting period across all Hazard Classes Q2`)%>%
+  rename(Num_incdents3=`Number of incidents within the Brigade Area for the reporting period across all Hazard Classes Q3`)%>%
+  rename(Num_incdents4=`Number of incidents within the Brigade Area for the reporting period across all Hazard Classes Q4`)
+```
+
+```{r}
+
+DataQ1_4 %>% 
+  select(Num_incdents1,
+         Num_incdents2,
+         Num_incdents3,
+         Num_incdents4)%>%
+  summary()%>%
+  kable(caption = "Summary of the incidents.") %>%
+  kable_styling(bootstrap_options = c("striped", "hover"))
+
+```
+
+
+The Volunteer Structure For 2016 {data-icon="ion-android-contact"}
+=================================================================================
+
+Column {data-width=500}
 ---------------------------------------------------------------------------------
 
 ### Statewide Age Distribution
@@ -137,7 +279,6 @@ ggplot(age_state, aes(x = age, y = tot_number)) +
 ```
 
 
-
 ### Statewide Serve Year Situation 
 
 ```{r fig42, fig.width=13, fig.align="center", fig.cap= "Serve Year Situation of the Statewide Volunteers", echo=FALSE, eval=TRUE, warning=FALSE}
@@ -149,7 +290,7 @@ ggplot(serve_state, aes(x = reorder(serve_years, -tot_number), y = tot_number)) 
   theme_classic()
 ```
 
-Column {data-width=350}
+Column {data-width=500}
 ---------------------------------------------------------------------------------
 
 ### Volunteer Number and Position Structure by District
@@ -164,7 +305,7 @@ knitr::kable(q4t1, caption = "Total Number of the Volunteers by District",
 ```
 
 
-```{r fig43, fig.width=12, fig.height=3, fig.align="center",message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, message=FALSE, fig.cap="the percentage of operational and non-operational volunteers among all the districts"}
+```{r fig43, fig.align="center",message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, message=FALSE, fig.cap="the percentage of operational and non-operational volunteers among all the districts"}
 library(plotly)
 q4p <- ggplot(q4p2, aes(x = district, y = percentage, fill = position))+
   geom_col(position = "stack")+
@@ -191,6 +332,8 @@ ft4perc  <- read_csv("data/ft4perc.csv")
 
 ```
 
+section2
+=================================================================================
 
 Column {data-width=300}
 -----------------------------------------------------------------------
@@ -324,7 +467,7 @@ DataQ1_4 %>%
 
 Australian Bushfires 2019/20 {data-icon="ion-fireball"}
 ==================
-Row{data-height=250}
+Column {data-height=200}
 --------
 
 ### Number of Fire Detections in Victoria
@@ -335,6 +478,27 @@ tablefires <- fire_total_detects %>%
 
 valueBox(tablefires$n,icon = "ion-fireball",caption = "Number of fire Detections in Victoria",color = "orange")
 ```
+
+
+### Total Detections by Year
+```{r tableyears, warning=FALSE, echo=FALSE, eval=TRUE,message=FALSE, fig.pos="hold", fig.width=8}
+
+
+firedetect <- ggplot(fire_total_detects, 
+                          aes(x = Years, 
+                              y = n)) +
+  geom_col(fill= "#FF9999") +
+  coord_flip()+
+  labs( y = "Counts")+
+  geom_text(aes(label = n, hjust= 0), size = 3, show.legend = F)+
+  scale_y_continuous(limits = c(0,3500000), breaks = seq(0,3500000,500000))+
+  theme_bw()
+
+ggplotly(firedetect)
+
+
+```
+
 
 
 
@@ -359,17 +523,14 @@ perc_affected_state <- perc_affected_state  %>%
 ```{r affectedstate, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, fig.align='center', fig.show="hold", fig.cap="Affectation by State"}
 
 ggplot(data = perc_affected_state, aes(x = Jurisdiction,
-                           y = Percentage, 
-                           fill= `Burnt Area`)) +
-    geom_bar(position="stack", 
-             stat="identity")+ 
-    geom_text(aes(label = paste0(round(Percentage,2),"%")), 
-              position = position_stack(vjust = 0.5), 
-              size = 3)+
+                                        y = Percentage, 
+                                          fill= `Burnt Area`)) +
     scale_y_continuous(labels = function(x) paste0(x, "%"), 
                        breaks = seq(0, 100, 10))+
+    geom_bar(position= position_stack(reverse = T), stat="identity")+
     coord_flip()+
     theme_bw()+
+    geom_text(aes(label = paste0(round(Percentage,2),"%")), position = position_stack(vjust = 0.5, reverse = T), size = 4.5)+
     theme(legend.position = "bottom")
    
   
@@ -397,11 +558,13 @@ ft4perc <- ft4perc  %>%
   pivot_longer(names_to = "Burnt Area Victoria", values_to = "Percentage", cols = -`Type of Forest`)
 
   ggplot(data = ft4perc, aes(x = `Type of Forest`,
-                           y = Percentage, fill= `Burnt Area Victoria`)) +
-    geom_bar(position= position_stack(reverse = T), stat="identity")+
+                              y = Percentage, 
+                               fill= `Burnt Area Victoria`)) +
+    geom_bar(position= position_stack(reverse = T), 
+             stat="identity")+
     coord_flip()+
-    theme_bw() +
-    geom_text(aes(label = paste0(round(Percentage,2),"%")), position = position_stack(vjust = 0.5, reverse = T), size = 3)+
+    theme_bw()+
+    geom_text(aes(label = paste0(round(Percentage,2),"%")), position = position_stack(vjust = 0.5, reverse = T), size = 4.5)+
     theme(legend.position = "bottom")
 
 ```
@@ -419,7 +582,7 @@ Row{data-height=250}
 
 ### Air Quality Index
 
-```{r figindex, fig.align='center', out.width="70%", message=FALSE, fig.cap="Air Quality Levels"}
+```{r figindex, fig.align='center', out.width="50%", message=FALSE, fig.cap="Air Quality Levels"}
 
 knitr::include_graphics(here::here('images/polution_table.png'))
 
@@ -437,21 +600,24 @@ Row{data-height=250}
 
 ### Melbourne Air Quality Index (4 Years)
 
-```{r airyears, warning=FALSE, message=FALSE , fig.align='center', fig.cap="Melbourne Air Quality"}
+```{r airyears, warning=FALSE, message=FALSE , fig.align='center'}
 
 melb_air2 <- melb_air %>%  select(date,pm25) %>% 
   mutate(date = as.Date(date, format = "%d/%m/%Y"))
 
-melb_air2 %>%
-  ggplot()+
+melb_air3 <-  ggplot(melb_air2)+
   geom_line(aes(x = date, 
                 y = pm25), 
             colour = "#FF6600")+
   theme_bw()+
   labs(x = "3 Year Historical Melbourne Air Index", 
-       y = "Air Index Score")+
+       y = "Air Index Score", caption = "Melbourne Air Quality")+
   scale_y_continuous(limits = c(0,280),
                      breaks = seq(0,280,50))
+
+ggplotly(melb_air3)
+
+
 
 
 ```
@@ -459,22 +625,25 @@ melb_air2 %>%
 ### Melbourne Air Quality Index 2020
 
 
-```{r figmelb, message=FALSE, fig.align='center', fig.cap="Bushfire Season 2019/2020 Air Quality in Melbourne"}
+```{r figmelb, message=FALSE, fig.align='center'}
 
 
-melb_air2 %>% 
-  filter(date >= "2019-12-01" & date <= "2020-03-30" ) %>% 
+melb2020 <- melb_air2 %>% 
+  filter(date >= "2019-12-01" & date <= "2020-03-30" ) 
   
 
- ggplot()+
+melb20202 <- ggplot(melb2020)+
   geom_line(aes(x = date, 
                 y = pm25), 
             colour = "#FF6600")+
   theme_bw()+
   labs(x = "Melbourne Air Index in 2020 (January to April)", 
-       y = "Air Index Score")+
+       y = "Air Index Score", caption = "Bushfire Season 2019/2020 Air Quality in Melbourne")+
   scale_y_continuous(limits = c(0,300),
                      breaks = seq(0,300,20))
+
+ggplotly(melb20202)
+
 
 
 ```
@@ -566,8 +735,3 @@ category_summary <- read_excel("data/protected-species-in-fire-affected-areas-20
   theme_ipsum()
 ggplotly(p2)
 ```
-
-
-
-
-
