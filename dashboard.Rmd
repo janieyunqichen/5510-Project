@@ -34,7 +34,7 @@ library(chron)
 ```
 
 
-The CFA Brigades Response Time to Incidents within their Areas (2019/20) {data-icon="ion-android-options"}
+The CFA Brigades Response Time to Incidents within their Areas (2018/19 - 2019/20) {data-icon="ion-android-options"}
 =================================================================================
 Row
 -----------------------------------------------------------------------
@@ -67,8 +67,6 @@ kable_styling(bootstrap_options = c("striped","hover"))
 ```
 
 
-The CFA Brigades Response Time to Incidents within their Areas (2018/19) {data-icon="ion-android-options"}
-=================================================================================
 Row
 -----------------------------------------------------------------------
 ### The CFA Brigades Response Time to Incidents within their Areas (2018/19)
@@ -104,7 +102,7 @@ kable_styling(bootstrap_options = c("striped","hover"))
 The number of incidents for four quarters 2019/20 {data-icon="ion-android-contact"}
 =================================================================================
 
-Column {data-width=500}
+Column {data-width=600}
 ---------------------------------------------------------------------------------
  
 
@@ -174,10 +172,6 @@ DataQ1_4 %>%
 
 
 
-The Most Frequent Fire Incident in Victoria {data-icon="ion-android-options"}
-=================================================================================
-Row
----------------------------------------------------------------------------------
 
 
 ```{r,include=FALSE}

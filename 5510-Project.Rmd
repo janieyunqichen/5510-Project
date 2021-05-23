@@ -167,7 +167,7 @@ The most recent data from April to June 2020 showed CFA brigades responded to 9,
 
 In 87 per cent of incidents that required emergency response, the community received a fire service within the standard response time, which was broadly consistent with previous quarters.[CFA News](https://news.cfa.vic.gov.au/-/cfa-release-latest-response-data)
 
-Let's visualize the data first.
+Let's have a look at the table for the fourth quarter 2019/20.
 
 ```{r plotting-data20, message=FALSE, echo=FALSE, warning=FALSE, eval=TRUE}
  data_20%>%
@@ -183,6 +183,8 @@ Let's visualize the data first.
 
 \clearpage
 
+Using the summary function, we can look at the summary of minimum, maximum and the mean time it took CFA brigades to respond to incidents within their brigade areas:
+
 ```{r tab-summary20, message=FALSE, echo=FALSE, eval=TRUE}
 data_20 %>%
   select(TimeResponse_within)%>%
@@ -192,7 +194,7 @@ kable_styling(bootstrap_options = c("striped","hover"))
 ```
 
 
-The mean time that it took CFA brigades to respond to incidents in their own CFA brigade areas is **eight minutes and thirty-seven seconds**. This is very close to the target response time for brigades, which is **eight minutes**. 
+From, the table \@ref(tab:tab-summary20), the **mean** time that it took CFA brigades to respond to incidents in their own CFA brigade areas is **eight minutes and thirty-seven seconds**. This is very close to the target response time for brigades, which is **eight minutes**. 
 
 
 \clearpage
