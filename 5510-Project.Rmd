@@ -640,7 +640,6 @@ According to the  information provided by the department of agriculture of Austr
 
 ```{r tableyears, warning=FALSE, echo=FALSE, eval=TRUE,message=FALSE, fig.pos="hold"}
 
-
 fire_total_detects %>% 
   select(Years, n) %>% 
   arrange(desc(n)) %>% 
@@ -657,22 +656,15 @@ fire_total_detects %>%
 
 ```{r a, message=FALSE, fig.width=15, fig.height=8, fig.cap="Number of Observations by Year", fig.align='default'}
 
-
-
-
  ggplot(fire_total_detects, 
                           aes(x = Years, 
                               y = n)) +
   geom_col(fill= 'coral3') +
   coord_flip()+
-  labs( y = "Counts") +
-  geom_text(aes(label = n, size = 1, hjust= -0.5))+
-  theme(legend.position = "none")+
-  scale_y_continuous(limits = c(0,3500000))+
+  labs( y = "Counts")+
+  scale_y_continuous(limits = c(0,3500000)) +
+  geom_text(aes(label = n, size = 1, hjust= 0), show.legend = F)+
   theme_bw()
-
-
-  
 
 ```
 

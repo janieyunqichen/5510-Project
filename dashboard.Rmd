@@ -450,7 +450,7 @@ DataQ1_4 %>%
 
 Australian Bushfires 2019/20 {data-icon="ion-fireball"}
 ==================
-Row{data-height=250}
+Column {data-height=200}
 --------
 
 ### Number of Fire Detections in Victoria
@@ -461,6 +461,27 @@ tablefires <- fire_total_detects %>%
 
 valueBox(tablefires$n,icon = "ion-fireball",caption = "Number of fire Detections in Victoria",color = "orange")
 ```
+
+
+### Total Detections by Year
+```{r tableyears, warning=FALSE, echo=FALSE, eval=TRUE,message=FALSE, fig.pos="hold", fig.width=8}
+
+
+firedetect <- ggplot(fire_total_detects, 
+                          aes(x = Years, 
+                              y = n)) +
+  geom_col(fill= "#FF9999") +
+  coord_flip()+
+  labs( y = "Counts")+
+  geom_text(aes(label = n, hjust= 0), size = 3, show.legend = F)+
+  scale_y_continuous(limits = c(0,3500000), breaks = seq(0,3500000,500000))+
+  theme_bw()
+
+ggplotly(firedetect)
+
+
+```
+
 
 
 
@@ -485,17 +506,14 @@ perc_affected_state <- perc_affected_state  %>%
 ```{r affectedstate, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, fig.align='center', fig.show="hold", fig.cap="Affectation by State"}
 
 ggplot(data = perc_affected_state, aes(x = Jurisdiction,
-                           y = Percentage, 
-                           fill= `Burnt Area`)) +
-    geom_bar(position="stack", 
-             stat="identity")+ 
-    geom_text(aes(label = paste0(round(Percentage,2),"%")), 
-              position = position_stack(vjust = 0.5), 
-              size = 3)+
+                                        y = Percentage, 
+                                          fill= `Burnt Area`)) +
     scale_y_continuous(labels = function(x) paste0(x, "%"), 
                        breaks = seq(0, 100, 10))+
+    geom_bar(position= position_stack(reverse = T), stat="identity")+
     coord_flip()+
     theme_bw()+
+    geom_text(aes(label = paste0(round(Percentage,2),"%")), position = position_stack(vjust = 0.5, reverse = T), size = 4.5)+
     theme(legend.position = "bottom")
    
   
@@ -523,11 +541,13 @@ ft4perc <- ft4perc  %>%
   pivot_longer(names_to = "Burnt Area Victoria", values_to = "Percentage", cols = -`Type of Forest`)
 
   ggplot(data = ft4perc, aes(x = `Type of Forest`,
-                           y = Percentage, fill= `Burnt Area Victoria`)) +
-    geom_bar(position= position_stack(reverse = T), stat="identity")+
+                              y = Percentage, 
+                               fill= `Burnt Area Victoria`)) +
+    geom_bar(position= position_stack(reverse = T), 
+             stat="identity")+
     coord_flip()+
-    theme_bw() +
-    geom_text(aes(label = paste0(round(Percentage,2),"%")), position = position_stack(vjust = 0.5, reverse = T), size = 3)+
+    theme_bw()+
+    geom_text(aes(label = paste0(round(Percentage,2),"%")), position = position_stack(vjust = 0.5, reverse = T), size = 4.5)+
     theme(legend.position = "bottom")
 
 ```
@@ -545,7 +565,7 @@ Row{data-height=250}
 
 ### Air Quality Index
 
-```{r figindex, fig.align='center', out.width="70%", message=FALSE, fig.cap="Air Quality Levels"}
+```{r figindex, fig.align='center', out.width="50%", message=FALSE, fig.cap="Air Quality Levels"}
 
 knitr::include_graphics(here::here('images/polution_table.png'))
 
@@ -563,21 +583,24 @@ Row{data-height=250}
 
 ### Melbourne Air Quality Index (4 Years)
 
-```{r airyears, warning=FALSE, message=FALSE , fig.align='center', fig.cap="Melbourne Air Quality"}
+```{r airyears, warning=FALSE, message=FALSE , fig.align='center'}
 
 melb_air2 <- melb_air %>%  select(date,pm25) %>% 
   mutate(date = as.Date(date, format = "%d/%m/%Y"))
 
-melb_air2 %>%
-  ggplot()+
+melb_air3 <-  ggplot(melb_air2)+
   geom_line(aes(x = date, 
                 y = pm25), 
             colour = "#FF6600")+
   theme_bw()+
   labs(x = "3 Year Historical Melbourne Air Index", 
-       y = "Air Index Score")+
+       y = "Air Index Score", caption = "Melbourne Air Quality")+
   scale_y_continuous(limits = c(0,280),
                      breaks = seq(0,280,50))
+
+ggplotly(melb_air3)
+
+
 
 
 ```
@@ -585,22 +608,25 @@ melb_air2 %>%
 ### Melbourne Air Quality Index 2020
 
 
-```{r figmelb, message=FALSE, fig.align='center', fig.cap="Bushfire Season 2019/2020 Air Quality in Melbourne"}
+```{r figmelb, message=FALSE, fig.align='center'}
 
 
-melb_air2 %>% 
-  filter(date >= "2019-12-01" & date <= "2020-03-30" ) %>% 
+melb2020 <- melb_air2 %>% 
+  filter(date >= "2019-12-01" & date <= "2020-03-30" ) 
   
 
- ggplot()+
+melb20202 <- ggplot(melb2020)+
   geom_line(aes(x = date, 
                 y = pm25), 
             colour = "#FF6600")+
   theme_bw()+
   labs(x = "Melbourne Air Index in 2020 (January to April)", 
-       y = "Air Index Score")+
+       y = "Air Index Score", caption = "Bushfire Season 2019/2020 Air Quality in Melbourne")+
   scale_y_continuous(limits = c(0,300),
                      breaks = seq(0,300,20))
+
+ggplotly(melb20202)
+
 
 
 ```
@@ -696,5 +722,3 @@ ggplotly(p2)
 
 
 
-
->>>>>>> 262ee4c494fe7f32890aed909a87584cecbd2599
