@@ -167,7 +167,7 @@ The most recent data from April to June 2020 showed CFA brigades responded to 9,
 
 In 87 per cent of incidents that required emergency response, the community received a fire service within the standard response time, which was broadly consistent with previous quarters.[CFA News](https://news.cfa.vic.gov.au/-/cfa-release-latest-response-data)
 
-Let's visualize the data first.
+Let's have a look at the table for the fourth quarter 2019/20.
 
 ```{r plotting-data20, message=FALSE, echo=FALSE, warning=FALSE, eval=TRUE}
  data_20%>%
@@ -183,6 +183,8 @@ Let's visualize the data first.
 
 \clearpage
 
+Using the summary function, we can look at the summary of minimum, maximum and the mean time it took CFA brigades to respond to incidents within their brigade areas:
+
 ```{r tab-summary20, message=FALSE, echo=FALSE, eval=TRUE}
 data_20 %>%
   select(TimeResponse_within)%>%
@@ -192,7 +194,7 @@ kable_styling(bootstrap_options = c("striped","hover"))
 ```
 
 
-The mean time that it took CFA brigades to respond to incidents in their own CFA brigade areas is **eight minutes and thirty-seven seconds**. This is very close to the target response time for brigades, which is **eight minutes**. 
+From, the table \@ref(tab:tab-summary20), the **mean** time that it took CFA brigades to respond to incidents in their own CFA brigade areas is **eight minutes and thirty-seven seconds**. This is very close to the target response time for brigades, which is **eight minutes**. 
 
 
 \clearpage
@@ -240,7 +242,7 @@ data_19$TimeResponse <- chron(times=data_19$TimeResponse)
 
 \clearpage
 
-Let's visualize the data for the year 2018/19 quarter four for districts where it took between seven and twelve minutes to respond to an incident.
+Let's look at the table that records information for the year 2018/19 fourth quarter for districts where it took between **seven and twelve minutes** to respond to an incident.
 
 
 
@@ -256,7 +258,7 @@ data_19%>%
  
 ```
 
-
+Using the Summary function, let's look at the summary of minimum and maximum amount of time it took Brigades to respond.
 
 ```{r tb19Sum, message=FALSE, eval=TRUE, echo=FALSE,warning=FALSE}
 data_19%>%
@@ -417,9 +419,10 @@ DataQ1_4 <-  read_csv("data/Question_3_dat_2.csv")%>%
 
 ```
 
-\clearpage
 
-```{r TabNum, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, message=FALSE}  
+
+```{r TabNum, eval= TRUE, echo=FALSE, message=FALSE, warning=FALSE}
+
 DataQ1 <- DataQ1_4 %>% 
   select(Num_incdents1,
          Num_incdents2,
@@ -428,25 +431,39 @@ DataQ1 <- DataQ1_4 %>%
   summary()%>%
   kable(caption = "Summary of the incidents.") %>%
   kable_styling(bootstrap_options = c("striped", "hover"))
-  
+ DataQ1 
 ```
 
 In the above table \@ref(tab:TabNum), we can see the summary for number of incidents in each quarter; we see that the highest number of incidents was recorded as `r max(DataQ1_4$Num_incdents2)` in the second quarter. 
 
-The data used here is the merged data that contains information on all four quarters. For the next steps, we will use the binding_data from above. 
+The data used here is the merged data that contains information on all four quarters. For the next steps, we will use the binding_data from above. Let's first visualize data for four quarters.
+
+```{r, eval = TRUE, echo= FALSE, message=FALSE, fig.width=15, fig.height=15, fig.align='default', fig.cap="Number of incidents"}
+
+ggplot(binding_data,
+       aes(x = Number_Incidents_total,
+           y= CFA_Brigade_Area))+ 
+  geom_col()+
+  theme_base()+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=0.5), axis.title.x = element_text(vjust=-1.8))+
+  xlab("Incidents") +  
+ ylab("Districts") +  
+  ggtitle("Number of incidents") 
+ 
+```
 
 
-```{r, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, message=FALSE}
+```{r, message=FALSE, warning=FALSE, echo=TRUE, eval=TRUE, message=FALSE}
  Highest_NumberIncidents <- binding_data%>%
   select(Number_Incidents_total)%>%
 summary()%>%
   kable(caption = "This is the summary of number of incidents across all hazard classes") %>%
   kable_styling(bootstrap_options = c("striped", "hover"))
-
+Highest_NumberIncidents
 ```
 
 
-We can see that highest number of incidents are `r max(binding_data$Number_Incidents_total)`, so now using the filter function. let's see which district has `r max(binding_data$Number_Incidents_total)` incidents. 
+We can see that highest number of incidents are `r max(binding_data$Number_Incidents_total)`, so now using the filter function, which we know from the graph above that Dandenong has had the highest number of incidents.Let's filter for the Dandenong district and see how many incidents took place in each quarter.  
 
 
 
@@ -454,7 +471,7 @@ We can see that highest number of incidents are `r max(binding_data$Number_Incid
 binding_data%>%
   select(-X1,
          -`CFA District`)%>%
-  filter(Number_Incidents_total == "374" )%>%
+  filter(CFA_Brigade_Area == "Dandenong" )%>%
   kable(caption = "Dandenong district has the highest number of incidents across all hazard classes in all of the four quarters.") %>%
   kable_styling(bootstrap_options = c("striped", "hover"))
 ```
@@ -640,7 +657,6 @@ According to the  information provided by the department of agriculture of Austr
 
 ```{r tableyears, warning=FALSE, echo=FALSE, eval=TRUE,message=FALSE, fig.pos="hold"}
 
-
 fire_total_detects %>% 
   select(Years, n) %>% 
   arrange(desc(n)) %>% 
@@ -657,22 +673,15 @@ fire_total_detects %>%
 
 ```{r a, message=FALSE, fig.width=15, fig.height=8, fig.cap="Number of Observations by Year", fig.align='default'}
 
-
-
-
  ggplot(fire_total_detects, 
                           aes(x = Years, 
                               y = n)) +
   geom_col(fill= 'coral3') +
   coord_flip()+
-  labs( y = "Counts") +
-  geom_text(aes(label = n, size = 1, hjust= -0.5))+
-  theme(legend.position = "none")+
-  scale_y_continuous(limits = c(0,3500000))+
+  labs( y = "Counts")+
+  scale_y_continuous(limits = c(0,3500000)) +
+  geom_text(aes(label = n, size = 1, hjust= 0), show.legend = F)+
   theme_bw()
-
-
-  
 
 ```
 
