@@ -102,7 +102,7 @@ kable_styling(bootstrap_options = c("striped","hover"))
 The number of incidents for four quarters 2019/20 {data-icon="ion-android-contact"}
 =================================================================================
 
-Column {data-width=650}
+Column {data-width=500}
 ---------------------------------------------------------------------------------
  
 
@@ -638,6 +638,4 @@ category_summary <- read_excel("data/protected-species-in-fire-affected-areas-20
   theme_ipsum()
 ggplotly(p2)
 ```
-
-
 
