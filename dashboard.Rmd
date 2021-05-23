@@ -34,7 +34,7 @@ library(chron)
 ```
 
 
-The CFA Brigades Response Time to Incidents within their Areas (2018/19 - 2019/20) {data-icon="ion-android-options"}
+CFA Response Time {data-icon="ion-android-alarm-clock"}
 =================================================================================
 Row
 -----------------------------------------------------------------------
@@ -61,7 +61,7 @@ data_20$TimeResponse <- chron(times=data_20$TimeResponse)
 data_20 %>%
   select(TimeResponse_within)%>%
   summary(data_20$TimeResponse_within)%>%
-  kable(caption = "Time Response within Brigade Area") %>%
+  kable() %>%
 kable_styling(bootstrap_options = c("striped","hover"))
 
 ```
@@ -93,13 +93,13 @@ data_19$TimeResponse <- chron(times=data_19$TimeResponse)
 data_19%>%
   select(TimeResponse_within)%>%
   summary(data_19$TimeResponse_within)%>%
-  kable(caption = "Summary for data 2019 Q4" ) %>%
+  kable() %>%
 kable_styling(bootstrap_options = c("striped","hover"))
 
 ```
 
 
-The number of incidents for four quarters 2019/20 {data-icon="ion-android-contact"}
+Incidents Number {data-icon="ion-calculator"}
 =================================================================================
 
 Column {data-width=500}
@@ -268,7 +268,7 @@ q4t1 <- tidy_district %>%
 ```
 
 
-The Volunteer Structure For 2016 {data-icon="ion-android-contact"}
+Volunteer Structure {data-icon="ion-android-contact"}
 =================================================================================
 
 Column {data-width=500}
@@ -324,10 +324,20 @@ ggplotly(q4p)
 
 
 
-The Most Frequent Fire Incident in Victoria {data-icon="ion-android-options"}
+VIC Fire Incidents {data-icon="ion-android-options"}
 =================================================================================
-Row
----------------------------------------------------------------------------------
+Column {data-width=150}
+-------------------------------------------------------------------------------
+
+### Total new hires
+```{r}
+q1table <- incident %>% 
+  count(code_description) %>% 
+  arrange(desc(n)) 
+
+valueBox(value = q1table$code_description[1],icon = "ion-leaf",caption = "the Top 1 Fire Accident",color = "green")
+```
+
 ### The Most Frequent Fire Incident in Victoria (July 2015 to June 2016)
 ```{r q1}
 # count number of incident
