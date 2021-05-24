@@ -64,7 +64,7 @@ ft4perc  <- read_csv("data/ft4perc.csv")
 
 In this report, we regard the 2019/20 bushfire as a particular case based on the country fire, which was one of the worst in recent times in the world. The season started in early November 2019 in New South Wales, and gradually progressed in Victoria, Western Australia, South Australia, and the Australian Capital Territory. Thousands of fire fighters and volunteers battled the fires, with millions of hectares burned, thousands of properties damaged, and countless numbers of wildlife exposed. In February 2020, the last fires were reportedly extinguished, with torrential rain assisting in putting out the remaining fires. 
 
-This case will be carried out at 3 points: land damage, environmental damage and species damage. So in general, the datasets for analysing the 2019 bushfire contain the area of land damage by the type, Melbourne air quality index, the distribution of the threatened species and the effects on them.
+This case will be carried out at 3 points: land damage, environmental damage and species damage. So in general, the datasets for analysing the 2019 bushfire contain the information of area of land damage by the type, Melbourne air quality index, the distribution of the threatened species and the effects on them.
 
 Above all, The following questions will be discussed in this report:
 
