@@ -312,11 +312,12 @@ knitr::kable(q4t1, caption = "Total Number of the Volunteers by District",
 ```
 
 
-```{r fig43, fig.align="center",message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, message=FALSE, fig.cap="the percentage of operational and non-operational volunteers among all the districts"}
+```{r fig43, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, message=FALSE, fig.cap="the percentage of operational and non-operational volunteers among all the districts"}
 library(plotly)
 q4p <- ggplot(q4p2, aes(x = district, y = percentage, fill = position))+
   geom_col(position = "stack")+
-  scale_fill_manual(values = c("#aaaaaa","#e1701a"))
+  scale_fill_manual(values = c("#aaaaaa","#e1701a"))+
+  theme(legend.position="bottom")
 #  scale_fill_brewer(palette = "Dark2")
 ggplotly(q4p)
 ```

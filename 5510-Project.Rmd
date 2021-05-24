@@ -62,7 +62,7 @@ Country Fire Authority (CFA) provides statewide fire and related emergency coord
  * Working with Forestry industry brigades
  * Other emergency activities including flood assistance.
 
-CFA delivers services to the community through a network of over 55,000 volunteers operating out of more than 1,200 rural and urban brigades across Victoria. CFA also employs around 1,000 Professional, Technical and Administrative staff to support service delivery. CFA uses its network of brigades to respond to emergency events, including structure fires, bush and grass fires, road crashes and vehicle fires. CFA brigades also respond alongside Fire Rescue Victoria and other emergency service organisations. 
+CFA delivers services to the community through a network of over 55,000 volunteers operating out of more than 1,200 rural and urban brigades across Victoria. CFA also employs around 1,000 Professional, Technical and Administrative staff to support service delivery. CFA uses its network of brigades to respond to emergency events, including structure fires, bush and grass fires, road crashes and vehicle fires. CFA brigades also respond alongside Fire Rescue Victoria and other emergency service organizations. 
 
 There are three critical components of CFA delivery services:
 
@@ -79,11 +79,14 @@ There are three critical components of CFA delivery services:
  * Hazard Class 4 (Rural): This includes primarily the natural surroundings in terms of bush and grassland, but also involves isolated dwellings and structures within those areas.
 
 
-In this report, we regard the 2019/20 bushfire as a particular case based on the country fire, which was one of the worst in recent times in the world. The season started in early November 2019 in New South Wales, and gradually progressed in Victoria, Western Australia, South Australia, and the Australian Capital Territory. Thousands of fire fighters and volunteers battled the fires, with millions of hectares burned, thousands of properties damaged, and countless numbers of wildlife exposed. In February 2020, the last fires were reportedly extinguished, with torrential rain assisting in putting out the remaining fires. 
+In this report, we found the most frequently happened fire incident from Country Fire Authority, which is somehow related to the bushfire in 2019/20. We regard the 2019/20 bushfire as a particular case based on the country fire, which was one of the worst in recent times in the world. The season started in early November 2019 in New South Wales, and gradually progressed in Victoria, Western Australia, South Australia, and the Australian Capital Territory. Thousands of fire fighters and volunteers battled the fires, with millions of hectares burned, thousands of properties damaged, and countless numbers of wildlife exposed. In February 2020, the last fires were reportedly extinguished, with torrential rain assisting in putting out the remaining fires. 
 
 This case will be carried out at 3 points: land damage, environmental damage and species damage. So in general, the datasets for analysing the 2019 bushfire contain the information of area of land damage by the type, Melbourne air quality index, the distribution of the threatened species and the effects on them.
 
-Above all, The following questions will be discussed in this report:
+The firefighters and the non-operational volunteers did a remarkable job in all the fire incidents, including bushfires. This report will also analyze the structure of the volunteers of CFA in Victoria, Australia.
+
+
+The following questions will be discussed in this report:
 
 * What is the most frequent fire incident in the year 2015? (CFA Incident Responses)
 
@@ -143,7 +146,7 @@ Based on the data supplied from New South Wales, organic products, including gre
 
 # The mean time it took CFA brigade to respond to Hazard class 2 incidents in their own brigade areas for the fourth quarter 2018/19 and 2019/20
 
-### 2019/20
+## 2019/20
 
 
 For this question we take into account the response time information for the fourth quarter for the years 2018/19 and 2019/20.
@@ -242,7 +245,7 @@ From, the table \@ref(tab:tab-summary20), the **mean** time that it took CFA bri
 \clearpage
 
 
-### 2018/19
+## 2018/19
 
 
 For the year 2018/19, we have used the data belonging to the year 2018/19, which was acquired from the [CFA official site](https://discover.data.vic.gov.au/organization/country-fire-authority).
@@ -716,7 +719,7 @@ fire_total_detects %>%
 ```
 
 
-```{r a, message=FALSE, fig.width=15, fig.height=8, fig.cap="Number of Observations by Year", fig.align='default'}
+```{r a, message=FALSE, fig.width=15, fig.height=8, fig.cap="Number of Observations by Year", fig.align='default',eval=TRUE, echo=FALSE, message=FALSE,warning=FALSE}
 
  ggplot(fire_total_detects, 
                           aes(x = Years, 
@@ -751,7 +754,7 @@ perc_affected_state <- perc_affected_state  %>%
 ```
 
 
-```{r affectedstate, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, fig.align='center', fig.show="hold", fig.cap="Affectation by State"}
+```{r affectedstate, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, fig.align='center', fig.show="hold", fig.cap="Affectation by State", eval=TRUE, echo=FALSE, message=FALSE,warning=FALSE}
 
 ggplot(data = perc_affected_state, aes(x = Jurisdiction,
                            y = Percentage, 
@@ -779,7 +782,7 @@ ggplot(data = perc_affected_state, aes(x = Jurisdiction,
 According to the classification of the land in Victoria, Multiple-use Public Forest got affected by 29%, whereas the Nature Conservation Reserve had 15% of burnt land. similarly the Unresolved tenure land lost 13% of it's extent by the fires. In the case of private land, around 6% was consumed by fires. See Figure \@ref(fig:affectedvic).
 
 
-```{r affectedvic, message=FALSE, fig.align='center', fig.show="hold", fig.cap="Land Type affected in Victoria"}
+```{r affectedvic, message=FALSE, fig.align='center', fig.show="hold", fig.cap="Land Type affected in Victoria", eval=TRUE, echo=FALSE, message=FALSE,warning=FALSE}
 
 
 ft4perc <- ft4perc  %>% 
@@ -838,7 +841,7 @@ melb_air2 %>%
 The figure \@ref(fig:figindex) shows the classification of the air quality index, this source will give a clearer idea of the readings of the bushfire season and for previous levels. 
 
 
-```{r figindex, fig.align='center', out.width="70%", message=FALSE, fig.cap="Air Quality Levels"}
+```{r figindex, fig.align='center', out.width="70%", message=FALSE, fig.cap="Air Quality Levels", eval=TRUE, echo=FALSE, message=FALSE,warning=FALSE}
 
 knitr::include_graphics(here::here('images/polution_table.png'))
 
@@ -846,7 +849,7 @@ knitr::include_graphics(here::here('images/polution_table.png'))
 
 Finally, having a closer look to the most affected months from January to April, we can see that in the figure \@ref(fig:figmelb) on 15th January the levels recorded was 272, clearly very unhealthy, the population needed to be indoors even more for those with respiratory affections. Certainly the first two weeks were highly affected by the pollution and the fires, all this happened mainly in the first two weeks of the year, leaving highly affected the fauna and flora. 
 
-```{r figmelb, message=FALSE, fig.align='center', fig.cap="Bushfire Season 2019/2020 Air Quality in Melbourne"}
+```{r figmelb, message=FALSE, fig.align='center', fig.cap="Bushfire Season 2019/2020 Air Quality in Melbourne", eval=TRUE, echo=FALSE, message=FALSE,warning=FALSE}
 
 
 melb_air2 %>% 
