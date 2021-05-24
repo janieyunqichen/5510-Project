@@ -55,6 +55,34 @@ ft4perc  <- read_csv("data/ft4perc.csv")
 
 
 
+
+
+
+
+
+
+
+In this report, we regard the 2019/20 bushfire as a particular case based on the country fire, which was one of the worst in recent times in the world. The season started in early November 2019 in New South Wales, and gradually progressed in Victoria, Western Australia, South Australia, and the Australian Capital Territory. Thousands of fire fighters and volunteers battled the fires, with millions of hectares burned, thousands of properties damaged, and countless numbers of wildlife exposed. In February 2020, the last fires were reportedly extinguished, with torrential rain assisting in putting out the remaining fires. 
+
+This case will be carried out at 3 points: land damage, environmental damage and species damage. So in general, the datasets for analysing the 2019 bushfire contain the area of land damage by the type, Melbourne air quality index, the distribution of the threatened species and the effects on them.
+
+Above all, The following questions will be discussed in this report:
+
+* What is the most frequent fire incident in the year 2015? (CFA Incident Responses)
+
+* How long did it take on average for the CFA brigade to respond to incidents in their own areas for hazard class 2 in Q4 2018/19 and Q4 2019/20?  Also, this will be analysed against the standard time (given in the data for each of the hazard classes). (CFA Emergency Response Time)
+
+* Which of the CFA brigade areas have had the highest number of incidents across Hazard classes for the reported period (2019/20) (four quarters). (CFA Emergency Response Time)
+
+* What is the volunteer age and serving length structure in 2016? (CFA Volunteer Demographics)
+
+* What is the number of fire detections, extent and land type affected in Australia and Victoria in the Australian bushfire 2020? (Australian Department of Agriculture)
+
+* What was the impact on the air pollution index in Melbourne city in the first trimester 2020?
+
+* How serious are the threatened species affected by the Australian bushfire 2020, and what’s the distribution of them? (Australian Department of Agriculture)
+
+
 # The Most Frequent Fire Incident in Victoria (July 2015 to June 2016) 
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, message=FALSE}
@@ -913,6 +941,8 @@ ggplotly(p2)
 
 According to the plot \@ref(fig:datSummary2), it seems that, for the vulnerable species, it's the plant which occurred the most serious destruction, besides, in terms of the endangered or critically endangered species, the other species like fish, bird, frog and mammals, were not as serious as the plants. In addition, there were 4 migratory species affected because of the bushfire.
 
+Nearly three billion animals: mammals, reptiles, birds, and frogs were killed or displaced by Australia’s devastating 2019-20 bush fires. It’s almost three times an earlier estimate released in January. The breakdown is 143 million mammals, 2.46 billion reptiles, 180 million birds, and 51 million frogs.
+
 
 # Conclusion
 
@@ -923,6 +953,9 @@ The most frequent fire incident is Small vegetation fire (one hectare or less) w
 For analyzing the effects on the species, most of the plants have more than 10%, but less than 30% area has been destroyed, with 107 plant species affected. In terms of the threatening condition, the plants suffered the most severe destruction as well. However, the effects on the other species like mammal, frog, and bird species all had similar extent in the destruction, not as severe as the plants.
 
 Nevertheless, many species not currently listed under national environmental law will have had much of their range affected by the fires. In some cases, that impact may mean that these species have become threatened. The Department will be considering assessments of these species soon. Besides, our knowledge about species distributions, fire severity, other threats, and impact on plants and animals is incomplete, which requires us to update the information further.
+
+The Australian government takes the recovery as the national priority, has spent over **$1.6 billion** from the NBRF and **$2.3 billion** total Commonwealth funds on bushfire response, recovery and resilience.
+
 
 # Reference:
 
@@ -936,7 +969,12 @@ Nevertheless, many species not currently listed under national environmental law
 
 * Volunteer with CFA. (2021, April 30). Retrieved from https://www.cfa.vic.gov.au/volunteer-careers/volunteers.
 
-
 * Vardoulakis, S., Jalaludin, B. B., Morgan, G. G., Hanigan, I. C., & Johnston, F. H. (2020). Bushfire smoke: urgent need for a national health protection strategy. The Medical Journal of Australia, 212(8), 349.
+
+* The GIS data of the species of National Environmental significance. Retrieved from: https://www.environment.gov.au/science/erin/databases-maps/snes.
+
+* National Bushfire Recovery Fund. Retrieved from: https://recovery.gov.au/progress-date/funding.
+
+* The aniamls impacted by the bushfire. Retrieved from: https://www.wwf.org.au/news/news/2020/3-billion-animals-impacted-by-australia-bushfire-crisis#gs.2525ta.
 
 
