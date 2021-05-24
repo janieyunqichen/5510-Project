@@ -51,15 +51,32 @@ ft4perc  <- read_csv("data/ft4perc.csv")
 
 # Introduction
 
+Country Fire Authority (CFA) provides statewide fire and related emergency coordination. The key part of the CFA mission is the fire safety and preparedness, therefore the key part of the CFA work includes: 
 
+ * Wildfire suppression
+ * Structural fire suppression
+ * Transport-related fire suppression
+ * Road rescue
+ * Technical rescue, such as high angle, trench and mine operations
+ * Hazardous materials transportation and storage incidents
+ * Working with Forestry industry brigades
+ * Other emergency activities including flood assistance.
 
+CFA delivers services to the community through a network of over 55,000 volunteers operating out of more than 1,200 rural and urban brigades across Victoria. CFA also employs around 1,000 Professional, Technical and Administrative staff to support service delivery. CFA uses its network of brigades to respond to emergency events, including structure fires, bush and grass fires, road crashes and vehicle fires. CFA brigades also respond alongside Fire Rescue Victoria and other emergency service organisations. 
 
+There are three critical components of CFA delivery services:
 
+ * Response time: This is measured from when the brigade is alerted to an event to when the brigade arrives at the scene.
 
+ * Brigade area: Each brigade has a defined brigade area, which specifies the operational footprint of the brigade.
 
+ * Hazard classes: Hazard class defines the type of risk for a given area. Each brigade area may contain multiple hazard classes. However, each hazard class has a predefined service delivery standards. There are three predefined hazard classes: 2, 3 and 4. 
+ 
+ * Hazard class 2 (Medium Urban): This includes significant urban areas which are primarily residential including commercial centres, clusters of industrial and/or high density community services e.g. schools, correctional facilities, hospitals. (8 minutes SDS)
 
+ * Hazard Class 3 (Low Urban): This includes all urban areas that are not included in Hazard Class 2 and includes predominantly residential occupancies and small industries. (10 minutes SDS)
 
-
+ * Hazard Class 4 (Rural): This includes primarily the natural surroundings in terms of bush and grassland, but also involves isolated dwellings and structures within those areas.
 
 
 In this report, we regard the 2019/20 bushfire as a particular case based on the country fire, which was one of the worst in recent times in the world. The season started in early November 2019 in New South Wales, and gradually progressed in Victoria, Western Australia, South Australia, and the Australian Capital Territory. Thousands of fire fighters and volunteers battled the fires, with millions of hectares burned, thousands of properties damaged, and countless numbers of wildlife exposed. In February 2020, the last fires were reportedly extinguished, with torrential rain assisting in putting out the remaining fires. 
@@ -126,13 +143,10 @@ Based on the data supplied from New South Wales, organic products, including gre
 
 # The mean time it took CFA brigade to respond to Hazard class 2 incidents in their own brigade areas for the fourth quarter 2018/19 and 2019/20
 
+### 2019/20
 
-There are three critical components of CFA delivery services:
-Response time: This is measured from when the brigade is alerted to an event to when the brigade arrives at the scene.
 
-Brigade area: Each brigade has a defined brigade area, which specifies the operational footprint of the brigade.
-
-Hazard classes: Hazard class defines the type of risk for a given area. Each brigade area may contain multiple hazard classes. However, each hazard class has a predefined service delivery standards. 
+For this question we take into account the response time information for the fourth quarter for the years 2018/19 and 2019/20.
 
 In the data we have two variables that record the amount of time it CFA brigade to respond to incidents in specified areas: 
 
@@ -213,7 +227,7 @@ Let's have a look at the table for the fourth quarter 2019/20.
 
 Using the summary function, we can look at the summary of minimum, maximum and the mean time it took CFA brigades to respond to incidents within their brigade areas:
 
-```{r tab-summary20, message=FALSE, echo=FALSE, eval=TRUE}
+```{r tab-summary20, message=FALSE, echo=FALSE, eval=TRUE, warning=FALSE}
 data_20 %>%
   select(TimeResponse_within)%>%
   summary(data_20$TimeResponse_within)%>%
@@ -226,6 +240,9 @@ From, the table \@ref(tab:tab-summary20), the **mean** time that it took CFA bri
 
 
 \clearpage
+
+
+### 2018/19
 
 
 For the year 2018/19, we have used the data belonging to the year 2018/19, which was acquired from the [CFA official site](https://discover.data.vic.gov.au/organization/country-fire-authority).
@@ -274,7 +291,7 @@ Let's look at the table that records information for the year 2018/19 fourth qua
 
 
 
-```{r plot-19, message=FALSE, fig.width=13, fig.height=12, fig.align='default'}
+```{r plot-19, message=FALSE, fig.width=13, fig.height=12, fig.align='default', echo=FALSE, eval=TRUE, warning=FALSE}
 
 data_19%>%
   select(CFA_Brigade_Area,
@@ -338,7 +355,7 @@ dat_Q1_2020 <- read_csv("data/dat_Q1_2020.csv") %>%
 ```
 
 
-```{r plotIncidents, message=FALSE, fig.width=12, fig.height=8, fig.align='default', fig.cap="Number of incidents"}
+```{r plotIncidents, message=FALSE, fig.width=12, fig.height=8, fig.align='default', fig.cap="Number of incidents", echo=FALSE, eval=TRUE}
 ggplot(dat_Q1_2020, aes( x = CFA_Brigade_Area,
                          y = Number_Incidents_total,
                          fill=Number_Incidents_total)) + 
@@ -411,7 +428,7 @@ dat_Q4_2020 <- read_csv("data/dat_2020Q4.csv")%>%
     rename(CFA_Brigade_Area = `CFA Brigade Area`)
 ```
 
-```{r plotting, fig.width=12, fig.height=10, fig.align='default', fig.cap="Number of incidents for the fourth quarter 2019/20"}
+```{r plotting, fig.width=12, fig.height=10, fig.align='default', fig.cap="Number of incidents for the fourth quarter 2019/20", echo=FALSE, eval=TRUE}
 ggplot(dat_Q4_2020,
        aes(x = CFA_Brigade_Area,
 y =  Number_Incidents_total)) +
@@ -429,7 +446,7 @@ palette = "Dark2"
 The above plot \@ref(fig:plotting) shows us the number of incidents for the fourth quarter 2019/20. On the x-axis we have number of incidents and the y-axis we can see the names of districts.
 
 
-```{r, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE}
+```{r, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE, echo=FALSE}
 binding_data <- bind_rows(dat_Q1_2020,dat_Q2_2020,dat_Q3_2020,dat_Q4_2020)
 
 ```
@@ -481,7 +498,7 @@ ggplot(binding_data,
 ```
 
 
-```{r, message=FALSE, warning=FALSE, echo=TRUE, eval=TRUE, message=FALSE}
+```{r, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, message=FALSE}
  Highest_NumberIncidents <- binding_data%>%
   select(Number_Incidents_total)%>%
 summary()%>%
